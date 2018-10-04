@@ -1,0 +1,25 @@
+{
+  "name": "jmt",
+  "version": "1.0.0",
+  "description": "jmt server",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=development nodemon --config './nodemon.ts.json' index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.1",
+    "@types/dotenv": "^4.0.3",
+    "@types/express": "^4.16.0",
+    "@types/node": "^10.11.3",
+    "chalk": "^2.4.1",
+    "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.6.0",
+    "typescript": "^3.1.1"
+  }
+}

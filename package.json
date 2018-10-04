@@ -1,0 +1,14 @@
+{
+  "name": "jmt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently 'cd JMT-Frontend && npm start' 'cd JMT-Backend && npm start'"
+  },
+  "author": "seongwoon hong",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^4.0.1"
+  }
+}

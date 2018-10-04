@@ -1,0 +1,51 @@
+{
+  "name": "jmt-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack --progress -p",
+    "lint": "./node_modules/.bin/eslint src/"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "classnames": "^2.2.5",
+    "clean-webpack-plugin": "^0.1.17",
+    "css-loader": "^0.28.0",
+    "file-loader": "^0.11.1",
+    "html-webpack-plugin": "^2.28.0",
+    "prop-types": "^15.6.0",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
+    "react-redux": "^5.0.4",
+    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0",
+    "style-loader": "^0.16.1",
+    "webpack": "^3.8.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.2",
+    "babel-jest": "^21.2.0",
+    "eslint": "4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-jsx-a11y": "6.0.2",
+    "eslint-plugin-react": "7.4.0",
+    "express": "^4.16.2",
+    "husky": "^0.15.0-rc.9",
+    "lint-staged": "^7.0.0",
+    "open-browser-webpack-plugin": "0.0.5",
+    "webpack-dev-server": "^2.9.4"
+  }
+}

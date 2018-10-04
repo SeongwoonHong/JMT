@@ -1,0 +1,16 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    "./dist/",
+    "./node_modules/",
+    "./package.json"
+  ],
+  "execMap": {
+    "ts": "ts-node -r tsconfig-paths/register"
+  },
+  "ext": "ts",
+  "watch": [
+    "index.ts",
+    "src/**/*.ts"
+  ]
+}
