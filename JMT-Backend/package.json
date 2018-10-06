@@ -4,13 +4,20 @@
   "description": "jmt server",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development nodemon --config './nodemon.ts.json' index.ts"
+    "start": "NODE_ENV=development nodemon --config './nodemon.ts.json' index.ts",
+    "test": "mocha --reporter spec --compilers ts:ts-node/register './src/test/**/*.test.ts'"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/chai": "^4.1.6",
+    "@types/chai-http": "^3.0.5",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "dotenv": "^6.0.0",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "mocha": "^5.2.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.1",
