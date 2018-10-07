@@ -1,6 +1,6 @@
 *.log
 dist/
-.env.*
+.env
 
 /node_modules/
 .idea/

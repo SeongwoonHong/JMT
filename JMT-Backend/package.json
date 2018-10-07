@@ -17,7 +17,8 @@
     "chai-http": "^4.2.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "pg": "^7.5.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.1",
