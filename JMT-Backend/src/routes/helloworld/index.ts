@@ -8,10 +8,9 @@ class HelloWorld {
     this.helloworld();
   }
 
-  private helloworld() {
+  private helloworld = () => {
     this.router.get('/', (req, res) => {
       res.send({ msg: 'Hello World' })
-      console.log('hello world!')
     });
   }
 }
