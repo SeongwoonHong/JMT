@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { App as AppAction, Alert } from 'actions';
+import axios from 'axios';
 
 class App extends React.Component {
   getMsgFromServer = () => {
@@ -25,6 +26,12 @@ class App extends React.Component {
     }));
   }
 
+  getAllUsers = () => {
+    axios.get('/api/user/getAll').then(({ data }) => {
+      console.log('all users = ', data);
+    });
+  }
+
   render() {
     const { msg, alert } = this.props;
 
@@ -34,6 +41,7 @@ class App extends React.Component {
         <div>{ msg }</div>
         <button onClick={this.getMsgFromServer}>getHelloWorldFromServer</button>
         <button onClick={this.getAlert}>get alert</button>
+        <button onClick={this.getAllUsers}>get all users</button>
         {
           alert.isVisible &&
           <div>
@@ -45,6 +53,7 @@ class App extends React.Component {
     );
   }
 }
+
 App.defaultProps = {
   msg: null,
   alert: {},

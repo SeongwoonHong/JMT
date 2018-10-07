@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^4.0.1"
+  },
+  "dependencies": {
+    "morgan": "^1.9.1"
   }
 }
