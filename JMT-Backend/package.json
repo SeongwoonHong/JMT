@@ -13,6 +13,7 @@
     "@types/chai": "^4.1.6",
     "@types/chai-http": "^3.0.5",
     "@types/mocha": "^5.2.5",
+    "bcrypt": "^2.0.1",
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
     "dotenv": "^6.0.0",

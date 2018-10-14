@@ -12,6 +12,7 @@ class User {
   private routes = (): void => {
     this.router.get('/getAll', controllers.getAll);
     this.router.post('/signUp', controllers.signup);
+    this.router.post('/login', controllers.login);
     this.router.delete('/removeById', controllers.removeById);
     this.router.delete('/removeByEmail', controllers.removeByEmail);
   }
