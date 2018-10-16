@@ -3,4 +3,6 @@ export interface UserModel {
   display_name: string,
   password: string,
   email: string,
+  avatar: string,
+  signupDate: string,
 };

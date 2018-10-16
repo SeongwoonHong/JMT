@@ -16,9 +16,9 @@ export function getMsg(msg) { // a temporary action creator
   };
 }
 
-export function getMsgFromServer() { // a temporary action creator for proving that it's possible to call our backend APIs
+export function isLoggedIn() { // a temporary action creator for proving that it's possible to call our backend APIs
   return (dispatch) => {
-    return axios.get('/api/helloworld')
+    return axios.get('/api/user/check')
       .then((res) => {
         dispatch(this.getMsg(res.data.msg));
       });

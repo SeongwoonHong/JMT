@@ -5,12 +5,6 @@ import { App as AppAction, Alert } from 'actions';
 import axios from 'axios';
 
 class App extends React.Component {
-  getMsgFromServer = () => {
-    const { dispatch } = this.props;
-
-    return dispatch(AppAction.getMsgFromServer());
-  }
-
   getMsg = () => {
     const { dispatch } = this.props;
 
@@ -32,6 +26,12 @@ class App extends React.Component {
     });
   }
 
+  isLoggedIn = () => {
+    const { dispatch } = this.props;
+
+    return dispatch(AppAction.isLoggedIn());
+  }
+
   render() {
     const { msg, alert } = this.props;
 
@@ -39,7 +39,7 @@ class App extends React.Component {
       <div>
         <button onClick={this.getMsg}>getHelloWorld</button>
         <div>{ msg }</div>
-        <button onClick={this.getMsgFromServer}>getHelloWorldFromServer</button>
+        <button onClick={this.isLoggedIn}>is Logged in?</button>
         <button onClick={this.getAlert}>get alert</button>
         <button onClick={this.getAllUsers}>get all users</button>
         {

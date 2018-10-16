@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import * as controllers from './controller';
+import { tokenVerifyMiddleware } from '../../middlewares/token-verify';
 
 class User {
   public router: Router;
@@ -11,10 +12,9 @@ class User {
 
   private routes = (): void => {
     this.router.get('/getAll', controllers.getAll);
+    this.router.get('/check', tokenVerifyMiddleware, controllers.check);
     this.router.post('/signUp', controllers.signup);
     this.router.post('/login', controllers.login);
-    this.router.delete('/removeById', controllers.removeById);
-    this.router.delete('/removeByEmail', controllers.removeByEmail);
   }
 }
 

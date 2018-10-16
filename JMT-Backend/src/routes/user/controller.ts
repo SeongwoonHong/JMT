@@ -1,107 +1,153 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
+import * as Joi from 'joi';
 
 import db from '../../database'
 import UserQuery from '../../database/repositories/user/queries';
-import * as bcryptUtils from '../../utils/bcryptUtils';
+import * as bcryptUtils from '../../utils/bcrypt-utils';
+import * as validationUtils from '../../utils/validation-utils';
+import * as jwtUtils from '../../utils/jwt-utils';
+import * as dateUtils from '../../utils/date-utils';
+// TODO - how to properly handle errors (through the app)
 
-export const getAll = (req, res: Response): void => {
+export const getAll = (req: Request, res: Response): void => {
   const query = new UserQuery();
 
-  db.query(query.getAllUsersQuery()).then(result => res.send(result.rows));
+  db.query(query.getAllUsersQuery())
+    .then(result => res.send(result.rows))
+    .catch(err => {
+      console.log(err);
+    });
 };
 
-export const getByEmail = (req, res: Response) => {
-  const { email } = req.params;
-  const query = new UserQuery({ email });
+export const signup = async (req: Request, res: Response): Promise<Response> => {
+  const { display_name, password, email, avatar } = req.body;
+  const schema = Joi.object().keys({
+    display_name: validationUtils.isDisplayName,
+    password: validationUtils.isPassword,
+    email: validationUtils.isEmail,
+    avatar: validationUtils.isAvatar,
+  });
+  let hashedPassword: string = null;
+  const result: any = Joi.validate({ display_name, password, email, avatar }, schema);
 
-  db.query(query.getUserByEmail()).then(result => res.send(result.rows));
-};
+  if (result.error) {
+    return res.status(400).json({
+      msg: result.error,
+      success: false,
+    })
+  }
 
-export const signup = async (req, res: Response): Promise<void> => {
-  const { display_name, password, email } = req.body;
-  const hashedPassword = await bcryptUtils.hash(password);
-  const userQuery = new UserQuery({ display_name, password: hashedPassword, email })
+  try {
+    hashedPassword = await bcryptUtils.hash(password);
+  } catch (e) {
+    console.log(e);
+  }
+
+  const userQuery = new UserQuery({ display_name, password: hashedPassword, email, avatar, signup_date: dateUtils.getDate() })
   const findEmailQuery = new UserQuery({ email });
-  const requiredFields = ['display_name', 'password', 'email'];
 
-  requiredFields.forEach((field) => {
-    if (!req.body[field]) {
-      res.status(400).json({
-        msg: `${field} IS NOT PROVIDED`
-      });
-    }
-  })
+  return db.query(findEmailQuery.getUserByEmailOrDisplayName())
+    .then(({ rows }) => {
+      if (rows.length) {
+        let duplicate: string;
 
-  db.query(findEmailQuery.getUserByEmail())
-    .then(result => {
-      if (result.rows.length) {
-        res.status(400).json({
-          msg: 'ALREADY EXIST ACCOUNT',
+        if (rows[0].display_name === display_name) {
+          duplicate = 'display_name';
+        } else if (rows[0].email === email) {
+          duplicate = 'email';
+        }
+
+        return res.status(400).json({
+          msg: `${duplicate} already exists`,
+          success: false,
         });
       }
 
-      db.query(userQuery.signUpQuery())
-        .then(result => res.send(result));
+      return db.query(userQuery.signUpQuery())
+        .then(result => res.send(result))
+        .catch(err => {
+          console.log(err);
+        })
+    })
+    .catch(err => {
+      console.log(err);
     })
 }
 
 export const login = (req, res: Response) => {
   const { email, password } = req.body;
-  const requiredFields = ['email', 'password'];
   const userQuery = new UserQuery({ email, password });
-  
-  requiredFields.forEach((field) => {
-    if (!req.body[field]) {
-      res.status(400).json({
-        msg: `${field} IS NOT PROVIDED`
-      });
-    }
-  })
+  const schema = Joi.object().keys({
+    email: validationUtils.isEmail,
+    password: validationUtils.isPassword,
+  });
+  const result: any = Joi.validate({ email, password}, schema);
+  let passwordMatched: boolean = null;
 
-  db.query(userQuery.getUserByEmail())
+  if (result.error) {
+    res.status(400).json({
+      msg: result.error,
+      success: false,
+    })
+  }
+
+  db.query(userQuery.getUserByEmailOrDisplayName())
     .then(async ({ rows }) => {
       if (!rows.length) {
         res.status(400).json({
-          msg: 'NOT EXISTING ACCOUNT'
+          msg: 'account does not exist',
+          success: false,
         })
       }
 
-      const user: boolean = await bcryptUtils.compare(password, rows[0].password);
+      const { display_name, avatar, signup_date } = rows[0];
 
-      if (user) {
-        res.json({
-          msg: 'LOGIN SUCCESS'
+      try {
+        passwordMatched = await bcryptUtils.compare(password, rows[0].password);
+      } catch (e) {
+        console.log(e);
+      }
+
+      if (passwordMatched) {
+        getToken({
+          email,
+          password,
+          display_name,
+          avatar,
+          signup_date,
+        })
+        .then((token) => {
+          res.json({
+            msg: 'login is succees',
+            success: true,
+            token
+          })
+        })
+        .catch((err) => {
+          res.status(403).json({
+            success: false,
+            msg: err.message
+          })
         })
       } else {
         res.json({
-          msg: 'PASSWORD IS NOT CORRECT'
+          msg: 'password is not correct',
+          success: false,
         })
       }
     })
+    .catch(err => {
+      console.log(err);
+    })
 }
 
-export const removeById = (req, res: Response): void => {
-  const { user_id } = req.body;
-  const query = new UserQuery({ user_id });
-
-  if (!user_id) {
-    res.status(400).send({
-      msg: 'Id IS NOT PROVIDED',
-    });
-  }
-
-  db.query(query.removeByIdQuery()).then(result => res.send(result));
+export const check = (req, res: Response): void => {
+  res.json({
+    success: true,
+    info: req.decoded
+  });
 }
 
-export const removeByEmail = (req, res: Response): void => {
-  const { email } = req.body;
-  const query = new UserQuery({ email });
-
-  if (!email) {
-    res.send({
-      msg: 'Email IS NOT PROVIDED',
-    });
-  }
-
-  db.query(query.removeByEmailQuery()).then(result => res.send(result));
+const getToken = (fields) => {
+  return jwtUtils.sign(fields);
 }
