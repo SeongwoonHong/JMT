@@ -9,13 +9,13 @@ class Query {
   public getAllUsersQuery = (): string => 'SELECT * FROM USERS';
 
   public signUpQuery = (): string => {
-    const { display_name, password, email } = this.fields;
+    const { display_name, password, email, avatar, signup_date } = this.fields;
 
     return (
       `
         INSERT INTO USERS
-        (display_name, password, email)
-        VALUES ('${display_name}', '${password}', '${email}')
+        (display_name, password, email, avatar, signup_date)
+        VALUES ('${display_name}', '${password}', '${email}', '${avatar}', '${signup_date}')
       `
     );
   }
@@ -42,13 +42,13 @@ class Query {
     );
   };
   
-  public getUserByEmail = (): string => {
-    const { email } = this.fields;
+  public getUserByEmailOrDisplayName = (): string => {
+    const { email, display_name } = this.fields;
 
     return (
       `
         SELECT * FROM USERS
-        WHERE email = '${email}'
+        WHERE email = '${email}' or display_name = '${display_name}'
       `
     );
   }

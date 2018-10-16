@@ -31,7 +31,6 @@ class App {
   }
 
   private routes(): void {
-    this.express.use('/api/helloworld', routes.HelloWorld);
     this.express.use('/api/user', routes.User);
   }
 }
