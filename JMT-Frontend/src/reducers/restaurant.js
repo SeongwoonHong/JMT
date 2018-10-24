@@ -1,14 +1,14 @@
-import { App } from 'actions';
+import { Restaurant } from 'actions';
 
 const initialState = {
-  view: 'list'
+  data: []
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case App.TOGGLE_VIEW:
+    case Restaurant.GET_RESTAURANT:
       return {
-        view: action.payload
+        data: action.payload,
       };
     default:
       return state;

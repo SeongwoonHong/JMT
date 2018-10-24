@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
-import { App, Alert } from './';
+import { App, Alert, Restaurants } from './';
 
 const appReducer = combineReducers({
   App,
   Alert,
+  Restaurants,
 });
 
 const rootReducer = (state, action) => {

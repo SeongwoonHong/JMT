@@ -1,44 +1,45 @@
 {
+  "extends": "airbnb",
   "parser": "babel-eslint",
-  "extends": "eslint-config-airbnb",
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "paths": ["src"]
-      }
-    }
-  },
+  "plugins": [
+    "import",
+    "jsx-a11y",
+    "react"
+  ],
   "rules": {
-    "import/no-extraneous-dependencies": [0],
-    "react/jsx-filename-extension": [1, { "extensions": [".js"] } ],
-    "no-nested-ternary": 0,
-    "max-len": 0,
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
+    "no-undef": "off",
+    "react/jsx-curly-spacing": 0,
+    "react/jsx-closing-bracket-location": 0,
+    "function-paren-newline": 0,
+    "jsx-a11y/anchor-is-valid": 0,
+    "padded-blocks": 0,
+    "comma-dangle": 0,
+    "global-require": 0,
+    "import/no-extraneous-dependencies": 0,
     "no-param-reassign": 0,
-    "no-extra-boolean-cast": 0,
-    "no-prototype-builtins": 0,
-    "no-return-assign": 0,
-    "react/forbid-prop-types": 0,
-    "react/no-unescaped-entities": ["error", {"forbid": [">", "}"]}],
-    "no-confusing-arrow": [0],
-    "jsx-a11y/click-events-have-key-events": 0,
-    "jsx-a11y/no-static-element-interactions": 0,
-    "no-use-before-define": 0,
-    "class-methods-use-this": 0,
-    "object-curly-newline": 0,
-    "prefer-destructuring": ["error", {"object": true, "array": false}],
-    "jsx-a11y/label-has-for": 0,
-    "camelcase": 0,
-    "no-underscore-dangle": 0,
-    "prefer-promise-reject-errors": 0,
-    "arrow-parens": ["error", "always"],
     "react/prefer-stateless-function": 0,
-    "import/no-mutable-exports": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+    "no-underscore-dangle": 0,
+    "no-console": 0,
+    "arrow-body-style": 0,
+    "react/prop-types": 0,
     "import/prefer-default-export": 0,
-    "arrow-body-style": 0
-  },
-  "env": {
-    "browser": true,
-    "jest": true
+    "no-return-assign": 0,
+    "class-methods-use-this": 0,
+    "jsx-a11y/label-has-for": 0,
+    "no-unused-expressions": 0,
+    "react/forbid-prop-types": 0,
+    "react/no-unused-state": "error",
+    "max-len": 0
   }
 }
-
