@@ -58,9 +58,17 @@ module.exports = {
   },
   plugins: plugins,
   resolve: {
-    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    modules: ['node_modules'],
     extensions: ['.js', '.jsx', '.react.js'],
     mainFields: ['browser', 'module', 'main'],
+    alias: {
+      'components': path.resolve('./src/components'),
+      'modules': path.resolve('./src/modules'),
+      'actions': path.resolve('./src/actions'),
+      'utils': path.resolve('./src/utils'),
+      'reducers': path.resolve('./src/reducers'),
+      'stores': path.resolve('./src/stores')
+    }
   },
   devtool: isProduction ? '' : 'eval',
   devServer: {

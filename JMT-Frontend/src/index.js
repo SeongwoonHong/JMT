@@ -5,14 +5,15 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
 
 import NotFound from 'components/NotFound';
-import App from 'modules/App/App';
+import Main from 'modules/Main/Main';
+import './styles';
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <div>
         <Switch>
-          <Route exact path="/" component={App} />
+          <Route exact path="/" component={Main} />
           <Route component={NotFound} />
         </Switch>
       </div>
