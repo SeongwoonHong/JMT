@@ -2,17 +2,50 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { colors } from 'utils/colors';
 import { connect } from 'react-redux';
-import { App } from 'actions';
+import { App, Restaurant } from 'actions';
+import Search from 'components/Search';
 
 class Header extends Component {
+  state = {
+    searchValue: ''
+  }
+
   toggleView = (view) => {
     const { dispatch } = this.props;
 
-    dispatch(App.toggleView(view));
+    return dispatch(App.toggleView(view));
   }
+
+  searchKeyDown = (e) => {
+    const { dispatch } = this.props;
+    const { value } = e.target;
+    const esc = 27;
+    const enter = 13;
+
+    if (e.keyCode === esc) {
+      return this.initializeSearchValue();
+    }
+    if (e.keyCode === enter) {
+
+      if (value.trim() === '') {
+        return false;
+      }
+
+      dispatch(Restaurant.searchRestaurant(value.trim(), 'finch station')); // hard coded location value for now
+
+      return this.initializeSearchValue();
+    }
+  }
+
+  searchChange = (e) => {
+    return this.setState({ searchValue: e.target.value });
+  }
+
+  initializeSearchValue = () => this.setState({ searchValue: '' });
 
   render() {
     const { view } = this.props;
+    const { searchValue } = this.state;
 
     return (
       <StyledHeader>
@@ -47,7 +80,11 @@ class Header extends Component {
         </StyledHeaderTopText>
         <StyledHeaderMiddleText>North York</StyledHeaderMiddleText>
         <StyledHeaderBottomText>
-          <div>Search for restaurants</div>
+          <Search
+            value={searchValue}
+            onKeyDown={this.searchKeyDown}
+            onChange={this.searchChange}
+          />
           <div>filter</div>
         </StyledHeaderBottomText>
       </StyledHeader>

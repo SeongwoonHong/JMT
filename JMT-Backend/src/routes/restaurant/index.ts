@@ -12,6 +12,7 @@ class User {
   private routes = (): void => {
     this.router.get('/getRestaurantNearby', controllers.getRestaurantNearby);
     this.router.get('/getRestaurantDetail', controllers.getRestaurantDetail);
+    this.router.get('/searchRestaurant', controllers.searchRestaurant);
   }
 }
 

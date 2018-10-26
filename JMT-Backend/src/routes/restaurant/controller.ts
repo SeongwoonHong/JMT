@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import axios from 'axios';
 
 const {
-  GOOGLE_PLACE_API_KEY: placeAPIKey,
+  GOOGLE_PLACE_API_KEY: placeApiKey,
+  YELP_API_KEY: yelpApiKey
 } = process.env;
 
 // google data example
@@ -2908,7 +2909,7 @@ export const getRestaurantNearby = async (req: Request, res: Response) => {
 //   const longitude = -79.41438; // yonge and fincth
 //   const radius = 1500;
 //   const keyword = 'korean';
-//   const endpoint = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&keyword=${keyword}&key=${placeAPIKey}`
+//   const endpoint = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&keyword=${keyword}&key=${placeApiKey}`
 
 //   try {
 //     const data = await axios.get(endpoint);
@@ -2922,7 +2923,7 @@ export const getRestaurantNearby = async (req: Request, res: Response) => {
 //   }
 
 // photo testing
-    // const endpoint = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU&key=${placeAPIKey}`;
+    // const endpoint = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU&key=${placeApiKey}`;
 
     // try {
     //     const data = await axios.get(endpoint);
@@ -2941,12 +2942,13 @@ export const getRestaurantNearby = async (req: Request, res: Response) => {
 
 export const getRestaurantDetail = async (req: Request, res: Response) => {
   const key = 'ChIJCxtUrQ8tK4gRzGY74H1wtno'; // key of the restaurant. right now, it is hardcoded but later, it will be coming from front end
-  const endpoint = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${key}&key=${placeAPIKey}`;
+  const endpoint = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${key}&key=${placeApiKey}`;
 
   try {
     const data = await axios.get(endpoint);
 
     return res.json(data.data);
+
   } catch (e) {
     return res.status(404).json({
       success: false,
@@ -2954,4 +2956,23 @@ export const getRestaurantDetail = async (req: Request, res: Response) => {
     });
   }
 
+}
+
+export const searchRestaurant = async (req: Request, res: Response) => {
+  const { keyword, location } = req.query;
+  const endpoint = `https://api.yelp.com/v3/businesses/search?term=${keyword}&location=${location}`;
+
+  try {
+    const data = await axios.get(endpoint, {
+        headers: { Authorization: `Bearer ${yelpApiKey}`}
+    });
+
+    return res.json(data.data.businesses);
+
+  } catch (e) {
+    return res.status(404).json({
+      success: false,
+      msg: e.message
+    });
+  }
 }
