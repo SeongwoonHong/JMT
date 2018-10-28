@@ -20,12 +20,18 @@ export const getRestaurant = (data) => {
   };
 };
 
-// For now, it only returns hard coded values near Finch Station
-export const getRestaurantNearby = () => {
+export const getRestaurantNearby = ({ location, latitude, longitude }) => {
   return (dispatch) => {
     dispatch(App.loadingStart());
 
-    return axios.get('/api/restaurant/getRestaurantNearby')
+    return axios.get('/api/restaurant/getRestaurantNearby', {
+      params: {
+        location,
+        latitude,
+        longitude,
+        keyword: 'restaurant',
+      },
+    })
       .then((res) => {
         dispatch(App.loadingDone());
         dispatch(this.getRestaurant(res.data));
@@ -41,7 +47,12 @@ export const getRestaurantNearby = () => {
   };
 };
 
-export const searchRestaurant = (keyword, location) => {
+export const searchRestaurant = ({
+  keyword,
+  location,
+  latitude,
+  longitude
+}) => {
   return (dispatch) => {
     dispatch(App.loadingStart());
 
@@ -49,6 +60,8 @@ export const searchRestaurant = (keyword, location) => {
       params: {
         keyword,
         location,
+        latitude,
+        longitude,
       }
     })
       .then((res) => {

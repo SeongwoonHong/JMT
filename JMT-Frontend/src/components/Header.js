@@ -7,7 +7,13 @@ import Search from 'components/Search';
 
 class Header extends Component {
   state = {
-    searchValue: ''
+    searchValue: '',
+  }
+
+  getCurrentLocationText = () => {
+    const { currentLocation } = this.props;
+
+    return currentLocation.isUserAllowed ? 'Current Location' : 'Toronto'; // it's toronto by default
   }
 
   toggleView = (view) => {
@@ -17,7 +23,7 @@ class Header extends Component {
   }
 
   searchKeyDown = (e) => {
-    const { dispatch } = this.props;
+    const { dispatch, currentLocation } = this.props;
     const { value } = e.target;
     const esc = 27;
     const enter = 13;
@@ -31,7 +37,11 @@ class Header extends Component {
         return false;
       }
 
-      dispatch(Restaurant.searchRestaurant(value.trim(), 'finch station')); // hard coded location value for now
+      dispatch(Restaurant.searchRestaurant({
+        keyword: value,
+        latitude: currentLocation.lat,
+        longitude: currentLocation.lng
+      }));
 
       return this.initializeSearchValue();
     }
@@ -78,7 +88,9 @@ class Header extends Component {
             </StyledSpan>
           </div>
         </StyledHeaderTopText>
-        <StyledHeaderMiddleText>North York</StyledHeaderMiddleText>
+        <StyledHeaderMiddleText>
+          Icon { this.getCurrentLocationText() }
+        </StyledHeaderMiddleText>
         <StyledHeaderBottomText>
           <Search
             value={searchValue}
@@ -106,6 +118,7 @@ const StyledHeaderTopText = styled.div`
 
 const StyledHeaderMiddleText = styled.div`
   margin-top: 10px;
+  border: none;
 `;
 
 const StyledHeaderBottomText = styled.div`

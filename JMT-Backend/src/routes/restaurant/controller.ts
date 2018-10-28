@@ -2902,65 +2902,32 @@ const yelpNearByMockData = [
     }
 ]
 
-export const getRestaurantNearby = async (req: Request, res: Response) => {
-  //params: latitude, longitude, radius, keyword, opennow, minprice(0-4), maxprice(0-4)
-//   const type = 'restaurant';
-//   const latitude = 43.780840; // yonge and fincth
-//   const longitude = -79.41438; // yonge and fincth
-//   const radius = 1500;
-//   const keyword = 'korean';
-//   const endpoint = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&keyword=${keyword}&key=${placeApiKey}`
+export const getRestaurantDetail = async (req: Request, res: Response) => {
+//   const key = 'ChIJCxtUrQ8tK4gRzGY74H1wtno'; // key of the restaurant. right now, it is hardcoded but later, it will be coming from front end
+//   const endpoint = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${key}&key=${placeApiKey}`;
 
 //   try {
 //     const data = await axios.get(endpoint);
 
-//     return res.json(data.data.results);
+//     return res.json(data.data);
+
 //   } catch (e) {
 //     return res.status(404).json({
 //       success: false,
 //       msg: e.message
-//     })
+//     });
 //   }
-
-// photo testing
-    // const endpoint = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU&key=${placeApiKey}`;
-
-    // try {
-    //     const data = await axios.get(endpoint);
-    //     console.log('data = ', data);
-    //     return res.json(data);
-    // } catch (e) {
-    //     return res.status(404).json({
-    //     success: false,
-    //     msg: e.message
-    //     })
-    // }
-//
-    // return res.json(nearByMockData.results);
-    return res.json(yelpNearByMockData);
-};
-
-export const getRestaurantDetail = async (req: Request, res: Response) => {
-  const key = 'ChIJCxtUrQ8tK4gRzGY74H1wtno'; // key of the restaurant. right now, it is hardcoded but later, it will be coming from front end
-  const endpoint = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${key}&key=${placeApiKey}`;
-
-  try {
-    const data = await axios.get(endpoint);
-
-    return res.json(data.data);
-
-  } catch (e) {
-    return res.status(404).json({
-      success: false,
-      msg: e.message
-    });
-  }
-
 }
 
 export const searchRestaurant = async (req: Request, res: Response) => {
-  const { keyword, location } = req.query;
-  const endpoint = `https://api.yelp.com/v3/businesses/search?term=${keyword}&location=${location}`;
+  const { keyword, location, latitude, longitude } = req.query;
+  let endpoint;
+
+  if (location) {
+    endpoint = `https://api.yelp.com/v3/businesses/search?term=${keyword}&location=${location}`;
+  } else { // for current location
+    endpoint = `https://api.yelp.com/v3/businesses/search?term=${keyword}&latitude=${latitude}&longitude=${longitude}&radius=1500`;
+  }
 
   try {
     const data = await axios.get(endpoint, {

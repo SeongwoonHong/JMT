@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { colors } from 'utils/colors';
 
 class Loader extends Component {
   render() {
@@ -16,12 +17,15 @@ class Loader extends Component {
 const StyledLoader = styled.div`
   display: flex;
   justify-content: center;
-  
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+
   > div {
     width: 1rem;
     height: 1rem;
     margin: 3rem 0.2rem;
-    background: #8385aa;
+    background: ${colors.theme};
     border-radius: 50%;
     animation: bouncing-loader 0.6s infinite alternate;
   }
