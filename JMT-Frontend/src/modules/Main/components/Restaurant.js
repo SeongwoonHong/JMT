@@ -1,24 +1,35 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { colors } from 'utils/colors';
 
 class Restaurant extends Component {
   render() {
     // const { name, rating, vicinity } = this.props.restaurant; // for google api
-    const { name, id, image_url: imageUrl, review_count, rating, location: { address1 }, distance, price } = this.props.restaurant;
+    const {
+      name,
+      id,
+      image_url: imageUrl,
+      review_count,
+      rating,
+      location: { address1 },
+      distance,
+      price,
+    } = this.props.data;
+
+    const { isSmallView } = this.props;
 
     return (
       <StyledRestaurant>
         <StyledLeft>
-          <StyledImage img={imageUrl} />
+          <StyledImage img={imageUrl} isSmallView={isSmallView} />
         </StyledLeft>
         <StyledRight>
           <StyledTopText>
-            <StyledRating>{rating}</StyledRating>
-            <StyledDesc>{ price || '??' }</StyledDesc>
+            <StyledRating isSmallView={isSmallView}>{rating}</StyledRating>
+            <StyledDesc isSmallView={isSmallView}>{ price || '??' }</StyledDesc>
           </StyledTopText>
-          <StyledMiddleText>{name}</StyledMiddleText>
-          <StyledBottomText>{distance.toFixed(0)} {address1}</StyledBottomText>
+          <StyledMiddleText isSmallView={isSmallView}>{name}</StyledMiddleText>
+          <StyledBottomText isSmallView={isSmallView}>{distance.toFixed(0)}M {address1}</StyledBottomText>
         </StyledRight>
       </StyledRestaurant>
     );
@@ -53,6 +64,13 @@ const StyledImage = styled.div`
   height: 90px;
   border-radius: 15px;
   margin: 10px;
+
+  ${props =>
+    props.isSmallView &&
+    css`
+      width: 50px;
+      height: 50px;
+    `};
 `;
 
 const StyledTopText = styled.div`
@@ -65,20 +83,45 @@ const StyledMiddleText = styled.div`
   font-weight: bold;
   font-size: 16px;
   margin-top: 10px;
+
+  ${props =>
+    props.isSmallView &&
+    css`
+      font-size: 14px;
+      white-space: nowrap;
+    `};
 `;
 
 const StyledBottomText = styled.div`
   margin: 10px 0 10px 0;
+
+  ${props =>
+    props.isSmallView &&
+    css`
+      font-size: 11px;
+    `};
 `;
 
 const StyledRating = styled.div`
   color: ${colors.theme};
   font-size: 20px;
+
+  ${props =>
+    props.isSmallView &&
+    css`
+      font-size: 14px;
+    `};
 `;
 
 const StyledDesc = styled.div`
   font-size: 14px;
   color: ${colors.black};
+
+  ${props =>
+    props.isSmallView &&
+    css`
+      font-size: 12px;
+    `};
 `;
 
 export default Restaurant;
