@@ -2,25 +2,45 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { colors } from 'utils/colors';
 import { connect } from 'react-redux';
+import Modal from 'react-modal';
 import { App, Restaurant } from 'actions';
 import Search from 'components/Search';
+import ModalContainer from './ModalContainer';
+
+const modalStyle = {
+  overlay: {
+    opacity: 1,
+    backgroundColor: 'rgba(0,0,0,.8)'
+  },
+  content: {
+    borderRadius: '10px',
+    top: '20%',
+    left: '0%',
+    right: '0%',
+    bottom: '20%',
+    display: 'flex'
+  }
+};
 
 class Header extends Component {
   state = {
     searchValue: '',
-  }
+    isModalOpen: false
+  };
 
   getCurrentLocationText = () => {
     const { currentLocation } = this.props;
 
     return currentLocation.isUserAllowed ? 'Current Location' : 'Toronto'; // it's toronto by default
-  }
+  };
+
+  modalToggler = () => this.setState(({ isModalOpen }) => ({ isModalOpen: !isModalOpen }));
 
   toggleView = (view) => {
     const { dispatch } = this.props;
 
     return dispatch(App.toggleView(view));
-  }
+  };
 
   searchKeyDown = (e) => {
     const { dispatch, currentLocation } = this.props;
@@ -32,7 +52,6 @@ class Header extends Component {
       return this.initializeSearchValue();
     }
     if (e.keyCode === enter) {
-
       if (value.trim() === '') {
         return false;
       }
@@ -45,20 +64,23 @@ class Header extends Component {
 
       return this.initializeSearchValue();
     }
-  }
+  };
 
   searchChange = (e) => {
     return this.setState({ searchValue: e.target.value });
-  }
+  };
 
   initializeSearchValue = () => this.setState({ searchValue: '' });
 
   render() {
     const { view } = this.props;
-    const { searchValue } = this.state;
+    const { searchValue, isModalOpen } = this.state;
 
     return (
       <StyledHeader>
+        <Modal isOpen={isModalOpen} style={modalStyle} ariaHideApp={false}>
+          <ModalContainer modalToggler={this.modalToggler} />
+        </Modal>
         <StyledHeaderTopText>
           <div>Find Restaurants</div>
           <div>
@@ -69,7 +91,7 @@ class Header extends Component {
                 backgroundColor: view === 'map' && colors.theme,
                 color: view === 'map' && 'white',
                 borderTopLeftRadius: '5px',
-                borderBottomLeftRadius: '5px',
+                borderBottomLeftRadius: '5px'
               }}
             >
               Map
@@ -81,7 +103,7 @@ class Header extends Component {
                 backgroundColor: view === 'list' && colors.theme,
                 color: view === 'list' && 'white',
                 borderTopRightRadius: '5px',
-                borderBottomRightRadius: '5px',
+                borderBottomRightRadius: '5px'
               }}
             >
               List
@@ -89,7 +111,7 @@ class Header extends Component {
           </div>
         </StyledHeaderTopText>
         <StyledHeaderMiddleText>
-          Icon { this.getCurrentLocationText() }
+          Icon {this.getCurrentLocationText()}
         </StyledHeaderMiddleText>
         <StyledHeaderBottomText>
           <Search
@@ -97,7 +119,7 @@ class Header extends Component {
             onKeyDown={this.searchKeyDown}
             onChange={this.searchChange}
           />
-          <div>filter</div>
+          <div onClick={this.modalToggler}>filter</div>
         </StyledHeaderBottomText>
       </StyledHeader>
     );
@@ -129,7 +151,6 @@ const StyledHeaderBottomText = styled.div`
 }
 `;
 
-
 const StyledSpan = styled.span`
   padding: 0.3rem 0.7rem;
   cursor: pointer;
@@ -137,14 +158,16 @@ const StyledSpan = styled.span`
 
   &:hover,
   &:focus {
-    box-shadow: 0 0 0 1px rgba(34,36,38,.35) inset, 0 0 0 0 rgba(34,36,38,.15) inset !important;
+    box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.35) inset,
+      0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
   }
 
   &:active {
-    box-shadow: 0 0 0 1px rgba(0,0,0,.15) inset, 0 1px 4px 0 rgba(34,36,38,.15) inset !important;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset,
+      0 1px 4px 0 rgba(34, 36, 38, 0.15) inset !important;
   }
 `;
 
 export default connect(state => ({
-  view: state.App.view,
+  view: state.App.view
 }))(Header);
