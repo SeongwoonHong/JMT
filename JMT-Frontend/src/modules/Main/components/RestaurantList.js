@@ -15,7 +15,7 @@ class RestaurantList extends Component {
           restaurants.map((restaurant) => {
             return (
               <Restaurant
-                restaurant={restaurant}
+                data={restaurant}
                 key={restaurant.id}
               />
             );

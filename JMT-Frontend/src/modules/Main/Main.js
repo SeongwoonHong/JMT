@@ -4,28 +4,42 @@ import Header from 'components/Header';
 import styled from 'styled-components';
 import { Restaurant } from 'actions';
 
+import Map from './components/Map';
 import RestaurantList from './components/RestaurantList';
 
 class Main extends React.Component {
   componentDidMount = () => {
     const { dispatch } = this.props;
 
-    dispatch(Restaurant.getRestaurantNearby());
+
+    return dispatch(Restaurant.getRestaurantNearby());
+  }
+
+  renderView = () => {
+    const { restaurants, view } = this.props;
+
+    if (view === 'map') {
+      return (
+        <Map
+          googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC50Sb3U7clyt4_TT36sj40NIXdTUaQc_E" // this key can be exposed
+          loadingElement={<div style={{ height: '100%' }}>Loading...</div>}
+          containerElement={<div style={{ height: '400px' }} />}
+          mapElement={<div style={{ height: '100%' }} />}
+          restaurants={restaurants.data}
+        />
+      );
+    }
+
+    return (
+      <RestaurantList restaurants={restaurants.data} />
+    );
   }
 
   render() {
-    const { restaurants, view } = this.props;
-
     return (
       <StyledDiv>
         <Header />
-        {
-          view === 'map'
-          ?
-            <div>map...</div>
-          :
-            <RestaurantList restaurants={restaurants.data} />
-        }
+        {this.renderView()}
         {/* {
           alert.isVisible &&
           <div>
