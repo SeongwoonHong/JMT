@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Header from 'components/Header';
 import styled from 'styled-components';
 import { Restaurant } from 'actions';
+import Loader from 'components/Loader';
 
 import Map from './components/Map';
 import RestaurantList from './components/RestaurantList';
@@ -16,13 +17,17 @@ class Main extends React.Component {
   }
 
   renderView = () => {
-    const { restaurants, view } = this.props;
+    const { restaurants, app } = this.props;
 
-    if (view === 'map') {
+    if (app.isLoading) {
+      return <Loader />;
+    }
+
+    if (app.view === 'map') {
       return (
         <Map
           googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC50Sb3U7clyt4_TT36sj40NIXdTUaQc_E" // this key can be exposed
-          loadingElement={<div style={{ height: '100%' }}>Loading...</div>}
+          loadingElement={<Loader />}
           containerElement={<div style={{ height: '400px' }} />}
           mapElement={<div style={{ height: '100%' }} />}
           restaurants={restaurants.data}
@@ -57,5 +62,5 @@ const StyledDiv = styled.div`
 
 export default connect(state => ({
   restaurants: state.Restaurants,
-  view: state.App.view
+  app: state.App
 }))(Main);

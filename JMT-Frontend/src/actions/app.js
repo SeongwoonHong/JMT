@@ -4,6 +4,8 @@ import axios from 'axios';
  */
 
 export const TOGGLE_VIEW = 'TOGGLE_VIEW';
+export const LOADING_START = 'LOADING_START';
+export const LOADING_DONE = 'LOADING_DONE';
 
 /**
  * Action Creators
@@ -25,3 +27,14 @@ export const isLoggedIn = () => { // a temporary action creator for proving that
   };
 };
 
+export const loadingStart = () => {
+  return {
+    type: LOADING_START,
+  };
+};
+
+export const loadingDone = () => {
+  return {
+    type: LOADING_DONE,
+  };
+};

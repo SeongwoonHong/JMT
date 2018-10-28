@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { App } from './';
+
 /**
  * Action types
  */
@@ -6,8 +8,6 @@ import axios from 'axios';
 export const GET_RESTAURANT = 'GET_RESTAURANT';
 export const GET_RESTAURANT_FAIL = 'GET_RESTAURANT_FAIL';
 export const SEARCH_RESTAURANT = 'SEARCH_RESTAURANT';
-export const LOADING_START = 'LOADING_START';
-export const LOADING_DONE = 'LOADING_DONE';
 export const SEARCH_RESTAURANT_FAIL = 'SEARCH_RESTAURANT_FAIL';
 /**
  * Action Creators
@@ -23,11 +23,11 @@ export const getRestaurant = (data) => {
 // For now, it only returns hard coded values near Finch Station
 export const getRestaurantNearby = () => {
   return (dispatch) => {
-    dispatch({ type: LOADING_START });
+    dispatch(App.loadingStart());
 
     return axios.get('/api/restaurant/getRestaurantNearby')
       .then((res) => {
-        dispatch({ type: LOADING_DONE });
+        dispatch(App.loadingDone());
         dispatch(this.getRestaurant(res.data));
       })
       .catch((e) => {
@@ -43,7 +43,7 @@ export const getRestaurantNearby = () => {
 
 export const searchRestaurant = (keyword, location) => {
   return (dispatch) => {
-    dispatch({ type: LOADING_START });
+    dispatch(App.loadingStart());
 
     return axios.get('/api/restaurant/searchRestaurant', {
       params: {
@@ -52,7 +52,7 @@ export const searchRestaurant = (keyword, location) => {
       }
     })
       .then((res) => {
-        dispatch({ type: LOADING_DONE });
+        dispatch(App.loadingDone());
         dispatch(this.getRestaurant(res.data));
       })
       .catch((e) => {

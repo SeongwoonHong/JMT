@@ -11,4 +11,8 @@ export default {
     props: {
     },
   },
+  Loader: {
+    components: require('components/Loader'),
+    props: {},
+  }
 };
