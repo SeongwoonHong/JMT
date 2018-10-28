@@ -11,7 +11,15 @@ class Map extends Component {
   }
 
   componentDidMount = () => {
-    this.getMapMarkerData();
+    this.getMapMarkerData(this.props.restaurants);
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (JSON.stringify(this.props.restaurants) !== JSON.stringify(nextProps.restaurants)) {
+      return this.getMapMarkerData(nextProps.restaurants);
+    }
+
+    return null;
   }
 
   onMarkerClick = (key) => {
@@ -34,9 +42,7 @@ class Map extends Component {
   //   return dispatch(GoogleMapAction.setCenter(center));
   // }
 
-  getMapMarkerData = () => {
-    const { restaurants } = this.props;
-
+  getMapMarkerData = (restaurants) => {
     const markers = restaurants.map((restaurant, index) => {
       const {
         name,
