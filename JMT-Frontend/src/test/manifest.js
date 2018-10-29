@@ -18,5 +18,10 @@ export default {
   Signup: {
     components: require('modules/Signup/components/Signup'),
     props: {}
-  }
+  },
+  SearchButton: {
+    components: require('components/SearchButton'),
+    props: {
+    },
+  },
 };
