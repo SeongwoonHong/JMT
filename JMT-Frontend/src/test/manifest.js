@@ -14,5 +14,10 @@ export default {
   Loader: {
     components: require('components/Loader'),
     props: {},
-  }
+  },
+  SearchButton: {
+    components: require('components/SearchButton'),
+    props: {
+    },
+  },
 };
