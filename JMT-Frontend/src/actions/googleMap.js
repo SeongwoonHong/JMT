@@ -8,7 +8,7 @@ export const setDefaultZoom = (value) => {
   };
 };
 
-export const setCenter = (value) => {
+export const setCenter = (value) => { // this value is an object that has lat, lng properies
   return {
     type: SET_CENTER,
     payload: value,

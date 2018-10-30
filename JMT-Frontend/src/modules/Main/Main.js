@@ -60,6 +60,7 @@ class Main extends React.Component {
 
   renderView = () => {
     const { restaurants, app } = this.props;
+    const { currentLocation } = this.state;
 
     if (app.view === 'map') {
       return (
@@ -69,6 +70,8 @@ class Main extends React.Component {
           containerElement={<div style={{ height: '400px' }} />}
           mapElement={<div style={{ height: '100%' }} />}
           restaurants={restaurants.data}
+          lat={currentLocation.lat}
+          lng={currentLocation.lng}
         />
       );
     }

@@ -33,14 +33,15 @@ class Map extends Component {
     return dispatch(GoogleMapAction.setDefaultZoom(zoomLevel));
   }
 
-  // onCenterChanged = () => { This needs to be investigated.
-  //   const { dispatch } = this.props;
-  //   const center = this.mapRef.googleMapRef.getCenter();
-  //   // console.log('center.lat = ', center.lat);
-  //   // console.log('center.lng = ', center.lng);
-  //   // return dispatch(GoogleMapAction.setCenter({ lat: center.lat, lng: center.lng }));
-  //   return dispatch(GoogleMapAction.setCenter(center));
-  // }
+  onCenterChanged = () => {
+    const { dispatch } = this.props;
+    const center = this.mapRef.googleMapRef.getCenter();
+
+    return dispatch(GoogleMapAction.setCenter({
+      lat: center.lat(),
+      lng: center.lng(),
+    }));
+  }
 
   getMapMarkerData = (restaurants) => {
     const markers = restaurants.map((restaurant, index) => {
@@ -95,15 +96,14 @@ class Map extends Component {
   }
 
   render() {
-    const lat = 43.780840; // This value is hard coded right now for testing but it'll be dynamic
-    const lng = -79.41438; // This value is hard coded right now for testing but it'll be dynamic
-    const { defaultZoom } = this.props.googleMapSettings;
+    const { lat, lng } = this.props;
+    const { defaultZoom, center } = this.props.googleMapSettings;
     const { markers } = this.state;
 
     return (
       <GoogleMap
-        lat={lat}
-        lng={lng}
+        lat={center.lat || lat} // once a user moves center coordination, it uses the values from redux, otherwise use props
+        lng={center.lng || lng} // once a user moves center coordination, it uses the values from redux, otherwise use props
         markers={markers}
         defaultZoom={defaultZoom}
         onMarkerClick={this.onMarkerClick}
@@ -117,6 +117,5 @@ class Map extends Component {
 }
 
 export default connect((state => ({
-  // restaurants: state.Restaurants.data,
   googleMapSettings: state.GoogleMap.settings,
 })))(withScriptjs(withGoogleMap(Map)));
