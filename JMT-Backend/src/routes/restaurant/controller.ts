@@ -2933,8 +2933,10 @@ export const searchRestaurant = async (req: Request, res: Response) => {
     const data = await axios.get(endpoint, {
         headers: { Authorization: `Bearer ${yelpApiKey}`}
     });
+    const { data: { businesses } } = data;
+    const validBusinesses = businesses.filter((business) => business.coordinates.latitude && business.coordinates.longitude);
 
-    return res.json(data.data.businesses);
+    return res.json(validBusinesses);
 
   } catch (e) {
     return res.status(404).json({
