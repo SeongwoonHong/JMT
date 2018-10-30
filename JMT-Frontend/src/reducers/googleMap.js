@@ -23,7 +23,9 @@ export default function (state = initialState, action) {
       return {
         settings: {
           ...state.settings,
-          center: action.payload,
+          center: {
+            ...action.payload,
+          }
         },
       };
     default:
