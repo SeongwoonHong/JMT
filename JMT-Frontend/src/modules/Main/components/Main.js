@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { App, Restaurant } from 'actions';
 import Loader from 'components/Loader';
 
-import Map from './components/Map';
-import RestaurantList from './components/RestaurantList';
+import Map from './Map';
+import RestaurantList from './RestaurantList';
 
 class Main extends React.Component {
   state = {

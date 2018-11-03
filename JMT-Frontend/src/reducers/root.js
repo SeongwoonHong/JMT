@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
-import { App, Alert, Restaurants, GoogleMap } from './';
+import { App, Alert, Restaurants, GoogleMap, Auth } from './';
 
 const appReducer = combineReducers({
   App,
   Alert,
   Restaurants,
   GoogleMap,
+  Auth,
 });
 
 const rootReducer = (state, action) => {

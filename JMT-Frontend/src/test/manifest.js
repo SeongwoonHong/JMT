@@ -14,5 +14,9 @@ export default {
   Loader: {
     components: require('components/Loader'),
     props: {},
+  },
+  Signup: {
+    components: require('modules/Signup/components/Signup'),
+    props: {}
   }
 };

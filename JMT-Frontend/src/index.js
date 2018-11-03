@@ -5,7 +5,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
 
 import NotFound from 'components/NotFound';
-import Main from 'modules/Main/Main';
+import Main from 'modules/Main';
+import Signup from 'modules/Signup';
+
 import './styles';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -25,7 +27,8 @@ ReactDOM.render(
               ? <Route path="/test" component={ TestRoutes } />
               : null
           }
-          <Route exact path="/" component={Main} />
+          <Route exact path="/main" component={Main} />
+          <Route exact path="/signup" component={Signup} />
           <Route component={NotFound} />
         </Switch>
       </div>

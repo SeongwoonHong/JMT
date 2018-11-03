@@ -34,7 +34,7 @@ export const getRestaurantNearby = ({ location, latitude, longitude }) => {
     })
       .then((res) => {
         dispatch(App.loadingDone());
-        dispatch(this.getRestaurant(res.data));
+        dispatch(getRestaurant(res.data));
       })
       .catch((e) => {
         // To do - Toaster
@@ -66,7 +66,7 @@ export const searchRestaurant = ({
     })
       .then((res) => {
         dispatch(App.loadingDone());
-        dispatch(this.getRestaurant(res.data));
+        dispatch(getRestaurant(res.data));
       })
       .catch((e) => {
         // To do - Toaster
@@ -75,15 +75,6 @@ export const searchRestaurant = ({
           payload: e
         });
         console.log(e);
-      });
-  };
-};
-
-export const isLoggedIn = () => { // a temporary action creator for proving that it's possible to call our backend APIs
-  return (dispatch) => {
-    return axios.get('/api/user/check')
-      .then((res) => {
-        dispatch(this.getMsg(res.data.msg));
       });
   };
 };
