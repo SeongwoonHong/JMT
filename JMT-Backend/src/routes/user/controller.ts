@@ -64,7 +64,7 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
       }
 
       return db.query(userQuery.signUpQuery())
-        .then(result => res.send(result))
+        .then(result => res.json(result))
         .catch(err => {
           console.log(err);
         })

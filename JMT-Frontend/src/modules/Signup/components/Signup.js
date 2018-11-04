@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Auth } from 'actions';
+import Loader from 'components/Loader';
 
 class Signup extends Component {
   state = {
@@ -19,18 +20,34 @@ class Signup extends Component {
 
   signup = () => {
     const { dispatch } = this.props;
-
-    dispatch(Auth.signup(this.state))
-      .then((res) => console.log('res = ', res))
-  }
-
-  render() {
     const {
       displayName,
       password,
       passwordConfirm,
       email
     } = this.state;
+
+    dispatch(Auth.signup({
+      displayName,
+      password,
+      passwordConfirm,
+      email
+    }))
+      .then((res) => console.log('res = ', res));
+  }
+
+  render() {
+    const { app } = this.props;
+    const {
+      displayName,
+      password,
+      passwordConfirm,
+      email
+    } = this.state;
+
+    if (app.isLoading) {
+      return <Loader />;
+    }
 
     return (
       <div>
@@ -44,6 +61,7 @@ class Signup extends Component {
         <div>
           password: <StyledInput
             name="password"
+            type="password"
             value={password}
             onChange={this.onChangeHandler}
           />
@@ -51,6 +69,7 @@ class Signup extends Component {
         <div>
           password confirm: <StyledInput
             name="passwordConfirm"
+            type="password"
             value={passwordConfirm}
             onChange={this.onChangeHandler}
           />
@@ -68,7 +87,9 @@ class Signup extends Component {
   }
 }
 
-export default connect()(Signup);
+export default connect(state => ({
+  app: state.App,
+}))(Signup);
 
 const StyledInput = styled.input`
   border-color: lightgrey;

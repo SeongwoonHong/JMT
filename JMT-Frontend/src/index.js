@@ -7,6 +7,7 @@ import store from 'stores/store';
 import NotFound from 'components/NotFound';
 import Main from 'modules/Main';
 import Signup from 'modules/Signup';
+import Login from 'modules/Login';
 
 import './styles';
 
@@ -29,6 +30,7 @@ ReactDOM.render(
           }
           <Route exact path="/main" component={Main} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/login" component={Login} />
           <Route component={NotFound} />
         </Switch>
       </div>

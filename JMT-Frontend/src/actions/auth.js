@@ -6,6 +6,8 @@ import { App } from './';
  */
 export const SIGNUP = 'SIGNUP';
 export const SIGNUP_FAIL = 'SIGNUP_FAIL';
+export const LOGIN = 'LOGIN';
+export const LOGIN_FAIL = 'LOGIN_FAIL';
 
 /**
  * Action creator
@@ -18,10 +20,25 @@ export const signupSuccess = () => {
   });
 };
 
-export const signupFail = () => {
+export const signupFail = (error) => {
   return ({
     type: SIGNUP_FAIL,
-    registered: false
+    registered: false,
+    payload: error,
+  });
+};
+
+export const loginSuccess = (user) => {
+  return ({
+    type: LOGIN,
+    payload: user,
+  });
+};
+
+export const loginFail = (error) => {
+  return ({
+    type: LOGIN_FAIL,
+    payload: error,
   });
 };
 
@@ -39,11 +56,31 @@ export const signup = (params) => {
 
         return dispatch(signupSuccess()); // TODO - toaster here
       })
-      .catch((e) => {
+      .catch(({ response }) => {
         dispatch(App.loadingDone());
 
-        return dispatch(signupFail()); // TODO - toaster here
+        return dispatch(signupFail(response.data)); // TODO - toaster here
       });
   };
 };
 
+export const login = (params) => {
+  return (dispatch) => {
+    dispatch(App.loadingStart());
+
+    return axios.post('/api/user/login', {
+      email: params.email,
+      password: params.password,
+    })
+      .then((res) => {
+        dispatch(App.loadingDone());
+
+        return dispatch(loginSuccess(res.data)); // TODO -toaster here
+      })
+      .catch(({ response }) => {
+        dispatch(App.loadingDone());
+
+        return dispatch(loginFail(response.data)); // TODO - toaster here
+      });
+  };
+};
