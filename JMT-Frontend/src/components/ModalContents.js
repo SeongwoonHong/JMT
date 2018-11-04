@@ -5,7 +5,6 @@ import { colors } from '../utils/colors';
 const ContentsWrapper = styled.div`
   flex: 1;
   display: flex;
-  // border: 3px black solid;
   padding-top: 5%;
 `;
 

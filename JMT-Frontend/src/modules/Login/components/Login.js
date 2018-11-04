@@ -1,19 +1,43 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Auth } from 'actions';
 import Loader from 'components/Loader';
+import { withCookies, Cookies } from 'react-cookie';
 
+@withCookies
+@withRouter
+@connect(state => ({
+  app: state.App,
+}))
 class Login extends Component {
   state = {
     email: '',
     password: '',
   };
 
+  componentWillMount = () => {
+    const { history } = this.props;
+
+    if (this.getTokenFromCookie()) {
+      return history.push('/main');
+    }
+
+    return false;
+  }
+
   onChangeHandler = (e) => {
     const { name, value } = e.target;
 
     return this.setState({ [name]: value });
+  }
+
+  getTokenFromCookie = () => {
+    const cookies = new Cookies();
+    const token = cookies.get('JMT_TOKEN');
+
+    return token;
   }
 
   login = () => {
@@ -58,9 +82,7 @@ class Login extends Component {
   }
 }
 
-export default connect(state => ({
-  app: state.App,
-}))(Login);
+export default Login;
 
 const StyledInput = styled.input`
   border-color: lightgrey;

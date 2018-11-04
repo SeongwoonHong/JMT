@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { Cookies } from 'react-cookie';
+
 import { App } from './';
 
 /**
@@ -12,6 +14,8 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 /**
  * Action creator
 */
+
+const cookies = new Cookies();
 
 export const signupSuccess = () => {
   return ({
@@ -72,10 +76,11 @@ export const login = (params) => {
       email: params.email,
       password: params.password,
     })
-      .then((res) => {
+      .then(({ data }) => {
         dispatch(App.loadingDone());
+        cookies.set('JMT_TOKEN', data.token);
 
-        return dispatch(loginSuccess(res.data)); // TODO -toaster here
+        return dispatch(loginSuccess(data)); // TODO -toaster here
       })
       .catch(({ response }) => {
         dispatch(App.loadingDone());

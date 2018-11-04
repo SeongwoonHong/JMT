@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
-
+import { CookiesProvider } from 'react-cookie';
 import NotFound from 'components/NotFound';
 import Main from 'modules/Main';
 import Signup from 'modules/Signup';
@@ -20,21 +20,23 @@ if (isDevelopment) {
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <div>
-        <Switch>
-          {
-            isDevelopment
-              ? <Route path="/test" component={ TestRoutes } />
-              : null
-          }
-          <Route exact path="/main" component={Main} />
-          <Route exact path="/signup" component={Signup} />
-          <Route exact path="/login" component={Login} />
-          <Route component={NotFound} />
-        </Switch>
-      </div>
-    </BrowserRouter>
+    <CookiesProvider>
+      <BrowserRouter>
+        <div>
+          <Switch>
+            {
+              isDevelopment
+                ? <Route path="/test" component={ TestRoutes } />
+                : null
+            }
+            <Route exact path="/main" component={Main} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/login" component={Login} />
+            <Route component={NotFound} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    </CookiesProvider>
   </Provider>,
   document.getElementById('app'),
 );
