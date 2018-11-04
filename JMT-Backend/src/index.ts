@@ -21,7 +21,7 @@ class App {
       }
     );
 
-    this.express.use(morgan(':method :url :status :res[content-length] - :response-time ms', {
+    this.express.use(morgan(':method :url :status :res[content-length] - :response-time ms [:date[web]] ', {
       skip: (req, res) => res.statusCode < 400,
       stream: accessLogStream
     }));
