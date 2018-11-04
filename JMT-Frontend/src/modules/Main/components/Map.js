@@ -5,6 +5,11 @@ import { GoogleMap as GoogleMapAction } from 'actions';
 
 import GoogleMap from 'components/GoogleMap';
 
+@connect((state => ({
+  googleMapSettings: state.GoogleMap.settings,
+})))
+@withScriptjs
+@withGoogleMap
 class Map extends Component {
   state = {
     markers: [],
@@ -116,6 +121,4 @@ class Map extends Component {
   }
 }
 
-export default connect((state => ({
-  googleMapSettings: state.GoogleMap.settings,
-})))(withScriptjs(withGoogleMap(Map)));
+export default Map;

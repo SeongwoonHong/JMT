@@ -22,6 +22,9 @@ const modalStyle = {
   }
 };
 
+@connect(state => ({
+  view: state.App.view
+}))
 class Header extends Component {
   state = {
     searchValue: '',
@@ -168,6 +171,4 @@ const StyledSpan = styled.span`
   }
 `;
 
-export default connect(state => ({
-  view: state.App.view
-}))(Header);
+export default Header;

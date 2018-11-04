@@ -8,6 +8,10 @@ import Loader from 'components/Loader';
 import Map from './Map';
 import RestaurantList from './RestaurantList';
 
+@connect(state => ({
+  restaurants: state.Restaurants,
+  app: state.App
+}))
 class Main extends React.Component {
   state = {
     currentLocation: {
@@ -110,7 +114,4 @@ class Main extends React.Component {
 const StyledDiv = styled.div`
 `;
 
-export default connect(state => ({
-  restaurants: state.Restaurants,
-  app: state.App
-}))(Main);
+export default Main;

@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 
 import Login from './components/Login';
 
+@connect(state => ({
+  auth: state.Auth,
+}))
 class LoginContainer extends Component {
   render() {
     const { auth } = this.props;
@@ -20,6 +23,4 @@ class LoginContainer extends Component {
   }
 }
 
-export default connect(state => ({
-  auth: state.Auth,
-}))(LoginContainer);
+export default LoginContainer;

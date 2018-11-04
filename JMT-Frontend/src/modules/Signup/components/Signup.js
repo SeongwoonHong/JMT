@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import { Auth } from 'actions';
 import Loader from 'components/Loader';
 
+@connect(state => ({
+  app: state.App,
+}))
 class Signup extends Component {
   state = {
     displayName: '',
@@ -87,9 +90,7 @@ class Signup extends Component {
   }
 }
 
-export default connect(state => ({
-  app: state.App,
-}))(Signup);
+export default Signup;
 
 const StyledInput = styled.input`
   border-color: lightgrey;
