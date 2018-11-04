@@ -1,33 +1,34 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { colors } from 'utils/colors';
 
 class SearchButton extends Component {
-
   render() {
-  
-    return ( 
-      <StyledSearchButton onClick={this.props.onClick}>
-        <ButtonText>Search</ButtonText>
+    return (
+      <StyledSearchButton
+        className={this.props.className}
+        onClick={this.props.onClick}
+      >
+        <StyledButtonText>Search</StyledButtonText>
       </StyledSearchButton>
     );
   }
 }
 
 const StyledSearchButton = styled.div`
-  width: 327px;
+  width: 100%;
   height: 54px;
   background-image: linear-gradient(to right ,rgb(244,123,66), rgb(246,54,64));
   box-shadow: 0 3px 5px 0 rgba(0,0,0,0.16);
   border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const ButtonText = styled.div`
-  padding: 15px 135px;
-  color: rgb(255,255,255);
+const StyledButtonText = styled.div`
+  color: ${colors.white};
   font-size: 18px;
-  font-family: "Open Sans", Arial, sans-serif;
-  font-weight: 400;
-  letter-spacing: -0.3px;
 `;
 
 export default SearchButton;
