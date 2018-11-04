@@ -6,7 +6,7 @@ class SearchButton extends Component {
   render() {
   
     return ( 
-      <StyledSearchButton>
+      <StyledSearchButton onClick={this.props.onClick}>
         <ButtonText>Search</ButtonText>
       </StyledSearchButton>
     );
