@@ -44,7 +44,7 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
   }
 
   const userQuery = new UserQuery({ display_name, password: hashedPassword, email, avatar, signup_date: dateUtils.getDate() })
-  const findEmailQuery = new UserQuery({ email });
+  const findEmailQuery = new UserQuery({ email, display_name });
 
   return db.query(findEmailQuery.getUserByEmailOrDisplayName())
     .then(({ rows }) => {
