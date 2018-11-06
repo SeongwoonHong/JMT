@@ -41,7 +41,7 @@ const StyledButton = styled(({ className, children, ...rest }) => rest.to ?
 )`
   width: 100%;
   height: 54px;
-  background-image: linear-gradient(to right ,rgb(244,123,66), rgb(246,54,64));
+  background-image: ${colors.themeWithGradient};
   box-shadow: 0 3px 5px 0 rgba(0,0,0,0.16);
   border-radius: 12px;
   display: flex;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { colors } from 'utils/colors';
+import TransitionGroup from 'react-transition-group-plus';
 
 import Restaurant from './Restaurant';
 
@@ -10,18 +11,21 @@ class RestaurantList extends Component {
 
     return (
       <StyledRestaurantList>
-        {
-          restaurants.length > 0 ?
-          restaurants.map((restaurant) => {
-            return (
-              <Restaurant
-                data={restaurant}
-                key={restaurant.id}
-              />
-            );
-          })
-          : null // Loader goes here
-        }
+        <TransitionGroup>
+          {
+            restaurants.length > 0 ?
+            restaurants.map((restaurant, index) => {
+              return (
+                <Restaurant
+                  data={restaurant}
+                  key={restaurant.id}
+                  delay={index / restaurants.length}
+                />
+              );
+            })
+            : null // Loader goes here
+          }
+        </TransitionGroup>
       </StyledRestaurantList>
     );
   }
