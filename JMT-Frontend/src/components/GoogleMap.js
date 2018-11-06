@@ -31,6 +31,7 @@ class GoogleMap extends Component {
                 position={marker} // this marker is an object that has lat and lnt for position
                 onClick={() => onMarkerClick(marker.key)}
                 key={marker.key}
+                animation={google.maps.Animation.DROP}
               >
                 {
                   marker.isInfoWindowShown &&

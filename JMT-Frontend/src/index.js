@@ -5,10 +5,10 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
 import { CookiesProvider } from 'react-cookie';
 import NotFound from 'components/NotFound';
+import Landing from 'modules/Landing';
 import Main from 'modules/Main';
 import Signup from 'modules/Signup';
 import Login from 'modules/Login';
-
 import './styles';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -29,6 +29,7 @@ ReactDOM.render(
                 ? <Route path="/test" component={ TestRoutes } />
                 : null
             }
+            <Route exact path="/" component={Landing} />
             <Route exact path="/main" component={Main} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/login" component={Login} />

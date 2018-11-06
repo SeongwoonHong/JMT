@@ -1,8 +1,33 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { colors } from 'utils/colors';
+import animate from 'gsap-promise';
 
 class Restaurant extends Component {
+  componentDidMount = () => {
+    animate.set(this.component, { autoAlpha: 0, x: '-80px' });
+  }
+
+  componentWillUnmount = () => {
+    TweenMax.killTweensOf(this.component);
+  }
+
+  componentWillEnter = (done) => {
+    this.animateIn().then(done);
+  }
+
+  componentWillAppear = (done) => {
+    this.animateIn().then(done);
+  }
+
+  animateIn = () => {
+    return animate.to(this.component, 0.5, {
+      autoAlpha: 1,
+      x: '0px',
+      delay: this.props.delay
+    });
+  }
+
   render() {
     // const { name, rating, vicinity } = this.props.restaurant; // for google api
     const {
@@ -19,7 +44,7 @@ class Restaurant extends Component {
     const { isSmallView } = this.props;
 
     return (
-      <StyledRestaurant>
+      <StyledRestaurant innerRef={el => this.component = el}>
         <StyledLeft>
           <StyledImage img={imageUrl} isSmallView={isSmallView} />
         </StyledLeft>
