@@ -10,7 +10,7 @@ class NotFound extends Component {
         <StyledTopText>404</StyledTopText>
         <StyledMiddleText>PAGE NOT</StyledMiddleText>
         <StyledBottomText>FOUND</StyledBottomText>
-        <Button to="/main" className="button">GO HOME</Button>
+        <Button to="/" className="button">GO HOME</Button>
       </StyledDiv>
     );
   }

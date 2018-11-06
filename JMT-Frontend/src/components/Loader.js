@@ -20,7 +20,11 @@ const StyledLoader = styled.div`
   width: 100vw;
   height: 100vh;
   align-items: center;
-
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  background-color: rgba(255,255,255,0.7);
+ 
   > div {
     width: 1rem;
     height: 1rem;

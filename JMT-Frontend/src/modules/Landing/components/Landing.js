@@ -3,7 +3,15 @@ import styled from 'styled-components';
 import { colors } from 'utils/colors';
 import animate from 'gsap-promise';
 import Button from 'components/Button';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { App } from 'actions';
+import Loader from 'components/Loader';
 
+@connect(state => ({
+  app: state.App,
+}))
+@withRouter
 class Landing extends Component {
   componentDidMount = () => {
     this.animateIn();
@@ -16,10 +24,33 @@ class Landing extends Component {
       y: '0px',
     };
 
-    animate.set([btnEl, this.finderText], { y: '-20px', autoAlpha: 0 });
-    animate.from(this.circle, 1, { scale: 7, ease: Quad.easeInOut })
-      .then(() => animate.to(this.finderText, 0.5, animateOption))
+    animate.set(btnEl, { y: '-20px', autoAlpha: 0 });
+    animate.from(this.circle, 1, { scale: 7, ease: Quad.easeInOut, delay: 0.5 })
       .then(() => animate.to(btnEl, 1, animateOption));
+  }
+
+  search = () => {
+    const { dispatch, history } = this.props;
+
+    dispatch(App.loadingStart());
+
+    /**
+     * temporarily
+     */
+    setTimeout(() => {
+      dispatch(App.loadingDone());
+      history.push('/main');
+    }, 2000);
+  }
+
+  renderLoader = () => {
+    const { app } = this.props;
+
+    if (app.isLoading) {
+      return <Loader />;
+    }
+
+    return null;
   }
 
   render() {
@@ -29,7 +60,14 @@ class Landing extends Component {
           innerRef={el => this.circle = el}
         />
         <StyledText innerRef={el => this.finderText = el}>Restaurant Finder</StyledText>
-        <Button className="search-button" id="searchBtn">Search</Button>
+        <Button
+          className="search-button"
+          id="searchBtn"
+          onClick={this.search}
+        >
+          Search
+        </Button>
+        {this.renderLoader()}
       </StyledDiv>
     );
   }
