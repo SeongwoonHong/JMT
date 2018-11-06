@@ -82,13 +82,13 @@ class Header extends Component {
   initializeSearchValue = () => this.setState({ searchValue: '' });
 
   render() {
-    const { view } = this.props;
+    const { view, currentLocation } = this.props;
     const { searchValue, isModalOpen } = this.state;
 
     return (
       <StyledHeader>
         <Modal isOpen={isModalOpen} style={modalStyle} ariaHideApp={false}>
-          <ModalContainer modalToggler={this.modalToggler} />
+          <ModalContainer currentLocation={currentLocation}modalToggler={this.modalToggler} />
         </Modal>
         <StyledHeaderTopText>
           <div>Find Restaurants</div>
