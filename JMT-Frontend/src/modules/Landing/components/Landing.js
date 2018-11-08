@@ -25,7 +25,9 @@ class Landing extends Component {
     };
 
     animate.set(btnEl, { y: '-20px', autoAlpha: 0 });
-    animate.from(this.circle, 1, { scale: 7, ease: Quad.easeInOut, delay: 0.5 })
+    animate.set(this.circle, { scale: 7 });
+    animate.to(this.circle, 1, { scale: 0.75, ease: Quad.easeInOut, delay: 0.5 })
+      .then(() => animate.to(this.circle, 0.5, { scale: 1, ease: Quad.easeInOut }))
       .then(() => animate.to(btnEl, 1, animateOption));
   }
 
