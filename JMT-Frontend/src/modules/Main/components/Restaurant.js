@@ -5,7 +5,9 @@ import animate from 'gsap-promise';
 
 class Restaurant extends Component {
   componentDidMount = () => {
-    animate.set(this.component, { autoAlpha: 0, x: '-80px' });
+    const { shouldAnimate } = this.props;
+
+    shouldAnimate && animate.set(this.component, { autoAlpha: 0, x: '-80px' });
   }
 
   componentWillUnmount = () => {
@@ -32,9 +34,9 @@ class Restaurant extends Component {
     // const { name, rating, vicinity } = this.props.restaurant; // for google api
     const {
       name,
-      id,
+      // id,
       image_url: imageUrl,
-      review_count,
+      // review_count,
       rating,
       location: { address1 },
       distance,

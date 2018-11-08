@@ -20,6 +20,7 @@ class RestaurantList extends Component {
                   data={restaurant}
                   key={restaurant.id}
                   delay={index / restaurants.length}
+                  shouldAnimate
                 />
               );
             })
