@@ -13,6 +13,7 @@ class User {
   private routes = (): void => {
     this.router.get('/getAll', controllers.getAll);
     this.router.get('/check', tokenVerifyMiddleware, controllers.check);
+    this.router.get('/emailVerification/:token', controllers.emailVerification);
     this.router.post('/signUp', controllers.signup);
     this.router.post('/login', controllers.login);
   }

@@ -78,7 +78,7 @@ export const login = (params) => {
     })
       .then(({ data }) => {
         dispatch(App.loadingDone());
-        cookies.set('JMT_TOKEN', data.token);
+        cookies.set('JMT_AUTH_TOKEN', data.token);
 
         return dispatch(loginSuccess(data)); // TODO -toaster here
       })

@@ -35,7 +35,7 @@ class Login extends Component {
 
   getTokenFromCookie = () => {
     const cookies = new Cookies();
-    const token = cookies.get('JMT_TOKEN');
+    const token = cookies.get('JMT_AUTH_TOKEN');
 
     return token;
   }
