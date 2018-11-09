@@ -52,6 +52,18 @@ class Query {
       `
     );
   }
+
+  public updateEmailVerifiationByEmail = (): string => {
+    const { email } = this.fields;
+
+    return (
+      `
+        UPDATE USERS
+        SET verified = true
+        where email = '${email}'
+      `
+    );
+  }
 }
 
 export default Query;

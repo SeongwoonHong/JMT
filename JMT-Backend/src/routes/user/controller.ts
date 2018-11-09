@@ -19,6 +19,23 @@ export const getAll = (req: Request, res: Response): void => {
     });
 };
 
+export const emailVerification = async (req: Request, res: Response) => {
+  try {
+    const token = await jwtUtils.verify(req.params.token);
+    const userQuery = new UserQuery({ email: token.email });
+    
+    db.query(userQuery.updateEmailVerifiationByEmail());
+  } catch (e) {
+    return res.status(400).json({
+      msg: 'Invalid token',
+      success: false,
+    })
+  }
+
+  return res.redirect('http://localhost:3000/email-verified');
+}
+
+
 export const signup = async (req: Request, res: Response): Promise<Response> => {
   const { display_name, password, email, avatar } = req.body;
   const schema = Joi.object().keys({
@@ -64,7 +81,17 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
       }
 
       return db.query(userQuery.signUpQuery())
-        .then(result => res.json(result))
+        .then(result => {
+          sendVerificationEmail({
+            display_name,
+            password,
+            email,
+            avatar
+          })
+          .then((token) => console.log('token = ', token))
+
+          return res.json(result)
+        })
         .catch(err => {
           console.log(err);
         })
@@ -100,7 +127,7 @@ export const login = (req, res: Response) => {
         })
       }
 
-      const { display_name, avatar, signup_date } = rows[0];
+      const { display_name, avatar, signup_date, verified } = rows[0];
 
       try {
         passwordMatched = await bcryptUtils.compare(password, rows[0].password);
@@ -109,7 +136,14 @@ export const login = (req, res: Response) => {
       }
 
       if (passwordMatched) {
-        getToken({
+        if (!verified) {
+          res.status(403).json({
+            success: false,
+            msg: 'Please verifiy your email'
+          });
+        }
+
+        creatToken({
           email,
           password,
           display_name,
@@ -148,6 +182,10 @@ export const check = (req, res: Response): void => {
   });
 }
 
-const getToken = (fields) => {
-  return jwtUtils.sign(fields);
+const creatToken = (fields) => {
+  return jwtUtils.createToken(fields);
+}
+
+const sendVerificationEmail = (fields) => {
+  return jwtUtils.createEmailToken(fields);
 }

@@ -25,4 +25,9 @@ export default {
       text: 'Search',
     },
   },
+  'email-verified': {
+    components: require('modules/EmailVerified'),
+    props: {
+    },
+  },
 };
