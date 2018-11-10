@@ -30,4 +30,11 @@ export default {
     props: {
     },
   },
+  Dropdown: {
+    components: require('modules/Landing/components/Dropdown'),
+    props: {
+      items: ['All', 'Africa Restaurant', 'Afghan Restaurant', 'American Restaurant', 'Asian Restaurant', 'Something Restaurant', 'Something2 Restaurant', 'Something3 Restaurant', 'Something4 Restaurant'],
+      isOpened: true
+    },
+  },
 };

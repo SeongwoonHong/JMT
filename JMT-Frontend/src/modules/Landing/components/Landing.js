@@ -7,12 +7,20 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { App } from 'actions';
 import Loader from 'components/Loader';
+import TransitionGroup from 'react-transition-group-plus';
+import logo from 'assets/logo.png';
+
+import Dropdown from './Dropdown';
 
 @connect(state => ({
   app: state.App,
 }))
 @withRouter
 class Landing extends Component {
+  state = {
+    isDropdownOpened: false,
+  }
+
   componentDidMount = () => {
     this.animateIn();
   }
@@ -45,6 +53,14 @@ class Landing extends Component {
     }, 2000);
   }
 
+  openDropdown = () => {
+    this.setState({ isDropdownOpened: true });
+  }
+
+  closeDropdonw = () => {
+    this.setState({ isDropdownOpened: false });
+  }
+
   renderLoader = () => {
     const { app } = this.props;
 
@@ -56,12 +72,27 @@ class Landing extends Component {
   }
 
   render() {
+    const { isDropdownOpened } = this.state;
+
     return (
-      <StyledDiv>
+      <StyledLanding>
         <StyledBackgroundOverlay
           innerRef={el => this.circle = el}
         />
-        <StyledText innerRef={el => this.finderText = el}>Restaurant Finder</StyledText>
+        <StyledLogo>
+          <img src={logo} alt="" />
+          <div>Restaurant Finder</div>
+        </StyledLogo>
+        <button onClick={this.openDropdown}>Toggle</button>
+        <TransitionGroup>
+          {
+            isDropdownOpened &&
+            <Dropdown
+              items={['All', 'Africa Restaurant', 'Afghan Restaurant', 'American Restaurant', 'Asian Restaurant', 'Something Restaurant', 'Something2 Restaurant', 'Something3 Restaurant', 'Something4 Restaurant']}
+              closeDropdonw={this.closeDropdonw}
+            />
+          }
+        </TransitionGroup>
         <Button
           className="search-button"
           id="searchBtn"
@@ -70,14 +101,14 @@ class Landing extends Component {
           Search
         </Button>
         {this.renderLoader()}
-      </StyledDiv>
+      </StyledLanding>
     );
   }
 }
 
 export default Landing;
 
-const StyledDiv = styled.div`
+const StyledLanding = styled.div`
   width: 100vw;
   height: 100vh;
   position: relative;
@@ -100,10 +131,10 @@ const StyledBackgroundOverlay = styled.div`
   margin: 30px auto;
 `;
 
-const StyledText = styled.div`
+const StyledLogo = styled.div`
   color: #fff;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 150px;
+  top: 100px;
 `;

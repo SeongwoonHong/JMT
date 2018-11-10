@@ -1,0 +1,18 @@
+<svg width="11px" height="11px" viewBox="0 0 11 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <polygon id="path-1" points="0 1.54566745e-05 10.9914087 1.54566745e-05 10.9914087 10.9914112 0 10.9914112"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="jmt_rs_list" transform="translate(-333.000000, -94.000000)">
+            <g id="Search" transform="translate(18.000000, 65.000000)">
+                <g id="ic_chk" transform="translate(315.000000, 29.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-2"></g>
+                    <path d="M4.48757494,8.31874614 L2.06770375,5.89897799 L2.87425878,5.09244871 L4.48757494,6.70566183 L8.11716276,3.0759452 L8.9237178,3.88250023 L4.48757494,8.31874614 Z M5.49571077,1.54566745e-05 C2.46063817,1.54566745e-05 -1.28805621e-05,2.4605377 -1.28805621e-05,5.49571335 C-1.28805621e-05,8.53086323 2.46063817,10.9914112 5.49571077,10.9914112 C8.53109251,10.9914112 10.9914087,8.53086323 10.9914087,5.49571335 C10.9914087,2.4605377 8.53098946,1.54566745e-05 5.49571077,1.54566745e-05 Z" id="Fill-1" fill="#F65641" mask="url(#mask-2)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
