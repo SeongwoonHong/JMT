@@ -16,7 +16,10 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@jmt/*": ["src/jtm/*"] // this is like resolve in webpack. as of now, this is just a placeholder to explain
+      "@jmt/*": ["src/jtm/*"], // this is like resolve in webpack. as of now, this is just a placeholder to explain
+      "@db/*": ["src/database/*"],
+      "@utils/*": ["src/utils/*"],
+      "@middlewares/*": ["src/middlewares/*"]
     },
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,

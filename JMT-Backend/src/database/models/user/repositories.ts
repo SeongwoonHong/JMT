@@ -1,8 +1,9 @@
-import db from '../../';
+import db from '@db/index';
+import * as dateUtils from '@utils/date-utils';
+import * as jwtUtils from '@utils/jwt-utils';
+import * as bcryptUtils from '@utils/bcrypt-utils';
+
 import UserQuery from './queries';
-import * as dateUtils from '../../../utils/date-utils';
-import * as jwtUtils from '../../../utils/jwt-utils';
-import * as bcryptUtils from '../../../utils/bcrypt-utils';
 
 export const updateEmailVerifiationByEmail = (token: { email: string }) => {
   try {

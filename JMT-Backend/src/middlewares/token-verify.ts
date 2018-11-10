@@ -1,4 +1,4 @@
-import * as jwtUtils from '../utils/jwt-utils';
+import * as jwtUtils from '@utils/jwt-utils';
 
 export const tokenVerifyMiddleware = (req, res, next) => {
   const token = req.headers['x-access-token'] || req.query.token;

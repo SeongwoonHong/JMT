@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import * as controllers from './controller';
-import { tokenVerifyMiddleware } from '../../middlewares/token-verify';
+import { tokenVerifyMiddleware } from '@middlewares/token-verify';
 
 class User {
   public router: Router;
