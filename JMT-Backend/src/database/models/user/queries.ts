@@ -53,6 +53,17 @@ class Query {
     );
   }
 
+  public getUserByEmail = (): string => {
+    const { email } = this.fields;
+
+    return (
+      `
+        SELECT * FROM USERS
+        WHERE email = '${email}'
+      `
+    );
+  }
+
   public updateEmailVerifiationByEmail = (): string => {
     const { email } = this.fields;
 
