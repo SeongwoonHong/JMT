@@ -5,6 +5,10 @@ import { connect } from 'react-redux';
 import Modal from 'react-modal';
 import { App, Restaurant } from 'actions';
 import Search from 'components/Search';
+import SVGContainer from 'components/SVGContainer';
+import locationSVG from 'assets/location.svg';
+import filterSVG from 'assets/filter.svg';
+
 import ModalContainer from './ModalContainer';
 
 const modalStyle = {
@@ -67,6 +71,8 @@ class Header extends Component {
 
       return this.initializeSearchValue();
     }
+
+    return false;
   };
 
   searchChange = (e) => {
@@ -114,7 +120,7 @@ class Header extends Component {
           </div>
         </StyledHeaderTopText>
         <StyledHeaderMiddleText>
-          Icon {this.getCurrentLocationText()}
+          <SVGContainer svg={locationSVG} /> {this.getCurrentLocationText()}
         </StyledHeaderMiddleText>
         <StyledHeaderBottomText>
           <Search
@@ -122,7 +128,10 @@ class Header extends Component {
             onKeyDown={this.searchKeyDown}
             onChange={this.searchChange}
           />
-          <div onClick={this.modalToggler}>filter</div>
+          <SVGContainer
+            svg={filterSVG}
+            onClick={this.modalToggler}
+          />
         </StyledHeaderBottomText>
       </StyledHeader>
     );

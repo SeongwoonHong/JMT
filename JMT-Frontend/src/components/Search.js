@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import SVGContainer from 'components/SVGContainer';
+import searchSVG from 'assets/search.svg';
 
 class Search extends Component {
   render() {
@@ -7,7 +9,9 @@ class Search extends Component {
 
     return (
       <StyledDiv {...this.props}>
-        <StyledIcon>Icon</StyledIcon>
+        <StyledIcon>
+          <SVGContainer svg={searchSVG} />
+        </StyledIcon>
         <StyledInput
           placeholder="Search for restaurants..."
           onChange={onChange}
@@ -24,7 +28,7 @@ const StyledDiv = styled.div`
 `;
 
 const StyledIcon = styled.div`
-  width: 10%;
+  margin-right: 5px;
   display: inline-block;
 `;
 
