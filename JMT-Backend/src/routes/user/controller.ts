@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import * as Joi from 'joi';
 
-import * as userRepository from '../../database/models/user/repositories';
-import db from '../../database'
-import UserQuery from '../../database/models/user/queries';
-import * as bcryptUtils from '../../utils/bcrypt-utils';
-import * as validationUtils from '../../utils/validation-utils';
-import * as jwtUtils from '../../utils/jwt-utils';
+import * as userRepository from '@db/models/user/repositories';
+import db from '@db/index'
+import UserQuery from '@db/models/user/queries';
+import * as bcryptUtils from '@utils/bcrypt-utils';
+import * as validationUtils from '@utils/validation-utils';
+import * as jwtUtils from '@utils/jwt-utils';
 // TODO - how to properly handle errors (through the app)
 
 export const getAll = (req: Request, res: Response): void => {
