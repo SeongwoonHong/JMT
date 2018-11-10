@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import * as Joi from 'joi';
 
+import * as userRepository from '../../database/models/user/repositories';
 import db from '../../database'
-import UserQuery from '../../database/repositories/user/queries';
+import UserQuery from '../../database/models/user/queries';
 import * as bcryptUtils from '../../utils/bcrypt-utils';
 import * as validationUtils from '../../utils/validation-utils';
 import * as jwtUtils from '../../utils/jwt-utils';
-import * as dateUtils from '../../utils/date-utils';
 // TODO - how to properly handle errors (through the app)
 
 export const getAll = (req: Request, res: Response): void => {
@@ -22,14 +22,13 @@ export const getAll = (req: Request, res: Response): void => {
 export const emailVerification = async (req: Request, res: Response) => {
   try {
     const token = await jwtUtils.verify(req.params.token);
-    const userQuery = new UserQuery({ email: token.email });
-    
-    db.query(userQuery.updateEmailVerifiationByEmail());
+
+    userRepository.updateEmailVerifiationByEmail(token);
   } catch (e) {
     return res.status(400).json({
       msg: 'Invalid token',
       success: false,
-    })
+    });
   }
 
   return res.redirect('http://localhost:3000/email-verified');
@@ -56,60 +55,29 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
 
   try {
     hashedPassword = await bcryptUtils.hash(password);
+
+    const userRes = await userRepository.getUserByEmailOrDisplayName({ display_name, email });
+
+    if (userRes.success) {
+      const result = userRepository.signup({ display_name, password, hashedPassword, email, avatar })
+
+      return res.json(result);
+    }
+
+    return res.status(400).json(userRes)
   } catch (e) {
     console.log(e);
+    return res.status(400).json(e);
   }
-
-  const userQuery = new UserQuery({ display_name, password: hashedPassword, email, avatar, signup_date: dateUtils.getDate() })
-  const findEmailQuery = new UserQuery({ email, display_name });
-
-  return db.query(findEmailQuery.getUserByEmailOrDisplayName())
-    .then(({ rows }) => {
-      if (rows.length) {
-        let duplicate: string;
-
-        if (rows[0].display_name === display_name) {
-          duplicate = 'display_name';
-        } else if (rows[0].email === email) {
-          duplicate = 'email';
-        }
-
-        return res.status(400).json({
-          msg: `${duplicate} already exists`,
-          success: false,
-        });
-      }
-
-      return db.query(userQuery.signUpQuery())
-        .then(result => {
-          sendVerificationEmail({
-            display_name,
-            password,
-            email,
-            avatar
-          })
-          .then((token) => console.log('token = ', token))
-
-          return res.json(result)
-        })
-        .catch(err => {
-          console.log(err);
-        })
-    })
-    .catch(err => {
-      console.log(err);
-    })
 }
 
-export const login = (req, res: Response) => {
+export const login = async (req, res: Response) => {
   const { email, password } = req.body;
-  const userQuery = new UserQuery({ email, password });
   const schema = Joi.object().keys({
     email: validationUtils.isEmail,
     password: validationUtils.isPassword,
   });
-  const result: any = Joi.validate({ email, password}, schema);
-  let passwordMatched: boolean = null;
+  const result: any = Joi.validate({ email, password }, schema);
 
   if (result.error) {
     res.status(400).json({
@@ -118,61 +86,32 @@ export const login = (req, res: Response) => {
     })
   }
 
-  db.query(userQuery.getUserByEmailOrDisplayName())
-    .then(async ({ rows }) => {
-      if (!rows.length) {
-        res.status(400).json({
-          msg: 'account does not exist',
-          success: false,
-        })
-      }
+  try {
+    const userRes = await userRepository.login({ email, password });
 
-      const { display_name, avatar, signup_date, verified } = rows[0];
+    if (!userRes.success) {
+      return res.status(400).json(userRes);
+    }
 
-      try {
-        passwordMatched = await bcryptUtils.compare(password, rows[0].password);
-      } catch (e) {
-        console.log(e);
-      }
+    const { display_name, avatar, signup_date } = userRes.result;
 
-      if (passwordMatched) {
-        if (!verified) {
-          res.status(403).json({
-            success: false,
-            msg: 'Please verifiy your email'
-          });
-        }
-
-        creatToken({
-          email,
-          password,
-          display_name,
-          avatar,
-          signup_date,
-        })
-        .then((token) => {
-          res.json({
-            msg: 'login is succees',
-            success: true,
-            token
-          })
-        })
-        .catch((err) => {
-          res.status(403).json({
-            success: false,
-            msg: err.message
-          })
-        })
-      } else {
-        res.json({
-          msg: 'password is not correct',
-          success: false,
-        })
-      }
+    const token = await creatToken({
+      email,
+      password,
+      display_name,
+      avatar,
+      signup_date,
     })
-    .catch(err => {
-      console.log(err);
+
+    return res.json({
+      msg: 'login is succees',
+      success: true,
+      token
     })
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).json(e.message);
+  }
 }
 
 export const check = (req, res: Response): void => {
@@ -186,6 +125,3 @@ const creatToken = (fields) => {
   return jwtUtils.createToken(fields);
 }
 
-const sendVerificationEmail = (fields) => {
-  return jwtUtils.createEmailToken(fields);
-}
