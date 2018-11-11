@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { compose, withState, withHandlers } from 'recompose';
-import { Filter, Restaurant } from 'actions';
+import { App } from 'actions';
 import ModalTitle from './ModalTitle';
 import ModalContents from './ModalContents';
 import Button from './Button';
@@ -13,27 +12,23 @@ const ModalWrapper = styled.div`
   flex-direction: column;
 `;
 const ModalContainer = ({
-  searchMethod, selected, styleToggler, methodToggler, modalToggler, currentLocation, dispatch, filter
+  searchParam, selected, styleToggler, filterToggler, modalToggler, dispatch, app
 }) => {
 
   function onSearchHandler() {
-    dispatch(Filter.updateFilter(searchMethod));
+    dispatch(App.updateFilter(searchParam));
 
-    return dispatch(Restaurant.searchRestaurant({
-      keyword: searchMethod,
-      latitude: currentLocation.lat,
-      longitude: currentLocation.lng
-    }));
+    return modalToggler();
   }
-  console.log(filter);
+
   return (
     <ModalWrapper>
       <ModalTitle modalToggler={modalToggler} />
       <ModalContents
         styleToggler={styleToggler}
         selected={selected}
-        methodToggler={methodToggler}
-        searchMethod={searchMethod}
+        filterToggler={filterToggler}
+        searchParam={searchParam}
     />
       <Button onClick={onSearchHandler} >
       Search
@@ -42,30 +37,7 @@ const ModalContainer = ({
   );
 };
 
-const EnhancedModalContainer = compose(
-  connect(state => ({
-    filter: state.Filter
-  })),
-  withState('selected', 'setSelected', 'Sort'),
-  withState('searchMethod', 'setSearchMethod', []),
-  withHandlers({
-    styleToggler: ({ setSelected }) => (current) => {
-      setSelected(current);
-    },
-    methodToggler: ({ setSearchMethod, searchMethod }) => (method) => {
+export default connect(state => ({
+  app: state.App
+}))(ModalContainer);
 
-      if (searchMethod.indexOf(method) > -1) { // When user's clicked a filter twice
-        const newList = searchMethod.filter(item => item !== method);
-
-        setSearchMethod([...newList]);
-      } else {
-        setSearchMethod([...searchMethod, method]);
-      }
-    },
-    resetState: ({ setSelected, setSearchMethod }) => () => {
-      setSelected('');
-      setSearchMethod('');
-    }
-  })
-)(ModalContainer);
-export default EnhancedModalContainer;

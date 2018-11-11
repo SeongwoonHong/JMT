@@ -32,7 +32,9 @@ const modalStyle = {
 class Header extends Component {
   state = {
     searchValue: '',
-    isModalOpen: false
+    isModalOpen: false,
+    selected: 'Sort',
+    searchParam: []
   };
 
   getCurrentLocationText = () => {
@@ -40,6 +42,20 @@ class Header extends Component {
 
     return currentLocation.isUserAllowed ? 'Current Location' : 'Toronto'; // it's toronto by default
   };
+
+  filterToggler = (param) => {
+    const { searchParam } = this.state;
+
+    if (searchParam.indexOf(param) > -1) { // When user's clicked a filter twice
+      const newList = searchParam.filter(item => item !== param);
+
+      return this.setState({ searchParam: [...newList] });
+    }
+
+    return this.setState({ searchParam: [...searchParam, param] });
+  }
+
+  styleToggler = current => this.setState({ selected: current })
 
   modalToggler = () => this.setState(({ isModalOpen }) => ({ isModalOpen: !isModalOpen }));
 
@@ -83,12 +99,21 @@ class Header extends Component {
 
   render() {
     const { view, currentLocation } = this.props;
-    const { searchValue, isModalOpen } = this.state;
+    const {
+      searchValue, isModalOpen, selected, searchParam
+    } = this.state;
 
     return (
       <StyledHeader>
         <Modal isOpen={isModalOpen} style={modalStyle} ariaHideApp={false}>
-          <ModalContainer currentLocation={currentLocation}modalToggler={this.modalToggler} />
+          <ModalContainer
+            currentLocation={currentLocation}
+            modalToggler={this.modalToggler}
+            selected={selected}
+            searchParam={searchParam}
+            styleToggler={this.styleToggler}
+            filterToggler={this.filterToggler}
+          />
         </Modal>
         <StyledHeaderTopText>
           <div>Find Restaurants</div>

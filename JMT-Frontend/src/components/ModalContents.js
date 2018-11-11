@@ -54,9 +54,9 @@ const categories = [
 
 
 const ModalContents = ({
-  searchMethod,
+  searchParam,
   selected,
-  methodToggler,
+  filterToggler,
   styleToggler
 }) => {
   return (
@@ -78,8 +78,8 @@ const ModalContents = ({
         <FilterSubCategory
           categories={categories}
           selected={selected}
-          searchMethod={searchMethod}
-          methodToggler={methodToggler}
+          searchParam={searchParam}
+          filterToggler={filterToggler}
         />
       </FilterMethodWrapper>
     </ContentsWrapper>
