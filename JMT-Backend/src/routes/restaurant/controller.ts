@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
+
 import axios from '@utils/axios';
+import * as restaurantRepository from '@db/models/restaurant/repositories';
+import restaurantModel from '@db/models/restaurant/model';
 
 const yelpNearByMockData = [
     {
@@ -814,14 +817,45 @@ const yelpNearByMockData = [
 ]
 
 export const getRestaurantDetail = async (req: Request, res: Response) => {
-  // id = CB8HrynUWR4Odnj-XTY-Ew -> kookminhakyo
   const { id } = req.query;
   const endpoint = `https://api.yelp.com/v3/businesses/${id}`;
-  console.log(endpoint)
+  
   try {
-    const dataRes = await axios.get(endpoint);
+    /**
+     * First, It checks whether our database has the information already
+     */
+    const restaurantFromDatabase = await restaurantRepository.getRestaurantById(id);
 
-    return res.json(dataRes.data);
+    if (restaurantFromDatabase.length) {
+      return res.json(restaurantFromDatabase[0]);
+    }
+
+    /**
+     * calling yelp api if there's no corresponding data in our database
+     */
+    const restaurantRes = await axios.get(endpoint);
+
+    /**
+     * create a restaurant model
+     */
+    const resModel = new restaurantModel({
+      restaurant_id: restaurantRes.data.id,
+      name: restaurantRes.data.name,
+      image_url: restaurantRes.data.image_url,
+      rating: restaurantRes.data.rating,
+      price: restaurantRes.data.price,
+      location_id: 0, // for now
+      display_phone: restaurantRes.data.display_phone,
+      longitude: restaurantRes.data.coordinates.longitude,
+      latitude: restaurantRes.data.coordinates.latitude,
+    })
+    
+    /**
+     * save the restaurant information in our database and return it
+     */
+    restaurantRepository.setRestaurant(resModel);
+
+    return res.json(restaurantRes.data);
   } catch (e) {
     return res.status(404).json({
       success: false,
