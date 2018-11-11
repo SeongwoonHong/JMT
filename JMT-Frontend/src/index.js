@@ -5,11 +5,12 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
 import { CookiesProvider } from 'react-cookie';
 import NotFound from 'components/NotFound';
-import Landing from 'modules/Landing';
-import Main from 'modules/Main';
-import Signup from 'modules/Signup';
-import Login from 'modules/Login';
-import EmailVerified from 'modules/EmailVerified';
+import Landing from 'modules/landing';
+import App from 'modules/app';
+import Signup from 'modules/signup';
+import Login from 'modules/login';
+import EmailVerified from 'modules/email-verified';
+import 'url-search-params-polyfill';
 import './styles';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -31,10 +32,10 @@ ReactDOM.render(
                 : null
             }
             <Route exact path="/" component={Landing} />
-            <Route exact path="/main" component={Main} />
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/email-verified" component={EmailVerified} />
+            <Route path="/main" component={App} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/login" component={Login} />
+            <Route path="/email-verified" component={EmailVerified} />
             <Route component={NotFound} />
           </Switch>
         </div>

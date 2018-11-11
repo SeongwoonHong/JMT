@@ -31,10 +31,10 @@ class Restaurant extends Component {
   }
 
   render() {
-    // const { name, rating, vicinity } = this.props.restaurant; // for google api
+    const { onClick } = this.props;
     const {
       name,
-      // id,
+      id,
       image_url: imageUrl,
       // review_count,
       rating,
@@ -46,7 +46,7 @@ class Restaurant extends Component {
     const { isSmallView } = this.props;
 
     return (
-      <StyledRestaurant innerRef={el => this.component = el}>
+      <StyledRestaurant innerRef={el => this.component = el} onClick={() => onClick(id)}>
         <StyledLeft>
           <StyledImage img={imageUrl} isSmallView={isSmallView} />
         </StyledLeft>

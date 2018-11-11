@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { GoogleMap as GMap, Marker, InfoWindow } from 'react-google-maps';
 
-import Restaurant from 'modules/Main/components/Restaurant'; // later, this Restaurant component should be separated as a generic component in the component folder
+import Restaurant from './Restaurant'; // later, this Restaurant component should be separated as a generic component in the component folder
 
 class GoogleMap extends Component {
   render() {

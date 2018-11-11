@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { colors } from 'utils/colors';
 import TransitionGroup from 'react-transition-group-plus';
 
-import Restaurant from './Restaurant';
+import Restaurant from 'components/Restaurant';
 
 class RestaurantList extends Component {
   render() {
-    const { restaurants } = this.props;
+    const { restaurants, onClick } = this.props;
 
     return (
       <StyledRestaurantList>
@@ -20,6 +20,7 @@ class RestaurantList extends Component {
                   data={restaurant}
                   key={restaurant.id}
                   delay={index / restaurants.length}
+                  onClick={onClick}
                   shouldAnimate
                 />
               );
