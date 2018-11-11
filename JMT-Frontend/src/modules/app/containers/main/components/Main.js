@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Header from 'components/Header';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { App, Restaurant } from 'actions';
+import Header from 'components/Header';
 import Loader from 'components/Loader';
 
 import Map from './Map';
@@ -12,6 +13,7 @@ import RestaurantList from './RestaurantList';
   restaurants: state.Restaurants,
   app: state.App
 }))
+@withRouter
 class Main extends React.Component {
   state = {
     currentLocation: {
@@ -62,6 +64,10 @@ class Main extends React.Component {
     });
   }
 
+  restaurantOnClickHandler = (id) => {
+    this.props.history.push(`/main/restaurant-detail?id=${id}`);
+  }
+
   renderView = () => {
     const { restaurants, app } = this.props;
     const { currentLocation } = this.state;
@@ -81,7 +87,10 @@ class Main extends React.Component {
     }
 
     return (
-      <RestaurantList restaurants={restaurants.data} />
+      <RestaurantList
+        restaurants={restaurants.list}
+        onClick={this.restaurantOnClickHandler}
+      />
     );
   }
 

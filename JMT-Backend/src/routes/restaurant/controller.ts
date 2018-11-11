@@ -817,11 +817,11 @@ export const getRestaurantDetail = async (req: Request, res: Response) => {
   // id = CB8HrynUWR4Odnj-XTY-Ew -> kookminhakyo
   const { id } = req.query;
   const endpoint = `https://api.yelp.com/v3/businesses/${id}`;
-
+  console.log(endpoint)
   try {
-    const data = await axios.get(endpoint);
+    const dataRes = await axios.get(endpoint);
 
-    return res.json(data);
+    return res.json(dataRes.data);
   } catch (e) {
     return res.status(404).json({
       success: false,

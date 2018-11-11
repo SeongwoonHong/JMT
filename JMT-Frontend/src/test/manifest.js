@@ -16,7 +16,7 @@ export default {
     props: {},
   },
   Signup: {
-    components: require('modules/Signup/components/Signup'),
+    components: require('modules/signup/components/Signup'),
     props: {}
   },
   Button: {
@@ -26,12 +26,12 @@ export default {
     },
   },
   'email-verified': {
-    components: require('modules/EmailVerified'),
+    components: require('modules/email-verified'),
     props: {
     },
   },
   Dropdown: {
-    components: require('modules/Landing/components/Dropdown'),
+    components: require('modules/landing/components/Dropdown'),
     props: {
       items: ['All', 'Africa Restaurant', 'Afghan Restaurant', 'American Restaurant', 'Asian Restaurant', 'Something Restaurant', 'Something2 Restaurant', 'Something3 Restaurant', 'Something4 Restaurant'],
       isOpened: true

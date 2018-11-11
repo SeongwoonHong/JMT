@@ -9,6 +9,8 @@ export const GET_RESTAURANT = 'GET_RESTAURANT';
 export const GET_RESTAURANT_FAIL = 'GET_RESTAURANT_FAIL';
 export const SEARCH_RESTAURANT = 'SEARCH_RESTAURANT';
 export const SEARCH_RESTAURANT_FAIL = 'SEARCH_RESTAURANT_FAIL';
+export const GET_RESTAURANT_DETAIL = 'GET_RESTAURANT_DETAIL';
+export const GET_RESTAURANT_DETAIL_FAIL = 'GET_RESTAURANT_DETAIL_FAIL';
 /**
  * Action Creators
  */
@@ -37,12 +39,35 @@ export const getRestaurantNearby = ({ location, latitude, longitude }) => {
         dispatch(getRestaurant(res.data));
       })
       .catch((e) => {
-        // To do - Toaster
+        // TODO - Toaster
         dispatch({
           type: GET_RESTAURANT_FAIL,
           payload: e
         });
         console.log(e);
+      });
+  };
+};
+
+export const getRestaurantDetail = (id) => {
+  return (dispatch) => {
+    dispatch(App.loadingStart());
+
+    return axios.get('/api/restaurant/getRestaurantDetail', {
+      params: {
+        id
+      }
+    })
+      .then((res) => {
+        dispatch(App.loadingDone());
+        dispatch({ type: GET_RESTAURANT_DETAIL, payload: res.data });
+      })
+      .catch((e) => {
+        // TODO - Toaster
+        dispatch({
+          type: GET_RESTAURANT_DETAIL_FAIL,
+          payload: e,
+        });
       });
   };
 };
@@ -69,7 +94,7 @@ export const searchRestaurant = ({
         dispatch(getRestaurant(res.data));
       })
       .catch((e) => {
-        // To do - Toaster
+        // TODO - Toaster
         dispatch({
           type: SEARCH_RESTAURANT_FAIL,
           payload: e
