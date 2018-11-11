@@ -3,20 +3,20 @@ import * as dateUtils from '@utils/date-utils';
 import * as jwtUtils from '@utils/jwt-utils';
 import * as bcryptUtils from '@utils/bcrypt-utils';
 
-import UserQuery from './queries';
+import Query from './queries';
 
 export const updateEmailVerifiationByEmail = (token: { email: string }) => {
   try {
-    const query = new UserQuery({ email: token.email });
+    const userQuery = new Query({ email: token.email });
   
-    db.query(query.updateEmailVerifiationByEmail())
+    db.query(userQuery.updateEmailVerifiationByEmail())
   } catch (e) {
     throw new Error(e);
   }
 }
 
 export const getUserByEmailOrDisplayName = async ({ display_name, email }) => {
-  const userQuery = new UserQuery({ email, display_name });
+  const userQuery = new Query({ email, display_name });
 
   try {
     const data = await db.query(userQuery.getUserByEmailOrDisplayName())
@@ -46,7 +46,7 @@ export const getUserByEmailOrDisplayName = async ({ display_name, email }) => {
 }
 
 export const signup = async ({ display_name, password, hashedPassword, email, avatar }) => {
-  const userQuery = new UserQuery({ display_name, password: hashedPassword, email, avatar, signup_date: dateUtils.getDate() })
+  const userQuery = new Query({ display_name, password: hashedPassword, email, avatar, signup_date: dateUtils.getDate() })
 
   try {
     const result = await db.query(userQuery.signUpQuery())
@@ -69,7 +69,7 @@ export const signup = async ({ display_name, password, hashedPassword, email, av
 
 export const login = async ({ email, password }) => {
   try {
-    const userQuery = new UserQuery({ email, password });
+    const userQuery = new Query({ email, password });
     let passwordMatched: boolean = false;
     const userData = await db.query(userQuery.getUserByEmail())
     const { rows } = userData;
