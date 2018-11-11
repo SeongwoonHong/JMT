@@ -15,7 +15,7 @@ const SubItem = styled.div`
   font-size: 1.1rem;
   padding: 3.5% 0px;
 
-  color: ${props => props.searchMethod.indexOf(props.item) > -1 || props.filtered.indexOf(props.item) > -1 ? 'red' : ''}
+  color: ${props => props.searchParam.indexOf(props.item) > -1 || props.filtered.indexOf(props.item) > -1 ? 'red' : ''};
 
   :hover {
     color: ${colors.theme};
@@ -25,7 +25,7 @@ const SubItem = styled.div`
 
 
 const FilterSubCategory = ({
-  categories, selected, searchMethod, methodToggler, filter
+  categories, selected, searchParam, filterToggler, app
 }) => {
   return (
     <SubCategory>
@@ -38,10 +38,10 @@ const FilterSubCategory = ({
             {subItems.map(item => (
               <SubItem
                 key={item}
-                onClick={() => methodToggler(item)}
-                searchMethod={searchMethod}
+                onClick={() => filterToggler(item)}
+                searchParam={searchParam}
                 item={item}
-                filtered={filter && filter.data}
+                filtered={app && app.filter}
 
               >
                 {item}
@@ -57,4 +57,4 @@ const FilterSubCategory = ({
 
 };
 
-export default connect(state => ({ filter: state.Filter }))(FilterSubCategory);
+export default connect(state => ({ app: state.App }))(FilterSubCategory);
