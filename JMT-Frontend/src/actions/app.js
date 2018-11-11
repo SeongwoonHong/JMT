@@ -6,6 +6,8 @@ import axios from 'axios';
 export const TOGGLE_VIEW = 'TOGGLE_VIEW';
 export const LOADING_START = 'LOADING_START';
 export const LOADING_DONE = 'LOADING_DONE';
+export const UPDATE_FILTER = 'UPDATE_FILTER';
+
 
 /**
  * Action Creators
@@ -36,5 +38,15 @@ export const loadingStart = () => {
 export const loadingDone = () => {
   return {
     type: LOADING_DONE,
+  };
+};
+
+/**
+ * Filter action
+ */
+export const updateFilter = (searchParam) => {
+  return {
+    type: UPDATE_FILTER,
+    payload: searchParam
   };
 };
