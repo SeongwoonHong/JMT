@@ -8,7 +8,7 @@ const contentHeight = '375px';
 
 class Dropdown extends Component {
   state = {
-    selectedItem: 'All'
+    selectedItem: this.props.items[1]
   };
 
   componentDidMount = () => {
@@ -63,7 +63,7 @@ class Dropdown extends Component {
 
   render() {
     const { selectedItem } = this.state;
-    const { className, closeDropdonw } = this.props;
+    const { className, onClickHandler, mode } = this.props;
 
     return (
       <StyledDropdown className={className}>
@@ -73,10 +73,10 @@ class Dropdown extends Component {
             { this.renderItems() }
           </StyledItemContainer>
           <Button
-            onClick={closeDropdonw}
+            onClick={() => onClickHandler(mode, selectedItem)}
             className="button"
           >
-            { selectedItem || 'All' }
+            { selectedItem }
           </Button>
         </StyledContent>
       </StyledDropdown>

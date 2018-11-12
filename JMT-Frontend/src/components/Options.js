@@ -10,6 +10,7 @@ class Options extends Component {
       label,
       text,
       onClick,
+      innerRef,
     } = this.props;
 
     return (
@@ -17,6 +18,7 @@ class Options extends Component {
         className={className}
         style={style}
         onClick={onClick}
+        innerRef={innerRef}
       >
         <StyledLabel>{label}</StyledLabel>
         <StyledSelectOptions>{text}</StyledSelectOptions>
@@ -28,7 +30,6 @@ class Options extends Component {
 const StyledBorder = styled.div`
   margin: 0 24px;
   border-bottom: solid 1px rgb(229,229,229);
-  width: 327px;
 `;
 
 const StyledLabel = styled.div`

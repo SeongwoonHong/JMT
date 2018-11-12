@@ -79,7 +79,7 @@ class Main extends React.Component {
           loadingElement={<Loader />}
           containerElement={<div style={{ height: '400px' }} />}
           mapElement={<div style={{ height: '100%' }} />}
-          restaurants={restaurants.data}
+          restaurants={restaurants.list}
           lat={currentLocation.lat}
           lng={currentLocation.lng}
         />
