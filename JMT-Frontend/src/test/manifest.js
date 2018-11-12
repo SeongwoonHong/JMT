@@ -35,6 +35,14 @@ export default {
     props: {
       items: ['All', 'Africa Restaurant', 'Afghan Restaurant', 'American Restaurant', 'Asian Restaurant', 'Something Restaurant', 'Something2 Restaurant', 'Something3 Restaurant', 'Something4 Restaurant'],
       isOpened: true
+    }
+  },
+  Options: {
+    components: require('components/Options'),
+    props: {
+      label: 'Cuisines',
+      text: 'All',
     },
   },
-};
+}
+
