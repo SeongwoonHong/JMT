@@ -865,13 +865,13 @@ export const getRestaurantDetail = async (req: Request, res: Response) => {
 }
 
 export const searchRestaurant = async (req: Request, res: Response) => {
-  const { keyword, location, latitude, longitude } = req.query;
+  const { cuisines, location, latitude, longitude } = req.query;
   let endpoint;
 
   if (location) {
-    endpoint = `https://api.yelp.com/v3/businesses/search?term=${keyword}&location=${location}`;
+    endpoint = `https://api.yelp.com/v3/businesses/search?term=${cuisines}&location=${location}`;
   } else { // for current location
-    endpoint = `https://api.yelp.com/v3/businesses/search?term=${keyword}&latitude=${latitude}&longitude=${longitude}&radius=1500`;
+    endpoint = `https://api.yelp.com/v3/businesses/search?term=${cuisines}&latitude=${latitude}&longitude=${longitude}&radius=1500`;
   }
 
   try {

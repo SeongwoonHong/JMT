@@ -12,6 +12,7 @@ import logo from 'assets/logo.png';
 import Options from 'components/Options';
 
 import Dropdown from './Dropdown';
+import EnterLocation from './EnterLocation';
 
 const cuisinesOptions = ['All', 'African Restaurant', 'Afghan Restaurant', 'American Restaurant', 'Asian Restaurant', 'Something Restaurant', 'Something2 Restaurant', 'Something3 Restaurant', 'Something4 Restaurant'];
 const locationOptions = ['Near By', 'Enter Location'];
@@ -25,12 +26,42 @@ class Landing extends Component {
     isDropdownOpened: false,
     cuisinesText: 'All',
     locationText: 'Select Location',
+    currentLocation: {},
     dropdownItems: [],
     dropdownMode: null,
+    isEnterLocationVisible: false,
   }
 
   componentDidMount = () => {
     this.animateIn();
+  }
+
+  getCurrentLocation = () => {
+    const location = window.navigator && window.navigator.geolocation;
+    const { dispatch } = this.props;
+
+    dispatch(App.loadingStart());
+
+    return new Promise((resolve) => {
+      if (location) {
+        return location.getCurrentPosition((position) => {
+          this.setState({
+            currentLocation: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            }
+          }, () => {
+            dispatch(App.loadingDone());
+            resolve(this.state.currentLocation);
+          });
+        }, () => {
+          dispatch(App.loadingDone());
+          resolve(this.state.currentLocation);
+        });
+      }
+
+      return resolve('cannot get location');
+    });
   }
 
   animateIn = () => {
@@ -50,37 +81,62 @@ class Landing extends Component {
   }
 
   search = () => {
-    const { dispatch, history } = this.props;
+    const { history } = this.props;
+    const {
+      cuisinesText,
+      locationText,
+      currentLocation: {
+        lat,
+        lng,
+      },
+    } = this.state;
+    let query = '/main?';
 
-    dispatch(App.loadingStart());
+    query += `cuisines=${cuisinesText}&`;
 
-    /**
-     * temporarily
-     */
-    setTimeout(() => {
-      dispatch(App.loadingDone());
-      history.push('/main');
-    }, 2000);
+    if (locationText === 'Near By') {
+      query += `latitude=${lat}&longitude=${lng}`;
+    } else {
+      query += `location=${locationText}`;
+    }
+
+    return history.push(query);
   }
 
   openDropdown = () => {
     this.setState({ isDropdownOpened: true });
   }
 
-  closeDropdonw = () => {
+  openEnterLocation = () => {
+    this.setState({ isEnterLocationVisible: true });
+  }
+
+  closeDropdown = () => {
     this.setState({ isDropdownOpened: false });
   }
 
+  closeEnterLocation = (location) => {
+    this.setState({
+      isEnterLocationVisible: false,
+      locationText: location,
+    });
+  }
+
   dropdownClickHandler = (mode, selectedItem) => {
-    this.closeDropdonw();
+    this.closeDropdown();
 
     if (mode === 'cuisines') {
       this.setState({ cuisinesText: selectedItem });
     } else {
       this.setState({ locationText: selectedItem });
     }
+
+    if (selectedItem === 'Near By') {
+      return this.getCurrentLocation();
+    }
+
     if (selectedItem === 'Enter Location') {
-      return console.log('enter location!');
+      return this.openEnterLocation();
     }
 
     return false;
@@ -118,6 +174,7 @@ class Landing extends Component {
       isDropdownOpened,
       dropdownItems,
       dropdownMode,
+      isEnterLocationVisible,
     } = this.state;
 
     return (
@@ -151,6 +208,12 @@ class Landing extends Component {
             />
           }
         </TransitionGroup>
+        {
+          isEnterLocationVisible &&
+          <EnterLocation
+            close={this.closeEnterLocation}
+          />
+        }
         <Button
           className="search-button"
           id="searchBtn"

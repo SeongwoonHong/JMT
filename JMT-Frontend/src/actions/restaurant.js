@@ -22,33 +22,6 @@ export const getRestaurant = (data) => {
   };
 };
 
-export const getRestaurantNearby = ({ location, latitude, longitude }) => {
-  return (dispatch) => {
-    dispatch(App.loadingStart());
-
-    return axios.get('/api/restaurant/getRestaurantNearby', {
-      params: {
-        location,
-        latitude,
-        longitude,
-        keyword: 'restaurant',
-      },
-    })
-      .then((res) => {
-        dispatch(App.loadingDone());
-        dispatch(getRestaurant(res.data));
-      })
-      .catch((e) => {
-        // TODO - Toaster
-        dispatch({
-          type: GET_RESTAURANT_FAIL,
-          payload: e
-        });
-        console.log(e);
-      });
-  };
-};
-
 export const getRestaurantDetail = (id) => {
   return (dispatch) => {
     dispatch(App.loadingStart());
@@ -73,7 +46,7 @@ export const getRestaurantDetail = (id) => {
 };
 
 export const searchRestaurant = ({
-  keyword,
+  cuisines,
   location,
   latitude,
   longitude
@@ -83,7 +56,7 @@ export const searchRestaurant = ({
 
     return axios.get('/api/restaurant/searchRestaurant', {
       params: {
-        keyword,
+        cuisines,
         location,
         latitude,
         longitude,

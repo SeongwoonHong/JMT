@@ -24,15 +24,19 @@ class Main extends React.Component {
   }
 
   componentDidMount = () => {
-    const { dispatch } = this.props;
+    const { dispatch, location } = this.props;
+    const params = new URLSearchParams(location.search);
+    const paramCuisines = params.get('cuisines');
+    const paramLocation = params.get('location');
+    const paramLat = params.get('latitude');
+    const paramLong = params.get('longitude');
 
-    this.getCurrentLocation()
-      .then(currentLocation => dispatch(Restaurant.searchRestaurant({
-        keyword: 'korean restaurants',
-        latitude: currentLocation.lat,
-        longitude: currentLocation.lng
-      })))
-      .catch(e => console.log(e)); // To Do - when it fails, we need to handle this properly
+    dispatch(Restaurant.searchRestaurant({
+      cuisines: paramCuisines === 'All' ? 'Restaurant' : paramCuisines,
+      latitude: paramLat,
+      longitude: paramLong,
+      location: paramLocation,
+    }));
   }
 
   getCurrentLocation = () => {
