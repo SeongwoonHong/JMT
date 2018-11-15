@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { colors } from 'utils/colors';
 import { connect } from 'react-redux';
 import Modal from 'react-modal';
-import { App, Restaurant } from 'actions';
+import { App } from 'actions';
+import { withRouter } from 'react-router-dom';
 import Search from 'components/Search';
 import SVGContainer from 'components/SVGContainer';
 import locationSVG from 'assets/location.svg';
@@ -29,18 +30,13 @@ const modalStyle = {
 @connect(state => ({
   view: state.App.view
 }))
+@withRouter
 class Header extends Component {
   state = {
     searchValue: '',
     isModalOpen: false,
     selected: 'Sort',
     searchParam: []
-  };
-
-  getCurrentLocationText = () => {
-    const { currentLocation } = this.props;
-
-    return currentLocation.isUserAllowed ? 'Current Location' : 'Toronto'; // it's toronto by default
   };
 
   filterToggler = (param) => {
@@ -66,10 +62,16 @@ class Header extends Component {
   };
 
   searchKeyDown = (e) => {
-    const { dispatch, currentLocation } = this.props;
+    const {
+      history,
+      restaurantLocation,
+      latitude,
+      longitude,
+    } = this.props;
     const { value } = e.target;
     const esc = 27;
     const enter = 13;
+    let query = '/main?';
 
     if (e.keyCode === esc) {
       return this.initializeSearchValue();
@@ -79,13 +81,15 @@ class Header extends Component {
         return false;
       }
 
-      dispatch(Restaurant.searchRestaurant({
-        keyword: value,
-        latitude: currentLocation.lat,
-        longitude: currentLocation.lng
-      }));
+      query += `cuisines=${cuisines}&`;
 
-      return this.initializeSearchValue();
+      if (restaurantLocation === 'Near By') {
+        query += `latitude=${latitude}&longitude=${longitude}`;
+      } else {
+        query += `location=${restaurantLocation}`;
+      }
+
+      return history.push(query);
     }
 
     return false;
@@ -98,7 +102,7 @@ class Header extends Component {
   initializeSearchValue = () => this.setState({ searchValue: '' });
 
   render() {
-    const { view, currentLocation } = this.props;
+    const { view, restaurantLocation } = this.props;
     const {
       searchValue, isModalOpen, selected, searchParam
     } = this.state;
@@ -107,7 +111,6 @@ class Header extends Component {
       <StyledHeader>
         <Modal isOpen={isModalOpen} style={modalStyle} ariaHideApp={false}>
           <ModalContainer
-            currentLocation={currentLocation}
             modalToggler={this.modalToggler}
             selected={selected}
             searchParam={searchParam}
@@ -145,7 +148,7 @@ class Header extends Component {
           </div>
         </StyledHeaderTopText>
         <StyledHeaderMiddleText>
-          <SVGContainer svg={locationSVG} /> {this.getCurrentLocationText()}
+          <SVGContainer svg={locationSVG} />{restaurantLocation}
         </StyledHeaderMiddleText>
         <StyledHeaderBottomText>
           <Search

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import { App, Restaurant } from 'actions';
+import { Restaurant } from 'actions';
 import Header from 'components/Header';
 import Loader from 'components/Loader';
 
@@ -15,57 +15,38 @@ import RestaurantList from './RestaurantList';
 }))
 @withRouter
 class Main extends React.Component {
-  state = {
-    currentLocation: {
-      lat: 43.653225, // by default, it's set to toronto in case a user denied to get current location
-      lng: -79.383186, // by default, it's set to toronto in case a user denied to get current location
-      isUserAllowed: false,
-    },
+  constructor(props) {
+    super(props);
+    this.state = {
+      cuisines: this.getParamsFromURL('cuisines'),
+      location: this.getParamsFromURL('location'),
+      latitude: this.getParamsFromURL('latitude'),
+      longitude: this.getParamsFromURL('longitude'),
+    };
   }
 
   componentDidMount = () => {
-    const { dispatch, location } = this.props;
-    const params = new URLSearchParams(location.search);
-    const paramCuisines = params.get('cuisines');
-    const paramLocation = params.get('location');
-    const paramLat = params.get('latitude');
-    const paramLong = params.get('longitude');
+    const { dispatch } = this.props;
+    const {
+      cuisines,
+      location,
+      latitude,
+      longitude,
+    } = this.state;
 
     dispatch(Restaurant.searchRestaurant({
-      cuisines: paramCuisines === 'All' ? 'Restaurant' : paramCuisines,
-      latitude: paramLat,
-      longitude: paramLong,
-      location: paramLocation,
+      cuisines: cuisines === 'All' ? 'Restaurant' : cuisines,
+      latitude,
+      longitude,
+      location,
     }));
   }
 
-  getCurrentLocation = () => {
-    const location = window.navigator && window.navigator.geolocation;
-    const { dispatch } = this.props;
+  getParamsFromURL = (param) => {
+    const { location } = this.props;
+    const params = new URLSearchParams(location.search);
 
-    dispatch(App.loadingStart());
-
-    return new Promise((resolve) => {
-      if (location) {
-        return location.getCurrentPosition((position) => {
-          this.setState({
-            currentLocation: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-              isUserAllowed: true,
-            }
-          }, () => {
-            dispatch(App.loadingDone());
-            resolve(this.state.currentLocation);
-          });
-        }, () => {
-          dispatch(App.loadingDone());
-          resolve(this.state.currentLocation);
-        });
-      }
-
-      return resolve('cannot get location');
-    });
+    return params.get(param);
   }
 
   restaurantOnClickHandler = (id) => {
@@ -74,7 +55,7 @@ class Main extends React.Component {
 
   renderView = () => {
     const { restaurants, app } = this.props;
-    const { currentLocation } = this.state;
+    const { latitude, longitude } = this.state;
 
     if (app.view === 'map') {
       return (
@@ -84,8 +65,8 @@ class Main extends React.Component {
           containerElement={<div style={{ height: '400px' }} />}
           mapElement={<div style={{ height: '100%' }} />}
           restaurants={restaurants.list}
-          lat={currentLocation.lat}
-          lng={currentLocation.lng}
+          lat={Number(latitude) || 43.653225} // by default, it's toronto downtown
+          lng={Number(longitude) || -79.383186} // by default, it's toronto downtown
         />
       );
     }
@@ -100,7 +81,7 @@ class Main extends React.Component {
 
   render() {
     const { app } = this.props;
-    const { currentLocation } = this.state;
+    const { location, latitude, longitude } = this.state;
 
     if (app.isLoading) {
       return <Loader />;
@@ -109,7 +90,9 @@ class Main extends React.Component {
     return (
       <StyledDiv>
         <Header
-          currentLocation={currentLocation}
+          restaurantLocation={location || 'Current Location'}
+          latitude={latitude}
+          longitude={longitude}
         />
         {this.renderView()}
         {/* {
