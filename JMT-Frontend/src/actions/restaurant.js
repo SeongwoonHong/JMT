@@ -32,8 +32,8 @@ export const getRestaurantDetail = (id) => {
       }
     })
       .then((res) => {
-        dispatch(App.loadingDone());
         dispatch({ type: GET_RESTAURANT_DETAIL, payload: res.data });
+        dispatch(App.loadingDone());
       })
       .catch((e) => {
         // TODO - Toaster

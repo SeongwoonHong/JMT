@@ -44,5 +44,17 @@ export default {
       text: 'All',
     },
   },
-}
+  ImageSlide: {
+    components: require('modules/app/containers/restaurant-detail/components/ImageSlide'),
+    props: {
+      images: [
+        'https://s3-media3.fl.yelpcdn.com/bphoto/Jt-heyagIeWlSGNcD6DSUw/o.jpg',
+        'https://s3-media2.fl.yelpcdn.com/bphoto/zgESCUABKFAvTATWHpWT3w/o.jpg',
+        'https://s3-media2.fl.yelpcdn.com/bphoto/qxl3bpWRv_Vm9t8kQNxgGQ/o.jpg',
+      ],
+      width: '100%',
+      height: '250px',
+    },
+  },
+};
 
