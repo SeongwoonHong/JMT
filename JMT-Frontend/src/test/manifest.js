@@ -44,5 +44,10 @@ export default {
       text: 'All',
     },
   },
+  RestaurantDetails: {
+    components: require('components/RestaurantDetails'),
+    props: {
+      },
+  },
 }
 
