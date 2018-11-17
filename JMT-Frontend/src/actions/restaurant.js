@@ -67,7 +67,7 @@ export const searchRestaurant = ({
       .then((res) => {
         dispatch(App.loadingDone());
         dispatch(getRestaurant(res.data));
-        let queryString = `?cuisines=${cuisines}`;
+        let queryString = `?cuisines=${cuisines}&`;
 
         if (location) {
           queryString += `&location=${location}`;

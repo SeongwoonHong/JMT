@@ -112,11 +112,7 @@ class RestaurantDetail extends Component {
     return (
       <StyledRestaurantDetail>
         <ImageSlide
-          images={[
-            'https://s3-media3.fl.yelpcdn.com/bphoto/Jt-heyagIeWlSGNcD6DSUw/o.jpg', // for now, it's hardcoded until backend has photos database table
-            'https://s3-media2.fl.yelpcdn.com/bphoto/zgESCUABKFAvTATWHpWT3w/o.jpg', // for now, it's hardcoded until backend has photos database table
-            'https://s3-media2.fl.yelpcdn.com/bphoto/qxl3bpWRv_Vm9t8kQNxgGQ/o.jpg', // for now, it's hardcoded until backend has photos database table
-          ]}
+          images={photos}
           currentIndex={imageIndex}
         />
         <StyledBottom>

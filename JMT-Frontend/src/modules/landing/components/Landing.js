@@ -91,7 +91,7 @@ class Landing extends Component {
 
     return dispatch(Restaurant.searchRestaurant({
       cuisines: cuisinesText,
-      location: locationText,
+      location: locationText === 'Near By' ? '' : locationText,
       latitude: lat,
       longitude: lng,
     }));
