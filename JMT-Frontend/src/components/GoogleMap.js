@@ -14,6 +14,7 @@ class GoogleMap extends Component {
       toggleInfoWindow,
       onZoomChanged,
       onCenterChanged,
+      options,
     } = this.props;
 
     return (
@@ -23,13 +24,14 @@ class GoogleMap extends Component {
         onZoomChanged={onZoomChanged}
         onCenterChanged={onCenterChanged}
         ref={el => this.googleMapRef = el}
+        options={options}
       >
         {
           markers.map((marker) => {
             return (
               <Marker
                 position={marker} // this marker is an object that has lat and lnt for position
-                onClick={() => onMarkerClick(marker.key)}
+                onClick={() => onMarkerClick && onMarkerClick(marker.key)}
                 key={marker.key}
                 animation={google.maps.Animation.DROP}
               >

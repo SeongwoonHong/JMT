@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { colors } from 'utils/colors';
 import { connect } from 'react-redux';
 import Modal from 'react-modal';
-import { App } from 'actions';
+import { App, Restaurant } from 'actions';
 import { withRouter } from 'react-router-dom';
 import Search from 'components/Search';
 import SVGContainer from 'components/SVGContainer';
@@ -39,6 +39,13 @@ class Header extends Component {
     searchParam: []
   };
 
+  // componentWillMount = () => {
+  //   this.props.history.listen((location, action) => {
+  //     console.log(`The current URL is ${location.pathname}${location.search}${location.hash}`)
+  //     console.log(`The last navigation action was ${action}`)
+  //   })
+  // }
+
   filterToggler = (param) => {
     const { searchParam } = this.state;
 
@@ -63,15 +70,14 @@ class Header extends Component {
 
   searchKeyDown = (e) => {
     const {
-      history,
       restaurantLocation,
       latitude,
       longitude,
+      dispatch,
     } = this.props;
     const { value } = e.target;
     const esc = 27;
     const enter = 13;
-    let query = '/main?';
 
     if (e.keyCode === esc) {
       return this.initializeSearchValue();
@@ -81,15 +87,12 @@ class Header extends Component {
         return false;
       }
 
-      query += `cuisines=${cuisines}&`;
-
-      if (restaurantLocation === 'Near By') {
-        query += `latitude=${latitude}&longitude=${longitude}`;
-      } else {
-        query += `location=${restaurantLocation}`;
-      }
-
-      return history.push(query);
+      return dispatch(Restaurant.searchRestaurant({
+        cuisines: value,
+        location: restaurantLocation,
+        latitude,
+        longitude,
+      }));
     }
 
     return false;

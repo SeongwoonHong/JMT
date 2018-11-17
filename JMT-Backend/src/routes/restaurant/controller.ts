@@ -824,11 +824,11 @@ export const getRestaurantDetail = async (req: Request, res: Response) => {
     /**
      * First, It checks whether our database has the information already
      */
-    const restaurantFromDatabase = await restaurantRepository.getRestaurantById(id);
+    // const restaurantFromDatabase = await restaurantRepository.getRestaurantById(id);
 
-    if (restaurantFromDatabase.length) {
-      return res.json(restaurantFromDatabase[0]);
-    }
+    // if (restaurantFromDatabase.length) {
+    //   return res.json(restaurantFromDatabase[0]);
+    // }
 
     /**
      * calling yelp api if there's no corresponding data in our database
@@ -853,7 +853,7 @@ export const getRestaurantDetail = async (req: Request, res: Response) => {
     /**
      * save the restaurant information in our database and return it
      */
-    restaurantRepository.setRestaurant(resModel);
+    // restaurantRepository.setRestaurant(resModel);
 
     return res.json(restaurantRes.data);
   } catch (e) {

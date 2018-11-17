@@ -56,5 +56,11 @@ export default {
       height: '250px',
     },
   },
+  RatingCircle: {
+    components: require('components/RatingCircle'),
+    props: {
+      rating: 2,
+    },
+  },
 };
 
