@@ -4,8 +4,7 @@ import { colors } from 'utils/colors';
 import animate from 'gsap-promise';
 import Button from 'components/Button';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { App } from 'actions';
+import { App, Restaurant } from 'actions';
 import Loader from 'components/Loader';
 import TransitionGroup from 'react-transition-group-plus';
 import logo from 'assets/logo.png';
@@ -20,7 +19,6 @@ const locationOptions = ['Near By', 'Enter Location'];
 @connect(state => ({
   app: state.App,
 }))
-@withRouter
 class Landing extends Component {
   state = {
     isDropdownOpened: false,
@@ -81,7 +79,7 @@ class Landing extends Component {
   }
 
   search = () => {
-    const { history } = this.props;
+    const { dispatch } = this.props;
     const {
       cuisinesText,
       locationText,
@@ -90,17 +88,13 @@ class Landing extends Component {
         lng,
       },
     } = this.state;
-    let query = '/main?';
 
-    query += `cuisines=${cuisinesText}&`;
-
-    if (locationText === 'Near By') {
-      query += `latitude=${lat}&longitude=${lng}`;
-    } else {
-      query += `location=${locationText}`;
-    }
-
-    return history.push(query);
+    return dispatch(Restaurant.searchRestaurant({
+      cuisines: cuisinesText,
+      location: locationText,
+      latitude: lat,
+      longitude: lng,
+    }));
   }
 
   openDropdown = () => {
@@ -144,6 +138,7 @@ class Landing extends Component {
 
   optionClickHandler = (mode) => {
     this.openDropdown();
+
     if (mode === 'cuisines') {
       return this.setState({
         dropdownItems: cuisinesOptions,

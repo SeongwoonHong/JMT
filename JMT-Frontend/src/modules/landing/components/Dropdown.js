@@ -114,7 +114,7 @@ const StyledContent = styled.div`
 const StyledItemContainer = styled.div`
   height: 200px;
   overflow-y: scroll;
-  padding: 10 0px;
+  padding: 10px 0px;
 `;
 
 const StyledItem = styled.div`

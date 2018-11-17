@@ -2,7 +2,7 @@ import { Restaurant } from 'actions';
 
 const initialState = {
   list: [],
-  activeRestaurant: [],
+  activeRestaurant: {},
 };
 
 export default function (state = initialState, action) {

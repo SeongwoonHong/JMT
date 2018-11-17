@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
 import { CookiesProvider } from 'react-cookie';
 import NotFound from 'components/NotFound';
@@ -10,6 +10,7 @@ import App from 'modules/app';
 import Signup from 'modules/signup';
 import Login from 'modules/login';
 import EmailVerified from 'modules/email-verified';
+import history from 'utils/history';
 import 'url-search-params-polyfill';
 import './styles';
 
@@ -23,7 +24,7 @@ if (isDevelopment) {
 ReactDOM.render(
   <Provider store={store}>
     <CookiesProvider>
-      <BrowserRouter>
+      <Router history={history}>
         <div>
           <Switch>
             {
@@ -39,7 +40,7 @@ ReactDOM.render(
             <Route component={NotFound} />
           </Switch>
         </div>
-      </BrowserRouter>
+      </Router>
     </CookiesProvider>
   </Provider>,
   document.getElementById('app'),

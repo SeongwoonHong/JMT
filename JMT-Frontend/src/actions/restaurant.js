@@ -1,4 +1,6 @@
 import axios from 'axios';
+import history from 'utils/history';
+
 import { App } from './';
 
 /**
@@ -65,6 +67,15 @@ export const searchRestaurant = ({
       .then((res) => {
         dispatch(App.loadingDone());
         dispatch(getRestaurant(res.data));
+        let queryString = `?cuisines=${cuisines}`;
+
+        if (location) {
+          queryString += `&location=${location}`;
+        } else {
+          queryString += `latitude=${latitude}&longitude=${longitude}`;
+        }
+
+        return history.push(`/main${queryString}`);
       })
       .catch((e) => {
         // TODO - Toaster
