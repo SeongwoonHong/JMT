@@ -9,6 +9,7 @@ import RatingCircle from 'components/RatingCircle';
 
 import Map from './Map';
 import ImageSlide from './ImageSlide';
+import Categories from './Categories';
 
 @connect(state => ({
   restaurants: state.Restaurants,
@@ -111,11 +112,19 @@ class RestaurantDetail extends Component {
     console.log('restaurants.activeRestaurant = ', restaurants.activeRestaurant);
     return (
       <StyledRestaurantDetail>
-        <ImageSlide
-          images={photos}
-          currentIndex={imageIndex}
-        />
+        <StyledImageSlideWrapper>
+          <ImageSlide
+            images={photos}
+            currentIndex={imageIndex}
+          />
+          <Categories
+            categories={categories}
+            className="categories-container"
+          />
+        </StyledImageSlideWrapper>
         <StyledBottom>
+          <StyledArrowLeft onClick={this.decreaseIndex} isHide={imageIndex === 0} />
+          <StyledArrowRight onClick={this.increaseIndex} isHide={imageIndex === photos.length - 1} />
           <StyledBottomTopInfo>
             <StyledRatingNumber>{rating}</StyledRatingNumber>
             <RatingCircle
@@ -165,6 +174,17 @@ const StyledRestaurantDetail = styled.div`
 
 `;
 
+const StyledImageSlideWrapper = styled.div`
+  position: relative;
+  height: 250px;
+
+  .categories-container {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+`;
+
 const StyledBottom = styled.div`
   padding: 10px;
 `;
@@ -177,6 +197,27 @@ const StyledRatingNumber = styled.span`
   color: ${colors.lightTheme};
   font-size: 25px;
   margin-right: 10px;
+`;
+
+const StyledArrowLeft = styled.span`
+  display: ${props => props.isHide ? 'none' : 'inline-block'};
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-top-width: 8px;
+  border-bottom-width: 7px;
+  border-right: 15px solid ${colors.theme};
+  margin-right: 5px;
+`;
+
+const StyledArrowRight = styled.span`
+  display: ${props => props.isHide ? 'none' : 'inline-block'};
+  width: 0;
+  height: 0;
+  border: 0 solid transparent;
+  border-bottom-width: 8px;
+  border-top-width: 7px;
+  border-left: 15px solid ${colors.theme};
 `;
 
 const StyledReviewNumber = styled.span`

@@ -28,7 +28,7 @@ export default ImageSlide;
 
 const StyledImageSlide = styled.div`
   width: 100%;
-  height: 250px;
+  height: 100%;
   position: relative;  
 `;
 
