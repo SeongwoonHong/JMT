@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
 import { CookiesProvider } from 'react-cookie';
-import NotFound from 'components/NotFound';
+import { NotFound } from 'components';
 import Landing from 'modules/landing';
 import App from 'modules/app';
 import Signup from 'modules/signup';

@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { Restaurant } from 'actions';
-import Header from 'components/Header';
-import Loader from 'components/Loader';
+import { Header, Loader } from 'components';
 
 import Map from './Map';
 import RestaurantList from './RestaurantList';

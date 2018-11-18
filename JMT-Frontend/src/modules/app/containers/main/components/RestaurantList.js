@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { colors } from 'utils/colors';
 import TransitionGroup from 'react-transition-group-plus';
-
-import Restaurant from 'components/Restaurant';
+import { Restaurant } from 'components';
 
 class RestaurantList extends Component {
   render() {

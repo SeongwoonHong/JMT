@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withGoogleMap, withScriptjs } from 'react-google-maps';
-
-import GoogleMap from 'components/GoogleMap';
+import { GoogleMap } from 'components';
 
 @withScriptjs
 @withGoogleMap

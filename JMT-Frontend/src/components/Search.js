@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import SVGContainer from 'components/SVGContainer';
+import { SVGContainer } from 'components';
 import searchSVG from 'assets/search.svg';
 
 class Search extends Component {

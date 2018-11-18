@@ -33,4 +33,5 @@ const StyledCategory = styled.span`
   text-align: center;
   padding: 3px 13px;
   margin-right: 5px;
+  font-size: 14px;
 `;

@@ -62,5 +62,11 @@ export default {
       rating: 2,
     },
   },
+  Arrow: {
+    components: require('components/Arrow'),
+    props: {
+      className: 'right',
+    },
+  }
 };
 
