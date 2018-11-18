@@ -4,13 +4,17 @@ import { colors } from 'utils/colors';
 
 class EnterLocation extends Component {
   state = {
-    location: 'Enter your Location',
+    location: '',
   }
 
   onKeyDownHandler = (e) => {
     const enter = 13;
 
     if (e.keyCode === enter) {
+      if (!e.target.value) {
+        return false;
+      }
+
       return this.close();
     }
 
@@ -36,6 +40,7 @@ class EnterLocation extends Component {
           onKeyDown={this.onKeyDownHandler}
           onChange={this.onChangeHandler}
           value={location}
+          placeholder="Enter your location"
         />
       </StyledDiv>
     );

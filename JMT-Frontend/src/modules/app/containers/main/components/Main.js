@@ -26,13 +26,15 @@ class Main extends React.Component {
   }
 
   componentDidMount = () => {
-    const { dispatch } = this.props;
+    const { dispatch, restaurants } = this.props;
     const {
       cuisines,
       location,
       latitude,
       longitude,
     } = this.state;
+
+    if (restaurants.list.length) return;
 
     dispatch(Restaurant.searchRestaurant({
       cuisines: cuisines === 'All' ? 'Restaurant' : cuisines,
@@ -42,6 +44,10 @@ class Main extends React.Component {
     }));
   }
 
+  /**
+   * @param {string} param
+   * returns a string from url query string corresponding to param being passed
+   */
   getParamsFromURL = (param) => {
     const { location } = this.props;
     const params = new URLSearchParams(location.search);
@@ -65,6 +71,7 @@ class Main extends React.Component {
           containerElement={<div style={{ height: '400px' }} />}
           mapElement={<div style={{ height: '100%' }} />}
           restaurants={restaurants.list}
+          restaurantOnClickHandler={this.restaurantOnClickHandler}
           lat={Number(latitude) || 43.653225} // by default, it's toronto downtown
           lng={Number(longitude) || -79.383186} // by default, it's toronto downtown
         />

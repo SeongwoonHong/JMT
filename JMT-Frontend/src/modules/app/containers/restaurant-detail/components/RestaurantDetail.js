@@ -6,6 +6,7 @@ import Loader from 'components/Loader';
 import phoneIcon from 'assets/phoneIcon.png';
 import { colors } from 'utils/colors';
 import RatingCircle from 'components/RatingCircle';
+import { getTimeWithPeriod } from 'utils/number-format';
 
 import Map from './Map';
 import ImageSlide from './ImageSlide';
@@ -35,38 +36,27 @@ class RestaurantDetail extends Component {
     return dispatch(Restaurant.getRestaurantDetail(id));
   }
 
+  /**
+   * returns a time string
+   * ex) '1.30pm - 2.30am', '6pm - 9.30pm'
+   */
   getHours = () => {
     const { hours } = this.props.restaurants.activeRestaurant;
     const currentDate = new Date();
     const currentDay = currentDate.getDay();
     const day = currentDay === 0 ? 6 : currentDay - 1;
+
+    if (!hours) {
+      return 'N/A';
+    }
+
     const hoursObj = hours[0].open[day];
 
-    return `${this.getTimeWithPeriod(hoursObj.start)} - ${this.getTimeWithPeriod(hoursObj.end)}`;
-  }
-
-  getTimeWithPeriod = (time) => {
-    let result = '';
-    const num = typeof time === 'string' ? Number(time) : time;
-
-    if (num > 1200) {
-      result += `${this.getNumberWithHourAndMinutes(num - 1200)}pm`;
-    } else {
-      result += `${this.getNumberWithHourAndMinutes(num)}am`;
+    if (!hoursObj) {
+      return '';
     }
 
-    return result;
-  }
-
-  getNumberWithHourAndMinutes = (number) => {
-    const hours = number / 100;
-    const minutes = number % 100;
-
-    if (minutes) {
-      return `${hours.toFixed(0)}.${minutes}`;
-    }
-
-    return hours.toFixed(0);
+    return `${getTimeWithPeriod(hoursObj.start)} - ${getTimeWithPeriod(hoursObj.end)}`;
   }
 
   /**
@@ -260,7 +250,7 @@ const StyledRestaurantAddress = styled.div`
 
 const StyledHorizontalBorders = styled.div`
   margin: 20px 0;
-  width: 95%;
+  width: 100%;
   height: 60px;
   border-top: solid 1px rgb(222,222,222);
   border-bottom: solid 1px rgb(222,222,222);

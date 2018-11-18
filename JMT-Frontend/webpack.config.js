@@ -68,7 +68,8 @@ module.exports = {
       'utils': path.resolve('./src/utils'),
       'reducers': path.resolve('./src/reducers'),
       'stores': path.resolve('./src/stores'),
-      'assets': path.resolve('./src/assets')
+      'assets': path.resolve('./src/assets'),
+      'constants': path.resolve('./src/constants')
     }
   },
   devtool: isProduction ? '' : 'eval',

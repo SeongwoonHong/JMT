@@ -14,6 +14,10 @@ class Map extends Component {
     this.getMapMarkerData(this.props.restaurant);
   }
 
+  /**
+   * @param {object} restaurant
+   * setting a restaurant object into a markers state that will be passed to GoogleMap component
+   */
   getMapMarkerData = (restaurant) => {
     console.log('in map restaurant = ', restaurant);
     const {

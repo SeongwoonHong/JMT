@@ -9,12 +9,10 @@ import Loader from 'components/Loader';
 import TransitionGroup from 'react-transition-group-plus';
 import logo from 'assets/logo.png';
 import Options from 'components/Options';
+import { cuisineOptions, locationOptions } from 'constants';
 
 import Dropdown from './Dropdown';
 import EnterLocation from './EnterLocation';
-
-const cuisinesOptions = ['All', 'African Restaurant', 'Afghan Restaurant', 'American Restaurant', 'Asian Restaurant', 'Something Restaurant', 'Something2 Restaurant', 'Something3 Restaurant', 'Something4 Restaurant'];
-const locationOptions = ['Near By', 'Enter Location'];
 
 @connect(state => ({
   app: state.App,
@@ -89,9 +87,13 @@ class Landing extends Component {
       },
     } = this.state;
 
+    if (locationText === 'Select Location') {
+      return false;
+    }
+
     return dispatch(Restaurant.searchRestaurant({
-      cuisines: cuisinesText,
-      location: locationText === 'Near By' ? '' : locationText,
+      cuisines: cuisinesText === 'All' ? 'restaurants' : cuisinesText,
+      location: locationText === 'Current Location' ? '' : locationText,
       latitude: lat,
       longitude: lng,
     }));
@@ -125,7 +127,7 @@ class Landing extends Component {
       this.setState({ locationText: selectedItem });
     }
 
-    if (selectedItem === 'Near By') {
+    if (selectedItem === 'Current Location') {
       return this.getCurrentLocation();
     }
 
@@ -141,7 +143,7 @@ class Landing extends Component {
 
     if (mode === 'cuisines') {
       return this.setState({
-        dropdownItems: cuisinesOptions,
+        dropdownItems: cuisineOptions,
         dropdownMode: 'cuisines',
       });
     }

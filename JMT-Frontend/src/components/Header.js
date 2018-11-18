@@ -39,13 +39,6 @@ class Header extends Component {
     searchParam: []
   };
 
-  // componentWillMount = () => {
-  //   this.props.history.listen((location, action) => {
-  //     console.log(`The current URL is ${location.pathname}${location.search}${location.hash}`)
-  //     console.log(`The last navigation action was ${action}`)
-  //   })
-  // }
-
   filterToggler = (param) => {
     const { searchParam } = this.state;
 
@@ -89,7 +82,7 @@ class Header extends Component {
 
       return dispatch(Restaurant.searchRestaurant({
         cuisines: value,
-        location: restaurantLocation,
+        location: restaurantLocation === 'Current Location' ? '' : restaurantLocation,
         latitude,
         longitude,
       }));
