@@ -66,6 +66,16 @@ class RestaurantDetail extends Component {
     return address.reduce((acc, value) => `${acc + value} `, '');
   }
 
+  getDistance = () => {
+    const { distance } = this.props.restaurants.activeRestaurant;
+
+    if (distance) {
+      return `${distance.toFixed(0)} m`;
+    }
+
+    return 'N/A';
+  }
+
   increaseIndex = () => {
     return this.setState({ imageIndex: this.state.imageIndex + 1 });
   }
@@ -132,7 +142,7 @@ class RestaurantDetail extends Component {
             <StyledReviewNumber>{reviewCount} Reviews</StyledReviewNumber>
             <StyledPriceDistanceWrapper>
               <StyledPrice>{price}</StyledPrice>
-              <StyledDistance>350 m</StyledDistance> {/* this value is hard coded for now.. */}
+              <StyledDistance>{this.getDistance()}</StyledDistance>
             </StyledPriceDistanceWrapper>
           </StyledBottomTopInfo>
           <StyledRestaurantName>{name}</StyledRestaurantName>
@@ -234,17 +244,19 @@ const StyledReviewNumber = styled.span`
 const StyledPriceDistanceWrapper = styled.span`
   position: absolute;
   right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0;
 `;
 
 const StyledPrice = styled.span`
   margin-right: 10px;
+  width: 55px;
+  display: inline-block;
+  text-align: right;
 `;
 
 const StyledDistance = styled.div`
   display: inline-block;
-  width: 53px;
+  width: 63px;
   height: 22px;
   border-radius: 4px;
   border: 1px solid rgb(189, 189, 189);

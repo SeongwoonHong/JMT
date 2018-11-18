@@ -34,7 +34,7 @@ export const getRestaurantDetail = (id) => {
       }
     })
       .then((res) => {
-        dispatch({ type: GET_RESTAURANT_DETAIL, payload: res.data });
+        dispatch({ type: GET_RESTAURANT_DETAIL, payload: res.data, id });
         dispatch(App.loadingDone());
       })
       .catch((e) => {
