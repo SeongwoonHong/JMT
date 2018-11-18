@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import Modal from 'react-modal';
 import { App, Restaurant } from 'actions';
 import { withRouter } from 'react-router-dom';
-import Search from 'components/Search';
-import SVGContainer from 'components/SVGContainer';
+import { Search, SVGContainer } from 'components';
 import locationSVG from 'assets/location.svg';
 import filterSVG from 'assets/filter.svg';
 

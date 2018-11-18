@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import Button from 'components/Button';
+import { Button } from 'components';
 
 @withRouter
 class EmailVerified extends Component {

@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { colors } from 'utils/colors';
 import animate from 'gsap-promise';
-import Button from 'components/Button';
+import { Button, Loader, Options } from 'components';
 import { connect } from 'react-redux';
 import { App, Restaurant } from 'actions';
-import Loader from 'components/Loader';
 import TransitionGroup from 'react-transition-group-plus';
 import logo from 'assets/logo.png';
-import Options from 'components/Options';
 import { cuisineOptions, locationOptions } from 'constants';
 
 import Dropdown from './Dropdown';

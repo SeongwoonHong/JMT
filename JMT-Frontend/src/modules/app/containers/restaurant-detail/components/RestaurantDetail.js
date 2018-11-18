@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Restaurant } from 'actions';
 import { connect } from 'react-redux';
-import Loader from 'components/Loader';
 import phoneIcon from 'assets/phoneIcon.png';
 import { colors } from 'utils/colors';
-import RatingCircle from 'components/RatingCircle';
+import { RatingCircle, Loader, Arrow } from 'components';
 import { getTimeWithPeriod } from 'utils/number-format';
+import history from 'utils/history';
 
 import Map from './Map';
 import ImageSlide from './ImageSlide';
@@ -74,6 +74,10 @@ class RestaurantDetail extends Component {
     return this.setState({ imageIndex: this.state.imageIndex - 1 });
   }
 
+  goToRestaurantList = () => {
+    history.goBack();
+  }
+
   render() {
     const { restaurants, app } = this.props;
     const { imageIndex } = this.state;
@@ -103,6 +107,10 @@ class RestaurantDetail extends Component {
     return (
       <StyledRestaurantDetail>
         <StyledImageSlideWrapper>
+          <Arrow
+            className="arrow-container left"
+            onClick={this.goToRestaurantList}
+          />
           <ImageSlide
             images={photos}
             currentIndex={imageIndex}
@@ -172,6 +180,13 @@ const StyledImageSlideWrapper = styled.div`
     position: absolute;
     right: 10px;
     bottom: 10px;
+  }
+
+  .arrow-container {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 1;
   }
 `;
 

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { withGoogleMap, withScriptjs } from 'react-google-maps';
 import { connect } from 'react-redux';
 import { GoogleMap as GoogleMapAction } from 'actions';
-
-import GoogleMap from 'components/GoogleMap';
+import { GoogleMap } from 'components';
 
 @connect((state => ({
   googleMapSettings: state.GoogleMap.settings,

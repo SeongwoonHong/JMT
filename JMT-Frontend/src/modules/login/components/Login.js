@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Auth } from 'actions';
-import Loader from 'components/Loader';
+import { Loader } from 'components';
 import { withCookies, Cookies } from 'react-cookie';
 
 @withCookies

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Auth } from 'actions';
-import Loader from 'components/Loader';
+import { Loader } from 'components';
 
 @connect(state => ({
   app: state.App,
@@ -36,7 +36,7 @@ class Signup extends Component {
       passwordConfirm,
       email
     }))
-      .then((res) => console.log('res = ', res));
+      .then(res => console.log('res = ', res));
   }
 
   render() {
