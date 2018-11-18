@@ -16,10 +16,6 @@ class Dropdown extends Component {
     animate.set(this.content, { y: contentHeight });
   }
 
-  onClickHandler = () => {
-    console.log('clicked!');
-  }
-
   componentWillEnter = (done) => {
     this.animateIn().then(done);
   }

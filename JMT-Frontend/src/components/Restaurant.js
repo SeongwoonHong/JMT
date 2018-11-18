@@ -46,14 +46,18 @@ class Restaurant extends Component {
     const { isSmallView } = this.props;
 
     return (
-      <StyledRestaurant innerRef={el => this.component = el} onClick={() => onClick(id)}>
+      <StyledRestaurant
+        innerRef={el => this.component = el}
+        onClick={() => onClick(id)}
+        isSmallView={isSmallView}
+      >
         <StyledLeft>
           <StyledImage img={imageUrl} isSmallView={isSmallView} />
         </StyledLeft>
-        <StyledRight>
+        <StyledRight isSmallView={isSmallView}>
           <StyledTopText>
             <StyledRating isSmallView={isSmallView}>{rating}</StyledRating>
-            <StyledDesc isSmallView={isSmallView}>{ price || '??' }</StyledDesc>
+            <StyledDesc isSmallView={isSmallView}>{ price || 'N/A' }</StyledDesc>
           </StyledTopText>
           <StyledMiddleText isSmallView={isSmallView}>{name}</StyledMiddleText>
           <StyledBottomText isSmallView={isSmallView}>{distance.toFixed(0)}M {address1}</StyledBottomText>
@@ -71,6 +75,12 @@ const StyledRestaurant = styled.div`
   justify-content: space-around;
   width: 90%;
   margin: 20px auto;
+
+  ${props =>
+    props.isSmallView &&
+    css`
+      margin: 0 auto;
+    `};
 `;
 
 const StyledLeft = styled.div`
@@ -81,6 +91,12 @@ const StyledRight = styled.div`
   width: 75%;
   display: inline-block;
   padding: 10px;
+
+  ${props =>
+    props.isSmallView &&
+    css`
+      padding: 0
+    `};
 `;
 
 const StyledImage = styled.div`

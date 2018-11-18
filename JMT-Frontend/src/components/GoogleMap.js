@@ -15,6 +15,7 @@ class GoogleMap extends Component {
       onZoomChanged,
       onCenterChanged,
       options,
+      restaurantOnClickHandler,
     } = this.props;
 
     return (
@@ -41,6 +42,7 @@ class GoogleMap extends Component {
                     <Restaurant
                       data={marker}
                       isSmallView
+                      onClick={() => restaurantOnClickHandler(marker.id)}
                     />
                   </InfoWindow>
                 }

@@ -48,6 +48,10 @@ class Map extends Component {
     }));
   }
 
+  /**
+   * @param {array} restaurants
+   * storing each restaurant object into a markers state that will be passed to GoogleMap component
+   */
   getMapMarkerData = (restaurants) => {
     const markers = restaurants.map((restaurant, index) => {
       const {
@@ -58,6 +62,7 @@ class Map extends Component {
         phone,
         location,
         distance,
+        id,
         coordinates: {
           latitude,
           longitude
@@ -71,6 +76,7 @@ class Map extends Component {
         name,
         rating,
         image_url,
+        id,
         price,
         phone,
         location,
@@ -101,7 +107,7 @@ class Map extends Component {
   }
 
   render() {
-    const { lat, lng } = this.props;
+    const { lat, lng, restaurantOnClickHandler } = this.props;
     const { defaultZoom, center } = this.props.googleMapSettings;
     const { markers } = this.state;
 
@@ -116,6 +122,7 @@ class Map extends Component {
         onZoomChanged={this.onZoomChanged}
         onCenterChanged={this.onCenterChanged}
         ref={el => this.mapRef = el}
+        restaurantOnClickHandler={restaurantOnClickHandler}
       />
     );
   }
