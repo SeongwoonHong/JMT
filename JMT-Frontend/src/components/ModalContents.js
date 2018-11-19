@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import FilterSubCategory from './FilterSubCategory';
 
 const ContentsWrapper = styled.div`
-  flex: 1;
   display: flex;
   padding-top: 5%;
+  flex: 1;
+  margin-bottom:auto;
 `;
 
-const FilterMethodWrapper = styled.div`
+const FilterParamWrapper = styled.div`
   flex: 1;
 `;
 
@@ -32,18 +33,18 @@ const NavigationItem = styled.div`
   padding: 1% 0px;
 `;
 
-const categories = [
+const categories = [ /** Menu Category and Sub menus */
   {
     name: 'Sort',
     subItems: ['Distance', 'Rating', 'Low to hight cost', 'High to low cost']
   },
   {
     name: 'Cusines',
-    subItems: ['Cusines A', 'Cusines B', 'Cusines C', 'Cusines D']
+    subItems: ['Afghani', 'African', 'American', 'Arabian', 'Argentine', 'Armenian', 'Korean', 'Japanese', 'Chinese', 'Afghani+', 'African+', 'American+', 'Arabian+', 'Argentine+', 'Armenian+', 'Korean+', 'Japanese+', 'Chinese+']
   },
   {
     name: 'Cost',
-    subItems: ['High to Low', 'Low to High']
+    subItems: ['$', '$$', '$$$', '$$$$']
   },
 
   {
@@ -61,8 +62,8 @@ const ModalContents = ({
 }) => {
   return (
     <ContentsWrapper>
-      <FilterMethodWrapper>
-        <NavigationWrapper>
+      <FilterParamWrapper>
+        <NavigationWrapper> {/** Menu Tab Rendering  */}
           {
             categories.map(({ name }) => (
               <NavigationItem
@@ -75,13 +76,14 @@ const ModalContents = ({
               </NavigationItem>
           ))}
         </NavigationWrapper>
+        {/** Sub Menu Rendering */}
         <FilterSubCategory
           categories={categories}
           selected={selected}
           searchParam={searchParam}
           filterToggler={filterToggler}
         />
-      </FilterMethodWrapper>
+      </FilterParamWrapper>
     </ContentsWrapper>
   );
 };
