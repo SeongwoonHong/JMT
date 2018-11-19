@@ -7,9 +7,11 @@ import ModalContents from './ModalContents';
 import Button from './Button';
 
 const ModalWrapper = styled.div`
-  flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
 `;
 const ModalContainer = ({
   searchParam, selected, styleToggler, filterToggler, modalToggler, dispatch, app
@@ -31,7 +33,7 @@ const ModalContainer = ({
         searchParam={searchParam}
     />
       <Button onClick={onSearchHandler} >
-      Search
+          Search
       </Button>
     </ModalWrapper>
   );
