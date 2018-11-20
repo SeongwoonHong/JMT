@@ -888,3 +888,19 @@ export const searchRestaurant = async (req: Request, res: Response) => {
     });
   }
 }
+
+export const getRestaurantAutoComplete = async (req: Request, res: Response) => {
+  const { keyword, latitude, longitude } = req.query;
+  const endpoint = `https://api.yelp.com/v3/autocomplete?text=${keyword}&latitude=${latitude}&longitude=${longitude}`;
+
+  try {
+    const result = await axios.get(endpoint);
+
+    return res.json(result.data)
+  } catch (e) {
+    return res.status(404).json({
+      success: false,
+      msg: e.message,
+    })
+  }
+}

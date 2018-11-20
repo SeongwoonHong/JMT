@@ -62,29 +62,25 @@ class Header extends Component {
 
   searchKeyDown = (e) => {
     const {
-      restaurantLocation,
-      latitude,
-      longitude,
+      // restaurantLocation,
+      // latitude,
+      // longitude,
       dispatch,
     } = this.props;
     const { value } = e.target;
     const esc = 27;
-    const enter = 13;
 
     if (e.keyCode === esc) {
       return this.initializeSearchValue();
     }
-    if (e.keyCode === enter) {
-      if (value.trim() === '') {
-        return false;
-      }
 
-      return dispatch(Restaurant.searchRestaurant({
-        cuisines: value,
-        location: restaurantLocation === 'Current Location' ? '' : restaurantLocation,
-        latitude,
-        longitude,
-      }));
+    if (this.lastRequestId) clearTimeout(this.lastRequestId);
+
+    if (value.length >= 3) {
+      this.lastRequestId = setTimeout(async () => {
+        const data = await dispatch(Restaurant.getRestaurantAutocomplete({ keyword: value }));
+        console.log(data);
+      }, 1500);
     }
 
     return false;

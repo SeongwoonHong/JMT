@@ -13,6 +13,7 @@ export const SEARCH_RESTAURANT = 'SEARCH_RESTAURANT';
 export const SEARCH_RESTAURANT_FAIL = 'SEARCH_RESTAURANT_FAIL';
 export const GET_RESTAURANT_DETAIL = 'GET_RESTAURANT_DETAIL';
 export const GET_RESTAURANT_DETAIL_FAIL = 'GET_RESTAURANT_DETAIL_FAIL';
+export const GET_RESTAURANT_AUTOCOMPLETE = 'GET_RESTAURANT_AUTOCOMPLETE';
 /**
  * Action Creators
  */
@@ -84,6 +85,33 @@ export const searchRestaurant = ({
           payload: e
         });
         console.log(e);
+      });
+  };
+};
+
+/**
+ * @param {string} keyword
+ * @param {number} latitude for now it's hardcoded
+ * @param {number} longitude for now it's hardcoded
+ */
+export const getRestaurantAutocomplete = ({
+  keyword,
+  latitude = 43.780130799999995,
+  longitude = -79.4136106
+}) => {
+  return () => {
+    return axios.get('/api/restaurant/getRestaurantAutoComplete', {
+      params: {
+        keyword,
+        latitude,
+        longitude,
+      }
+    })
+      .then((e) => {
+        return e.data;
+      })
+      .catch((e) => {
+        console.log(e); // TODO - Toaster
       });
   };
 };
