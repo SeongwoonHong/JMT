@@ -12,6 +12,7 @@ class User {
   private routes = (): void => {
     this.router.get('/getRestaurantDetail', controllers.getRestaurantDetail);
     this.router.get('/searchRestaurant', controllers.searchRestaurant);
+    this.router.get('/getRestaurantAutoComplete', controllers.getRestaurantAutoComplete);
   }
 }
 

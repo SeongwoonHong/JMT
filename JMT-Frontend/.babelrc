@@ -1,5 +1,15 @@
 {
-  "presets": [["env", { "modules": false }], "react", "stage-0"],
+  "presets": [
+    [
+      "env", {
+        "targets": {
+          "node": "current"
+        },
+        "modules": false
+      }
+    ],
+    "react",
+    "stage-0"],
   "plugins": ["transform-decorators-legacy"],
   "env": {
     "test": {
