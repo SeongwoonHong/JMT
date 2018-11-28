@@ -21,7 +21,7 @@ class Login extends Component {
     const { history } = this.props;
 
     if (this.getTokenFromCookie()) {
-      return history.push('/main');
+      return history.push('/');
     }
 
     return false;

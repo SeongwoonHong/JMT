@@ -7,19 +7,18 @@ import Query from './queries';
 
 export const updateEmailVerifiationByEmail = (token: { email: string }) => {
   try {
-    const userQuery = new Query({ email: token.email });
-  
-    db.query(userQuery.updateEmailVerifiationByEmail())
+    const { email } = token;
+
+    Query.updateEmailVerifiationByEmailQuery(email);
   } catch (e) {
     throw new Error(e);
   }
 }
 
 export const getUserByEmailOrDisplayName = async ({ display_name, email }) => {
-  const userQuery = new Query({ email, display_name });
-
   try {
-    const data = await db.query(userQuery.getUserByEmailOrDisplayName())
+    const param = email ? email : display_name;
+    const data = await Query.getUserByEmailOrDisplayNameQuery(param);
     const { rows } = data;
 
     if (rows.length) {
@@ -46,10 +45,8 @@ export const getUserByEmailOrDisplayName = async ({ display_name, email }) => {
 }
 
 export const signup = async ({ display_name, password, hashedPassword, email, avatar }) => {
-  const userQuery = new Query({ display_name, password: hashedPassword, email, avatar, signup_date: dateUtils.getDate() })
-
   try {
-    const result = await db.query(userQuery.signUpQuery())
+    const result = await Query.signUpQuery({ display_name, password: hashedPassword, email, avatar })
 
     sendVerificationEmail({
       display_name,
@@ -69,9 +66,8 @@ export const signup = async ({ display_name, password, hashedPassword, email, av
 
 export const login = async ({ email, password }) => {
   try {
-    const userQuery = new Query({ email, password });
     let passwordMatched: boolean = false;
-    const userData = await db.query(userQuery.getUserByEmail())
+    const userData = await Query.getUserByEmailQuery({ email });
     const { rows } = userData;
 
     if (!rows.length) {

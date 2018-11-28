@@ -2,11 +2,11 @@ import { Client } from 'pg';
 import chalk from 'chalk';
 
 class DataBase {
-  public db;
+  public pg;
 
   constructor() {
-    this.db = new Client();
-    this.db.connect()
+    this.pg = new Client();
+    this.pg.connect()
     .then(() => 
     console.log(`
 -------------------------------
@@ -18,6 +18,42 @@ class DataBase {
       console.error(e.stack);
     })
   }
+
+  public async executeSP(sp: string, parameters: object):Promise<any> {
+    return new Promise<any>(async resolve => {
+      let type: string;
+      let statement: string = 'SELECT ';
+      let params: string = '(';
+
+      type = sp.split('_')[0];
+
+      if (type === 'GET') {
+        statement += `* FROM ${sp}`;
+      } else {
+        statement += sp;
+      }
+
+      if (typeof parameters !== 'object') {
+        params += `'${parameters}'`;
+      } else {
+        Object.keys(parameters).forEach((p, i) => {
+          if (!parameters[p]) {
+            params += `NULL`;
+          } else {
+            params += `'${parameters[p]}'`;
+          }
+          if (i !== Object.keys(parameters).length - 1) {
+            params += ',';
+          }
+        })
+      }
+      params += ')';
+      statement += params;
+
+      return this.pg.query(statement)
+        .then((result) => resolve(result));
+    })
+  }
 }
 
-export default new DataBase().db;
+export default new DataBase();
