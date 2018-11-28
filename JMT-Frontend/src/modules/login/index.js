@@ -12,7 +12,7 @@ class LoginContainer extends Component {
     const { auth } = this.props;
 
     if (auth.user && auth.user.success) {
-      return <Redirect to="/main" />;
+      return <Redirect to="/" />;
     }
 
     return (

@@ -9,16 +9,6 @@ import * as validationUtils from '@utils/validation-utils';
 import * as jwtUtils from '@utils/jwt-utils';
 // TODO - how to properly handle errors (through the app)
 
-export const getAll = (req: Request, res: Response): void => {
-  const query = new UserQuery();
-
-  db.query(query.getAllUsersQuery())
-    .then(result => res.send(result.rows))
-    .catch(err => {
-      console.log(err);
-    });
-};
-
 export const emailVerification = async (req: Request, res: Response) => {
   try {
     const token = await jwtUtils.verify(req.params.token);
@@ -124,4 +114,3 @@ export const check = (req, res: Response): void => {
 const creatToken = (fields) => {
   return jwtUtils.createToken(fields);
 }
-

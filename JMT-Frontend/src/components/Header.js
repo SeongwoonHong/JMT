@@ -76,7 +76,7 @@ class Header extends Component {
 
     if (this.lastRequestId) clearTimeout(this.lastRequestId);
 
-    if (value.length >= 3) {
+    if (value.length >= 2) {
       this.lastRequestId = setTimeout(async () => {
         const data = await dispatch(Restaurant.getRestaurantAutocomplete({ keyword: value }));
         console.log(data);

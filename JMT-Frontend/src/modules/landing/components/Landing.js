@@ -70,8 +70,12 @@ class Landing extends Component {
     animate.set(this.circle, { scale: 7 });
     animate.to(this.circle, 1, { scale: 0.75, ease: Quad.easeInOut, delay: 0.5 })
       .then(() => animate.to(this.circle, 0.5, { scale: 1, ease: Quad.easeInOut }))
-      .then(() => animate.to([this.cuisines, this.location], 1, animateOption))
-      .then(() => animate.to(btnEl, 1, animateOption));
+      .then(() => {
+        animate.all([
+          animate.to([this.cuisines, this.location], 1, animateOption),
+          animate.to(btnEl, 1, animateOption),
+        ]);
+      });
   }
 
   search = () => {

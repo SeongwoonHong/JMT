@@ -1,78 +1,25 @@
+import db from '@db/index';
+
 class Query {
-  private fields;
 
-  constructor(fields = {}) {
-    this.fields = fields;
+  public static signUpQuery = (params): Promise<any> => {
+    return db.executeSP('INSERT_USER', params);
   }
 
-  public getAllUsersQuery = (): string => 'SELECT * FROM USERS';
-
-  public signUpQuery = (): string => {
-    const { display_name, password, email, avatar, signup_date } = this.fields;
-
-    return (
-      `
-        INSERT INTO USERS
-        (display_name, password, email, avatar, signup_date)
-        VALUES ('${display_name}', '${password}', '${email}', '${avatar}', '${signup_date}')
-      `
-    );
-  }
-
-  public removeByIdQuery = (): string => {
-    const { user_id } = this.fields;
-
-    return (
-      `
-        DELETE FROM USERS
-        WHERE user_id = '${user_id}'
-      `
-    );
-  };
-
-  public removeByEmailQuery = (): string => {
-    const { email } = this.fields;
-
-    return (
-      `
-        DELETE FROM USERS
-        WHERE email = '${email}'
-      `
-    );
+  public static removeByIdQuery = (params): Promise<any> => {
+    return db.executeSP('DELETE_USER', params);
   };
   
-  public getUserByEmailOrDisplayName = (): string => {
-    const { email, display_name } = this.fields;
-
-    return (
-      `
-        SELECT * FROM USERS
-        WHERE email = '${email}' or display_name = '${display_name}'
-      `
-    );
+  public static getUserByEmailOrDisplayNameQuery = (params): Promise<any> => {
+    return db.executeSP('GET_USER_BY_EMAIL_OR_DISPLAYNAME', params);
   }
 
-  public getUserByEmail = (): string => {
-    const { email } = this.fields;
-
-    return (
-      `
-        SELECT * FROM USERS
-        WHERE email = '${email}'
-      `
-    );
+  public static getUserByEmailQuery = (params): Promise<any> => {
+    return db.executeSP('GET_USER_BY_EMAIL', params);
   }
 
-  public updateEmailVerifiationByEmail = (): string => {
-    const { email } = this.fields;
-
-    return (
-      `
-        UPDATE USERS
-        SET verified = true
-        where email = '${email}'
-      `
-    );
+  public static updateEmailVerifiationByEmailQuery = (params): Promise<any> => {
+    return db.executeSP('UPDATE_EMAIL_VERIFICATION', params);
   }
 }
 
