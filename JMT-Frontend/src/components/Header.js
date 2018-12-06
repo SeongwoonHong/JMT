@@ -27,7 +27,8 @@ const modalStyle = {
 };
 
 @connect(state => ({
-  view: state.App.view
+  view: state.App.view,
+  filter: state.App.filter,
 }))
 @withRouter
 class Header extends Component {
@@ -35,19 +36,27 @@ class Header extends Component {
     searchValue: '',
     isModalOpen: false,
     selected: 'Sort',
-    searchParam: []
+    searchParam: this.props.filter || {}
   };
 
-  filterToggler = (param) => {
+  filterToggler = (category, param) => {
     const { searchParam } = this.state;
+    let newSearchParam = { ...searchParam };
 
-    if (searchParam.indexOf(param) > -1) { // When user's clicked a filter twice
-      const newList = searchParam.filter(item => item !== param);
-
-      return this.setState({ searchParam: [...newList] });
+    if (category === 'sort') {
+      newSearchParam.sort = newSearchParam.sort === param ? '' : param;
+    } else if (!newSearchParam[category]) {
+      newSearchParam[category] = [param];
+    } else if (newSearchParam[category].indexOf(param) > -1) {
+      newSearchParam = {
+        ...searchParam,
+        [category]: searchParam[category].filter(item => item !== param),
+      };
+    } else {
+      newSearchParam[category].push(param);
     }
 
-    return this.setState({ searchParam: [...searchParam, param] });
+    return this.setState({ searchParam: newSearchParam });
   }
 
   styleToggler = current => this.setState({ selected: current })

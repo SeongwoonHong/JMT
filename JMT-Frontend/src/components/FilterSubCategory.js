@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import SubItemCusines from './SubItemCusines';
-import SubItemCost from './SubItemCost';
+import SubItemCuisines from './SubItemCuisines';
+import SubItemPrice from './SubItemPrice';
 
 const SubCategory = styled.div`
   flex: 1;
@@ -12,7 +12,7 @@ const SubCategory = styled.div`
   overflow: hidden;
 `;
 
-const CusinesSubMenuWrapper = styled.div`
+const CuisinesSubMenuWrapper = styled.div`
   overflow: hidden;
   overflow-y: scroll;
   max-height: 310px; /* This line should be fixed */
@@ -23,8 +23,7 @@ const SubItem = styled.div`
   font-size: 1.1rem;
   line-height: 1.7rem;
   padding: 3.5% 0px;
-
-  color: ${props => props.searchParam.indexOf(props.item) > -1 || props.filtered.indexOf(props.item) > -1 ? 'red' : ''};
+  color: ${props => props.searchParam.sort === props.item ? 'red' : ''};
   transition: all 0.5s;
 `;
 const CostSubMenuWrapper = styled.div`
@@ -32,7 +31,6 @@ const CostSubMenuWrapper = styled.div`
   justify-content: space-between;
   padding: 7% 0%;
 `;
-
 
 const FilterSubCategory = ({
   categories, selected, searchParam, filterToggler, app
@@ -43,12 +41,12 @@ const FilterSubCategory = ({
       .filter(({ name }) => name.toLowerCase() === selected.toLowerCase())
       .map(
         ({ name, subItems }) => {
-          if (name === 'Cusines') { /** User Clicked Cusines Manu */
+          if (name === 'Cuisines') { /** User Clicked Cuisines Manu */
             return (
-              <CusinesSubMenuWrapper key={name} name={name}>
+              <CuisinesSubMenuWrapper key={name} name={name}>
                 {subItems.map(item => (
-                  <SubItemCusines
-                    displaying={name === 'Cusines'}
+                  <SubItemCuisines
+                    displaying={name === 'Cuisines'}
                     key={item}
                     item={item}
                     searchParam={searchParam}
@@ -57,18 +55,18 @@ const FilterSubCategory = ({
                   />
                   ))
                 }
-              </CusinesSubMenuWrapper>
+              </CuisinesSubMenuWrapper>
             );
-          } else if (name === 'Cost') { /** User Clicked Cost Menu */
+          } else if (name === 'Price') { /** User Clicked Cost Menu */
             return (
               <CostSubMenuWrapper key={name}>
-                {subItems.map(item => (
-                  <SubItemCost
+                {subItems.map((item, index) => (
+                  <SubItemPrice
                     key={item}
                     item={item}
+                    value={index + 1}
                     searchParam={searchParam}
                     filterToggler={filterToggler}
-                    filtered={app && app.filter}
                   />
                 ))}
               </CostSubMenuWrapper>
@@ -77,17 +75,18 @@ const FilterSubCategory = ({
 
           return (
             <div key={name}> {/** Default Menu */}
-              {subItems.map(item => (
-                <SubItem
-                  key={item}
-                  onClick={() => filterToggler(item)}
-                  searchParam={searchParam}
-                  item={item}
-                  filtered={app && app.filter}
-                >
-                  {item}
-                </SubItem>
-              ))}
+              {subItems.map((item) => {
+                return (
+                  <SubItem
+                    key={item}
+                    onClick={() => filterToggler('sort', item.toLowerCase())}
+                    searchParam={searchParam}
+                    item={item.toLowerCase()}
+                  >
+                    {item}
+                  </SubItem>
+                );
+              })}
             </div>
           );
         }

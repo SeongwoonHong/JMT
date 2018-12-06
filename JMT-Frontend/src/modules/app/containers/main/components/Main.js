@@ -17,10 +17,12 @@ class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cuisines: this.getParamsFromURL('cuisines'),
-      location: this.getParamsFromURL('location'),
-      latitude: this.getParamsFromURL('latitude'),
-      longitude: this.getParamsFromURL('longitude'),
+      cuisines: this.getParamsFromString(this.props.location.search, 'cuisines'),
+      location: this.getParamsFromString(this.props.location.search, 'location'),
+      latitude: this.getParamsFromString(this.props.location.search, 'latitude'),
+      longitude: this.getParamsFromString(this.props.location.search, 'longitude'),
+      price: this.getParamsFromString(this.props.location.search, 'price'),
+      sort_by: this.getParamsFromString(this.props.location.search, 'sort_by'),
     };
   }
 
@@ -31,6 +33,8 @@ class Main extends React.Component {
       location,
       latitude,
       longitude,
+      price,
+      sort_by,
     } = this.state;
 
     if (restaurants.list.length) return;
@@ -40,16 +44,41 @@ class Main extends React.Component {
       latitude,
       longitude,
       location,
+      price,
+      sort_by,
     }));
   }
 
   /**
-   * @param {string} param
-   * returns a string from url query string corresponding to param being passed
+   * when filtered from filter modal
    */
-  getParamsFromURL = (param) => {
-    const { location } = this.props;
-    const params = new URLSearchParams(location.search);
+  componentWillReceiveProps = (nextProps) => {
+    const { dispatch } = this.props;
+    const {
+      cuisines,
+      location,
+      latitude,
+      longitude,
+    } = this.state;
+    if (nextProps.location.search !== this.props.location.search) {
+      const price = this.getParamsFromString(nextProps.location.search, 'price');
+      const sort_by = this.getParamsFromString(nextProps.location.search, 'sort_by'); // eslint-disable-line
+
+      return dispatch(Restaurant.searchRestaurant({
+        cuisines,
+        latitude,
+        longitude,
+        location,
+        price,
+        sort_by,
+      }, false));
+    }
+
+    return null;
+  }
+
+  getParamsFromString = (str, param) => {
+    const params = new URLSearchParams(str);
 
     return params.get(param);
   }

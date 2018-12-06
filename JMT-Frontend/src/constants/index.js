@@ -1,1 +1,1 @@
-export { cuisineOptions, locationOptions } from './constants';
+export { cuisineOptions, locationOptions, categories } from './constants';

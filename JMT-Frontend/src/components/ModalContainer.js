@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { App } from 'actions';
+import history from 'utils/history';
 import ModalTitle from './ModalTitle';
 import ModalContents from './ModalContents';
 import Button from './Button';
@@ -14,13 +16,49 @@ const ModalWrapper = styled.div`
   height: 100%;
 `;
 const ModalContainer = ({
-  searchParam, selected, styleToggler, filterToggler, modalToggler, dispatch, app
+  searchParam, selected, styleToggler, filterToggler, modalToggler, dispatch, location
 }) => {
 
+  /**
+   * @param {string} param
+   * returns a string from url query string corresponding to param being passed
+   */
+  function getParamsFromURL(param) {
+    const params = new URLSearchParams(location.search);
+
+    return params.get(param);
+  }
+
   function onSearchHandler() {
+    const locationQuery = getParamsFromURL('location');
+    const latitude = getParamsFromURL('latitude');
+    const longitude = getParamsFromURL('longitude');
+    let url = '';
+
     dispatch(App.updateFilter(searchParam));
 
-    return modalToggler();
+    if (searchParam.cuisines && searchParam.cuisines.length) {
+      url += `/main?cuisines=${searchParam.cuisines.join(',')}`;
+    } else {
+      return false; // TODO - when a user did not select any cuisine in filter modal
+    }
+
+    if (locationQuery) {
+      url += `&location=${locationQuery}`;
+    } else {
+      url += `&latitude=${latitude}&longitude=${longitude}`;
+    }
+
+    if (searchParam.sort) {
+      url += `&sort_by=${searchParam.sort}`;
+    }
+
+    if (searchParam.price) {
+      url += `&price=${searchParam.price.join(',')}`;
+    }
+
+    modalToggler();
+    return history.push(url);
   }
 
   return (
@@ -33,7 +71,7 @@ const ModalContainer = ({
         searchParam={searchParam}
     />
       <Button onClick={onSearchHandler} >
-          Search
+        Search
       </Button>
     </ModalWrapper>
   );
@@ -41,5 +79,5 @@ const ModalContainer = ({
 
 export default connect(state => ({
   app: state.App
-}))(ModalContainer);
+}))(withRouter(ModalContainer));
 

@@ -3,13 +3,14 @@ import { App } from 'actions';
 const initialState = {
   view: 'list',
   isLoading: false,
-  filter: []
+  filter: {}
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case App.TOGGLE_VIEW:
       return {
+        ...state,
         view: action.payload,
       };
     case App.LOADING_START:
