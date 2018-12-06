@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { categories } from 'constants';
 import FilterSubCategory from './FilterSubCategory';
 
 const ContentsWrapper = styled.div`
@@ -32,26 +33,6 @@ const NavigationItem = styled.div`
   align-items: center;
   padding: 1% 0px;
 `;
-
-const categories = [ /** Menu Category and Sub menus */
-  {
-    name: 'Sort',
-    subItems: ['Distance', 'Rating', 'Low to hight cost', 'High to low cost']
-  },
-  {
-    name: 'Cusines',
-    subItems: ['Afghani', 'African', 'American', 'Arabian', 'Argentine', 'Armenian', 'Korean', 'Japanese', 'Chinese', 'Afghani+', 'African+', 'American+', 'Arabian+', 'Argentine+', 'Armenian+', 'Korean+', 'Japanese+', 'Chinese+']
-  },
-  {
-    name: 'Cost',
-    subItems: ['$', '$$', '$$$', '$$$$']
-  },
-
-  {
-    name: 'Ratings',
-    subItems: ['3+', '4+', '5+']
-  },
-];
 
 
 const ModalContents = ({

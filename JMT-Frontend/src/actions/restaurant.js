@@ -52,31 +52,43 @@ export const searchRestaurant = ({
   cuisines,
   location,
   latitude,
-  longitude
-}) => {
+  longitude,
+  ...rest,
+}, noReroute = true) => {
   return (dispatch) => {
-    dispatch(App.loadingStart());
+    const { sort_by: sortBy, price } = rest;
 
+    dispatch(App.loadingStart());
     return axios.get('/api/restaurant/searchRestaurant', {
       params: {
-        cuisines,
         location,
         latitude,
         longitude,
+        sort_by: sortBy,
+        categories: cuisines, // on the backend, 'cuisines' is now categories. so we need to pass it as categories
+        price,
       }
     })
       .then((res) => {
         dispatch(App.loadingDone());
         dispatch(getRestaurant(res.data));
-        let queryString = `?cuisines=${cuisines}&`;
+        let url = `?cuisines=${cuisines}`;
 
         if (location) {
-          queryString += `&location=${location}`;
+          url += `&location=${location}`;
         } else {
-          queryString += `latitude=${latitude}&longitude=${longitude}`;
+          url += `&latitude=${latitude}&longitude=${longitude}`;
         }
 
-        return history.push(`/main${queryString}`);
+        if (sortBy) {
+          url += `&sort_by=${sortBy}`;
+        }
+
+        if (price) {
+          url += `&price=${price}`;
+        }
+
+        return noReroute && history.push(`/main${url}`);
       })
       .catch((e) => {
         // TODO - Toaster

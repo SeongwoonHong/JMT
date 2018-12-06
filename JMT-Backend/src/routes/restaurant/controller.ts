@@ -865,15 +865,23 @@ export const getRestaurantDetail = async (req: Request, res: Response) => {
 }
 
 export const searchRestaurant = async (req: Request, res: Response) => {
-  const { cuisines, location, latitude, longitude } = req.query;
+  const { categories, location, latitude, longitude, sort_by, price } = req.query;
   let endpoint;
 
   if (location) {
-    endpoint = `https://api.yelp.com/v3/businesses/search?term=${cuisines}&location=${location}`;
+    endpoint = `https://api.yelp.com/v3/businesses/search?categories=${categories}&location=${location}`;
   } else { // for current location
-    endpoint = `https://api.yelp.com/v3/businesses/search?term=${cuisines}&latitude=${latitude}&longitude=${longitude}&radius=1500`;
+    endpoint = `https://api.yelp.com/v3/businesses/search?categories=${categories}&latitude=${latitude}&longitude=${longitude}&radius=1500`;
   }
 
+  if (sort_by) {
+    endpoint += `&sort_by=${sort_by}`;
+  }
+  if (price) {
+    endpoint += `&price=${price}`;
+  }
+
+  console.log('endpoint = ', endpoint);
   try {
     const data = await axios.get(endpoint);
     const { data: { businesses } } = data;
