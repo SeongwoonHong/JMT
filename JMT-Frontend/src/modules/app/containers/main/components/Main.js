@@ -55,12 +55,12 @@ class Main extends React.Component {
   componentWillReceiveProps = (nextProps) => {
     const { dispatch } = this.props;
     const {
-      cuisines,
       location,
       latitude,
       longitude,
     } = this.state;
     if (nextProps.location.search !== this.props.location.search) {
+      const cuisines = this.getParamsFromString(nextProps.location.search, 'cuisines');
       const price = this.getParamsFromString(nextProps.location.search, 'price');
       const sort_by = this.getParamsFromString(nextProps.location.search, 'sort_by'); // eslint-disable-line
 

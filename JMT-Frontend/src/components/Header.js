@@ -63,6 +63,12 @@ class Header extends Component {
 
   modalToggler = () => this.setState(({ isModalOpen }) => ({ isModalOpen: !isModalOpen }));
 
+  modalClose = () => {
+    this.setState({ searchParam: this.props.filter });
+
+    return this.modalToggler();
+  }
+
   toggleView = (view) => {
     const { dispatch } = this.props;
 
@@ -112,6 +118,7 @@ class Header extends Component {
         <Modal isOpen={isModalOpen} style={modalStyle} ariaHideApp={false}>
           <ModalContainer
             modalToggler={this.modalToggler}
+            modalClose={this.modalClose}
             selected={selected}
             searchParam={searchParam}
             styleToggler={this.styleToggler}

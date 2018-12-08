@@ -5,11 +5,13 @@ const TitleWrapper = styled.div`
   display: flex;
   padding: 3% 0px;
 `;
+
 const ModalCloser = styled.div`
   flex: 0.2;
   display: flex;
   font-size: 1.3rem;
   align-items: center;
+
   :hover {
     color: red;
     transition: all 0.5s;
@@ -26,9 +28,9 @@ const Title = styled.div`
   font-weight: bold;
 `;
 
-const ModalTitle = ({ modalToggler }) => (
+const ModalTitle = ({ modalClose }) => (
   <TitleWrapper>
-    <ModalCloser onClick={modalToggler}>X</ModalCloser>
+    <ModalCloser onClick={modalClose}>X</ModalCloser>
     <Title>FILTER</Title>
   </TitleWrapper>
 );
