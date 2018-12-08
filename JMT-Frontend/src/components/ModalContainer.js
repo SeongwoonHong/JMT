@@ -16,7 +16,7 @@ const ModalWrapper = styled.div`
   height: 100%;
 `;
 const ModalContainer = ({
-  searchParam, selected, styleToggler, filterToggler, modalToggler, dispatch, location
+  searchParam, selected, styleToggler, filterToggler, modalToggler, dispatch, location, modalClose
 }) => {
 
   /**
@@ -63,7 +63,7 @@ const ModalContainer = ({
 
   return (
     <ModalWrapper>
-      <ModalTitle modalToggler={modalToggler} />
+      <ModalTitle modalClose={modalClose} />
       <ModalContents
         styleToggler={styleToggler}
         selected={selected}
