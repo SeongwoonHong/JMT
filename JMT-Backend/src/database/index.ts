@@ -7,7 +7,7 @@ class DataBase {
   constructor() {
     this.pg = new Client();
     this.pg.connect()
-    .then(() => 
+    .then(() =>
     console.log(`
 -------------------------------
   ${chalk.blue("Database is connected")}

@@ -5,13 +5,13 @@ export const hash = (password: string): string => {
     .then(hash => hash)
     .catch(err => {
       throw new Error(err);
-    })
-}
+    });
+};
 
-export const compare = (plainPassword, hashedPassword): boolean => {
+export const compare = (plainPassword: string, hashedPassword: string): boolean => {
   return bcrypt.compare(plainPassword, hashedPassword)
     .then(res => res === true)
     .catch(err => {
       throw new Error(err);
-    })
-}
+    });
+};

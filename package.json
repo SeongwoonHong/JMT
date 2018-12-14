@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean": "concurrently 'cd JMT-Frontend && rm -rf node_modules && npm i' 'cd JMT-Backend && rm -rf node_modules && npm i'",
     "start": "concurrently 'cd JMT-Frontend && npm start' 'cd JMT-Backend && npm start'"
   },
   "author": "seongwoon hong",

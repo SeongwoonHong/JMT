@@ -4,6 +4,7 @@ import * as express from 'express';
 import * as morgan from 'morgan';
 
 import * as routes from './routes';
+
 class App {
   public express;
 

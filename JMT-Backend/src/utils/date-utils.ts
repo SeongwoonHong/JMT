@@ -14,4 +14,4 @@ export const getDate = (): string => {
   }
 
   return `${date}/${month}/${year}`;
-}
+};
