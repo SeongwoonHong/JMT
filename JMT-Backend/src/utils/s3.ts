@@ -4,6 +4,7 @@ const {
   ACCESS_KEY_ID: accessKeyId,
   SECRET_ACCESS_KEY: secretAccessKey,
   AWS_REGION: region,
+  AWS_SIGNATURE_VERSION: signatureVersion,
 } = process.env;
 
 class S3 {
@@ -17,7 +18,7 @@ class S3 {
     this.s3 = new AWS.S3({
       accessKeyId,
       secretAccessKey,
-      signatureVersion: 'v4',
+      signatureVersion,
       region
     });
   }

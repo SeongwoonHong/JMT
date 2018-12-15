@@ -11,17 +11,16 @@ import * as jwtUtils from '@utils/jwt-utils';
 
 export const emailVerification = async (req: Request, res: Response) => {
   try {
-    const token = await jwtUtils.verify(req.params.token);
-
+    const token = await jwtUtils.verify(req.params.t);
     userRepository.updateEmailVerifiationByEmail(token);
+
+    return res.redirect(`http://localhost:3000/email-verified?t=${req.params.t}`);
   } catch (e) {
     return res.status(400).json({
       msg: 'Invalid token',
       success: false,
     });
   }
-
-  return res.redirect('http://localhost:3000/email-verified');
 }
 
 
