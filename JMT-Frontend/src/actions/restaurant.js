@@ -54,7 +54,7 @@ export const searchRestaurant = ({
   latitude,
   longitude,
   ...rest,
-}, noReroute = true) => {
+}) => {
   return (dispatch) => {
     const { sort_by: sortBy, price } = rest;
 
@@ -88,7 +88,7 @@ export const searchRestaurant = ({
           url += `&price=${price}`;
         }
 
-        return noReroute && history.push(`/main${url}`);
+        return history.push(`/main${url}`);
       })
       .catch((e) => {
         // TODO - Toaster

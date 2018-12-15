@@ -71,7 +71,7 @@ class Main extends React.Component {
         location,
         price,
         sort_by,
-      }, false));
+      }));
     }
 
     return null;
