@@ -6,7 +6,7 @@ import {
 import * as jwtUtils from '@utils/jwt-utils';
 
 export const tokenVerifyMiddleware = (req, res: Response, next: NextFunction): void => {
-  const token = req.headers['x-access-token'] || req.query.token;
+  const token = req.headers['x-access-token'] || req.header.cookie || req.query.token;
 
   if (!token) {
     res.status(403).json({

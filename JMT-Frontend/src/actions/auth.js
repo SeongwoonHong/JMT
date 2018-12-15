@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Cookies } from 'react-cookie';
-
+import history from 'utils/history';
 import { App } from './';
 
 /**
@@ -10,7 +10,9 @@ export const SIGNUP = 'SIGNUP';
 export const SIGNUP_FAIL = 'SIGNUP_FAIL';
 export const LOGIN = 'LOGIN';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
-
+export const PROFILE_IMAGE = 'PROFILE_IMAGE';
+export const PROFILE_IMAGE_FAIL = 'PROFILE_IMAGE_FAIL';
+export const TOKEN_DECODE = 'TOKEN_DECODE';
 /**
  * Action creator
 */
@@ -86,6 +88,58 @@ export const login = (params) => {
         dispatch(App.loadingDone());
 
         return dispatch(loginFail(response.data)); // TODO - toaster here
+      });
+  };
+};
+
+const sendPresignedUrlWithFile = (url, file) => {
+  axios.defaults.headers.put['Content-Type'] = 'image/jpeg';
+  return axios.put(url, { file })
+    .then(() => delete axios.defaults.headers.put['Content-Type'])
+    .catch(e => console.log(e));
+};
+
+export const uploadProfileImage = (file, token) => {
+  return (dispatch) => {
+    dispatch(App.loadingStart());
+
+    return axios.get('/api/upload/profilePicture', {
+      params: { token }
+    })
+      .then(({ data }) => {
+        sendPresignedUrlWithFile(data.url, file)
+          .then(() => dispatch(App.loadingDone()))
+          .catch((e) => {
+            dispatch(App.loadingDone());
+            console.log(e);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const tokenDecode = (token) => {
+  return (dispatch) => {
+    dispatch(App.loadingStart());
+
+    return axios.get('/api/user/check', {
+      params: { token }
+    })
+      .then(({ data }) => {
+        dispatch(App.loadingDone());
+
+        if (!data.success) {
+          return history.push('/'); // TODO: toaster with a message such as 'not valid token'
+        }
+
+        return false;
+      })
+      .catch(() => {
+        dispatch(App.loadingDone());
+
+        return history.push('/');
       });
   };
 };

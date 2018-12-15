@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { Restaurant } from 'actions';
 import { Header, Loader } from 'components';
-
+import getURLSearchParams from 'utils/get-url-params';
 import Map from './Map';
 import RestaurantList from './RestaurantList';
 
@@ -17,12 +17,12 @@ class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cuisines: this.getParamsFromString(this.props.location.search, 'cuisines'),
-      location: this.getParamsFromString(this.props.location.search, 'location'),
-      latitude: this.getParamsFromString(this.props.location.search, 'latitude'),
-      longitude: this.getParamsFromString(this.props.location.search, 'longitude'),
-      price: this.getParamsFromString(this.props.location.search, 'price'),
-      sort_by: this.getParamsFromString(this.props.location.search, 'sort_by'),
+      cuisines: getURLSearchParams(this.props.location.search, 'cuisines'),
+      location: getURLSearchParams(this.props.location.search, 'location'),
+      latitude: getURLSearchParams(this.props.location.search, 'latitude'),
+      longitude: getURLSearchParams(this.props.location.search, 'longitude'),
+      price: getURLSearchParams(this.props.location.search, 'price'),
+      sort_by: getURLSearchParams(this.props.location.search, 'sort_by'),
     };
   }
 
@@ -60,9 +60,9 @@ class Main extends React.Component {
       longitude,
     } = this.state;
     if (nextProps.location.search !== this.props.location.search) {
-      const cuisines = this.getParamsFromString(nextProps.location.search, 'cuisines');
-      const price = this.getParamsFromString(nextProps.location.search, 'price');
-      const sort_by = this.getParamsFromString(nextProps.location.search, 'sort_by'); // eslint-disable-line
+      const cuisines = getURLSearchParams(nextProps.location.search, 'cuisines');
+      const price = getURLSearchParams(nextProps.location.search, 'price');
+      const sort_by = getURLSearchParams(nextProps.location.search, 'sort_by'); // eslint-disable-line
 
       return dispatch(Restaurant.searchRestaurant({
         cuisines,
@@ -75,12 +75,6 @@ class Main extends React.Component {
     }
 
     return null;
-  }
-
-  getParamsFromString = (str, param) => {
-    const params = new URLSearchParams(str);
-
-    return params.get(param);
   }
 
   restaurantOnClickHandler = (id) => {
