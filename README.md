@@ -6,6 +6,6 @@ A repo where crazy things are happening
 ```
 git clone git@github.com:SeongwoonHong/JMT.git
 cd JMT
-npm install
+npm run clean
 npm start
 ```
