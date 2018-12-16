@@ -10,7 +10,7 @@ export const tokenVerifyMiddleware = (req, res: Response, next: NextFunction): v
 
   if (!token) {
     res.status(403).json({
-      msg: 'Not logged in',
+      msg: 'Token is not provided',
       success: false,
     })
   }

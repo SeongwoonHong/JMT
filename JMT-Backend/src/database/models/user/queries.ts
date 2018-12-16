@@ -21,6 +21,10 @@ class Query {
   public static updateEmailVerifiationByEmailQuery = (params): Promise<any> => {
     return db.executeSP('UPDATE_EMAIL_VERIFICATION', params);
   }
+
+  public static updateUserProfile = (params): Promise<any> => {
+    return db.executeSP('UPDATE_USER_PROFILE', params);
+  }
 }
 
 export default Query;

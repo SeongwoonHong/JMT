@@ -10,6 +10,10 @@ export const updateEmailVerifiationByEmail = (token: { email: string }) => {
     const { email } = token;
 
     Query.updateEmailVerifiationByEmailQuery(email);
+
+    return {
+      success: true,
+    };
   } catch (e) {
     throw new Error(e);
   }
@@ -30,15 +34,15 @@ export const getUserByEmailOrDisplayName = async ({ display_name, email }) => {
         duplicate = 'email';
       }
 
-      return ({
+      return {
         msg: `${duplicate} already exists`,
         success: false,
-      });
+      };
     }
 
-    return ({
+    return {
       success: true
-    })
+    };
   } catch (e) {
     throw new Error(e);
   }
@@ -55,10 +59,10 @@ export const signup = async ({ display_name, password, hashedPassword, email, av
       avatar
     });
 
-    return ({
+    return {
       result,
       success: true
-    })
+    };
   } catch (e) {
     throw new Error(e);
   }
@@ -71,10 +75,10 @@ export const login = async ({ email, password }) => {
     const { rows } = userData;
 
     if (!rows.length) {
-      return ({
+      return {
         msg: 'account does not exist',
         success: false,
-      })
+      };
     }
 
     const { verified } = rows[0];
@@ -82,29 +86,40 @@ export const login = async ({ email, password }) => {
     passwordMatched = await bcryptUtils.compare(password, rows[0].password);
 
     if (!passwordMatched) {
-      return ({
+      return {
         success: false,
         msg: 'password is not correct',
-      });
+      };
     }
 
     if (!verified) {
-      return ({
+      return {
         success: false,
         msg: 'Please verify your email',
-      });
+      };
     }
 
-    return ({
+    return {
       result: rows[0],
       success: true,
-    })
+    };
   } catch (e) {
-    console.log('here you!')
     throw new Error(e);
   }
 }
 
 const sendVerificationEmail = (fields) => {
   return jwtUtils.createEmailToken(fields);
+}
+
+export const updateUserProfile = async (params) => {
+  try {
+    await Query.updateUserProfile(params);
+
+    return {
+      success: true,
+    };
+  } catch (e) {
+    throw new Error(e);
+  }
 }

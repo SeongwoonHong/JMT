@@ -93,10 +93,11 @@ export const login = (params) => {
 };
 
 const sendPresignedUrlWithFile = (url, file) => {
-  axios.defaults.headers.put['Content-Type'] = 'image/jpeg';
-  return axios.put(url, { file })
-    .then(() => delete axios.defaults.headers.put['Content-Type'])
-    .catch(e => console.log(e));
+  return axios.put(url, file, {
+    headers: {
+      'Content-Type': file.type
+    }
+  });
 };
 
 export const uploadProfileImage = (file, token) => {

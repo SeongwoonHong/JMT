@@ -15,6 +15,7 @@ class User {
     this.router.get('/emailVerification/:t', controllers.emailVerification);
     this.router.post('/signUp', controllers.signup);
     this.router.post('/login', controllers.login);
+    this.router.post('/updateProfile', tokenVerifyMiddleware, controllers.updateProfile);
   }
 }
 

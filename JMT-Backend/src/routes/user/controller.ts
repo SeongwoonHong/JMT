@@ -86,9 +86,7 @@ export const login = async (req, res: Response) => {
 
     const token = await creatToken({
       email,
-      password,
       display_name,
-      avatar,
       signup_date,
     })
 
@@ -113,3 +111,36 @@ export const check = (req, res: Response): void => {
 const creatToken = (fields) => {
   return jwtUtils.createToken(fields);
 }
+
+export const updateProfile = async (req, res: Response) => {
+  const { email, display_name, password, avatar } = req.body;
+  const schema = Joi.object().keys({
+    email: validationUtils.isEmail,
+    password: validationUtils.isPassword,
+    display_name: validationUtils.isDisplayName,
+    avatar: validationUtils.isAvatar,
+  });
+  const result: any = Joi.validate({ email, display_name, password, avatar }, schema);
+
+  if (result.error) {
+    res.status(400).json({
+      msg: result.error,
+      success: false,
+    })
+  }
+
+  try {
+    const userRes = await userRepository.updateUserProfile({ email, display_name, password, avatar });
+    
+    if (!userRes.success) {
+      return res.status(400).json(userRes);
+    }
+
+    return res.json({
+      success: true
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).json(e.message);
+  }
+};

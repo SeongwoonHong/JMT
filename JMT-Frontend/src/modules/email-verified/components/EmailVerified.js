@@ -37,7 +37,9 @@ class EmailVerified extends Component {
     const { dispatch } = this.props;
     const { file, token } = this.state;
 
-    dispatch(Auth.uploadProfileImage(file, token));
+    if (!file) return false;
+
+    return dispatch(Auth.uploadProfileImage(file, token));
   }
 
   renderLoader = () => {
