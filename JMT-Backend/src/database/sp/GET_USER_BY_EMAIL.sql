@@ -4,7 +4,7 @@
 
 CREATE OR REPLACE FUNCTION public.get_user_by_email(
 	_email character varying)
-    RETURNS TABLE(user_id integer, display_name character varying, password character varying, email character varying, avatar character varying, verified boolean, signup_date date) 
+    RETURNS TABLE(user_id integer, display_name character varying, password character varying, email character varying, avatar text, verified boolean, signup_date date) 
     LANGUAGE 'plpgsql'
 
     COST 100

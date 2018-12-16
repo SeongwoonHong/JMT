@@ -105,7 +105,7 @@ export const uploadProfileImage = (file, token) => {
     dispatch(App.loadingStart());
 
     return axios.get('/api/upload/profilePicture', {
-      params: { token, fileType: file.type }
+      params: { token, fileName: file.name }
     })
       .then(({ data }) => {
         sendPresignedUrlWithFile(data.url, file)

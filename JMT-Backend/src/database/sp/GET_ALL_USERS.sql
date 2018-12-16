@@ -9,7 +9,7 @@ CREATE OR REPLACE FUNCTION public.get_all_users(
       display_name character varying,
       password character varying,
       email character varying,
-      avatar character varying,
+      avatar text,
       verified boolean,
       signup_date date
     )

@@ -55,6 +55,7 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
 
     return res.status(400).json(userRes)
   } catch (e) {
+    console.log('here!s')
     console.log(e);
     return res.status(400).json(e);
   }

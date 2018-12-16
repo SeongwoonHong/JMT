@@ -17,6 +17,7 @@
     "express": "^4.16.3",
     "joi": "^14.0.0",
     "jsonwebtoken": "^8.3.0",
+    "mime-types": "^2.1.21",
     "nodemailer": "^4.6.8",
     "pg": "^7.5.0",
     "uuid": "^3.3.2"
