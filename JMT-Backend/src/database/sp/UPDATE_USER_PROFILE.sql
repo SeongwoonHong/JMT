@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION update_user_profile(
 	_email character varying,
 	_display_name character varying,
 	_password character varying,
-	_avatar character varying
+	_avatar text
 )
     RETURNS void
     LANGUAGE 'plpgsql'

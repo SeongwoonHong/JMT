@@ -13,17 +13,12 @@ class Signup extends Component {
     password: '',
     passwordConfirm: '',
     email: '',
-    avatar: null,
   }
 
   onChangeHandler = (e) => {
     const { name, value } = e.target;
 
     this.setState({ [name]: value });
-  }
-
-  onFileChange = (e) => {
-    this.setState({ avatar: e.target.files[0] });
   }
 
   signup = () => {
@@ -33,7 +28,6 @@ class Signup extends Component {
       password,
       passwordConfirm,
       email,
-      avatar,
     } = this.state;
 
     dispatch(Auth.signup({
@@ -41,7 +35,6 @@ class Signup extends Component {
       password,
       passwordConfirm,
       email,
-      avatar
     }))
       .then(res => console.log('res = ', res));
   }
@@ -89,13 +82,6 @@ class Signup extends Component {
             name="email"
             value={email}
             onChange={this.onChangeHandler}
-          />
-        </div>
-        <div>
-          <input
-            onChange={this.onFileChange}
-            type="file"
-            accept="image/*"
           />
         </div>
         <button onClick={this.signup}>Signup</button>
