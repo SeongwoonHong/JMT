@@ -7,4 +7,6 @@ export const colors = {
   themeWithGradient: 'linear-gradient(to right ,rgb(244,123,66), rgb(246,54,64))',
   lightGrey: 'rgba(0, 0, 0, 0.4)',
   backgroundOverlay: 'rgba(0, 0, 0, 0.75)',
+  inputColor: 'rgb(80, 80, 80)',
+  inputBorder: 'rgb(173, 173, 173)'
 };
