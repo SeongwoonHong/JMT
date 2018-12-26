@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Auth } from 'actions';
 import { Loader } from 'components';
+import { toast } from 'react-toastify';
 
 @connect(state => ({
   app: state.App,
@@ -30,6 +31,7 @@ class Signup extends Component {
       email,
     } = this.state;
 
+    // TODO: validation here
     dispatch(Auth.signup({
       displayName,
       password,
@@ -53,7 +55,7 @@ class Signup extends Component {
     }
 
     return (
-      <div>
+      <div className="a">
         <div>
           display name: <StyledInput
             name="displayName"

@@ -37,7 +37,7 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
 
   if (result.error) {
     return res.status(400).json({
-      msg: result.error,
+      msg: result.error.details[0].message,
       success: false,
     })
   }
@@ -55,7 +55,6 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
 
     return res.status(400).json(userRes)
   } catch (e) {
-    console.log('here!s')
     console.log(e);
     return res.status(400).json(e);
   }
@@ -71,7 +70,7 @@ export const login = async (req, res: Response) => {
 
   if (result.error) {
     res.status(400).json({
-      msg: result.error,
+      msg: result.error.details[0].message,
       success: false,
     })
   }
