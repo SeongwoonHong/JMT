@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { Auth } from 'actions';
-import { Loader } from 'components';
+import { Loader, Arrow, InputTextField, Button } from 'components';
 import { withCookies, Cookies } from 'react-cookie';
+import inputValidator from 'utils/input-validator';
+import history from 'utils/history';
+import { colors } from 'utils/colors';
 
 @withCookies
-@withRouter
 @connect(state => ({
   app: state.App,
 }))
@@ -15,11 +16,10 @@ class Login extends Component {
   state = {
     email: '',
     password: '',
+    errorMessages: {},
   };
 
   componentWillMount = () => {
-    const { history } = this.props;
-
     if (this.getTokenFromCookie()) {
       return history.push('/');
     }
@@ -43,47 +43,123 @@ class Login extends Component {
   login = () => {
     const { dispatch } = this.props;
     const { email, password } = this.state;
+    const errorMessages = this.validateInputs(email, password);
+
+    this.initializeErrorMessages();
+    if (!this.isInputValidationPassed(errorMessages)) {
+      return this.setState({ errorMessages });
+    }
 
     return dispatch(Auth.login({ email, password }));
   }
 
+
+  isInputValidationPassed = (errorObject) => {
+    return Object.keys(errorObject).length === 0;
+  }
+
+  initializeErrorMessages = () => {
+    return this.setState({ errorMessages: {} });
+  }
+
+  validateInputs = (email, password) => {
+    const errorMessages = {};
+
+    if (inputValidator.isEmpty(email)) {
+      errorMessages.email = 'Email is required';
+    }
+
+    if (inputValidator.isEmpty(password)) {
+      errorMessages.password = 'Password is required';
+    } else if (!inputValidator.isPassword(password)) {
+      errorMessages.password = '6 - 20 characters: letters, numbers, special characters';
+    }
+
+    return errorMessages;
+  }
+
   render() {
     const { app } = this.props;
-    const { email, password } = this.state;
+    const { email, password, errorMessages } = this.state;
 
     if (app.isLoading) {
       return <Loader />;
     }
 
     return (
-      <div>
-        <div>
-          <div>Email</div>
-          <StyledInput
+      <StyledLoginContainer>
+        <Arrow
+          className="login-arrow left"
+          onClick={() => history.goBack()}
+        />
+        <StyledHeader>Login</StyledHeader>
+
+        <StyledInputWrapper>
+          <InputTextField
+            label="Email"
             name="email"
             value={email}
-            placeholder="Email"
             onChange={this.onChangeHandler}
+            hasError={errorMessages.email}
           />
-        </div>
-        <div>
-          <div>Password</div>
-          <StyledInput
+          { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
+        </StyledInputWrapper>
+
+        <StyledInputWrapper>
+          <InputTextField
+            label="Password"
             name="password"
             type="password"
             value={password}
-            placeholder="Password"
             onChange={this.onChangeHandler}
+            hasError={errorMessages.password}
           />
-        </div>
-        <button onClick={this.login}>Login</button>
-      </div>
+          { errorMessages.password && <StyledErrorMessage>{errorMessages.password}</StyledErrorMessage> }
+        </StyledInputWrapper>
+        <Button
+          onClick={this.login}
+          className="btn-login"
+        >
+          Signup
+        </Button>
+      </StyledLoginContainer>
     );
   }
 }
 
 export default Login;
 
-const StyledInput = styled.input`
-  border-color: lightgrey;
+const StyledLoginContainer = styled.div`
+  padding: 15px;
+
+  .login-arrow {
+    span {
+      background-color: ${colors.black};
+    }
+  }
+
+  .btn-login {
+    margin-top: 35px;
+  }
+`;
+
+const StyledHeader = styled.div`
+  font-size: 32px;
+  margin-top: 30px;
+  color: ${colors.black};
+`;
+
+
+const StyledInputWrapper = styled.div`
+  position: relative;
+  margin-top: 30px;
+`;
+
+const StyledErrorMessage = styled.div`
+  color: ${colors.theme};
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  right: 0;
+  font-size: 12px;
 `;

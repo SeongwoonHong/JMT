@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Auth } from 'actions';
-import { Loader } from 'components';
-import { toast } from 'react-toastify';
+import { Loader, InputTextField, Button, Arrow } from 'components';
+import inputValidator from 'utils/input-validator';
+import { colors } from 'utils/colors';
+import history from 'utils/history';
 
 @connect(state => ({
   app: state.App,
@@ -14,12 +16,13 @@ class Signup extends Component {
     password: '',
     passwordConfirm: '',
     email: '',
+    errorMessages: {},
   }
 
   onChangeHandler = (e) => {
     const { name, value } = e.target;
 
-    this.setState({ [name]: value });
+    return this.setState({ [name]: value });
   }
 
   signup = () => {
@@ -31,8 +34,14 @@ class Signup extends Component {
       email,
     } = this.state;
 
-    // TODO: validation here
-    dispatch(Auth.signup({
+    this.initializeErrorMessages();
+    const errorMessages = this.validateInputs(email, displayName, password, passwordConfirm);
+
+    if (!this.isInputValidationPassed(errorMessages)) {
+      return this.setState({ errorMessages });
+    }
+
+    return dispatch(Auth.signup({
       displayName,
       password,
       passwordConfirm,
@@ -41,13 +50,53 @@ class Signup extends Component {
       .then(res => console.log('res = ', res));
   }
 
+  isInputValidationPassed = (errorObject) => {
+    return Object.keys(errorObject).length === 0;
+  }
+
+  initializeErrorMessages = () => {
+    return this.setState({ errorMessages: {} });
+  }
+
+  validateInputs = (email, displayName, password, passwordConfirm) => {
+    const errorMessages = {};
+
+    if (inputValidator.isEmpty(email)) {
+      errorMessages.email = 'Email is required';
+    } else if (!inputValidator.isEmail(email)) {
+      errorMessages.email = 'Invalid Email Address';
+    }
+
+    if (inputValidator.isEmpty(password)) {
+      errorMessages.password = 'Password is required';
+    } else if (!inputValidator.isPassword(password)) {
+      errorMessages.password = '6 - 20 characters: letters, numbers, special characters';
+    } else if (password !== passwordConfirm) {
+      errorMessages.password = 'Password should be matched';
+      errorMessages.passwordConfirm = 'Password should be matched';
+    }
+
+    if (inputValidator.isEmpty(passwordConfirm)) {
+      errorMessages.passwordConfirm = 'This field is required';
+    }
+
+    if (inputValidator.isEmpty(displayName)) {
+      errorMessages.displayName = 'Name is required';
+    } else if (!inputValidator.isDisplayName(displayName)) {
+      errorMessages.displayName = '3 - 12 characters: letters, numbers';
+    }
+
+    return errorMessages;
+  }
+
   render() {
     const { app } = this.props;
     const {
       displayName,
       password,
       passwordConfirm,
-      email
+      email,
+      errorMessages,
     } = this.state;
 
     if (app.isLoading) {
@@ -55,45 +104,101 @@ class Signup extends Component {
     }
 
     return (
-      <div className="a">
-        <div>
-          display name: <StyledInput
+      <StyledSignupContainer>
+        <Arrow
+          className="signup-arrow left"
+          onClick={() => history.goBack()}
+        />
+        <StyledHeader>Sign up</StyledHeader>
+        <StyledInputWrapper>
+          <InputTextField
+            label="Email"
+            name="email"
+            value={email}
+            onChange={this.onChangeHandler}
+            hasError={errorMessages.email}
+          />
+          { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
+        </StyledInputWrapper>
+
+        <StyledInputWrapper>
+          <InputTextField
+            label="Name"
             name="displayName"
             value={displayName}
             onChange={this.onChangeHandler}
+            hasError={errorMessages.displayName}
           />
-        </div>
-        <div>
-          password: <StyledInput
+          { errorMessages.displayName && <StyledErrorMessage>{errorMessages.displayName}</StyledErrorMessage> }
+        </StyledInputWrapper>
+
+        <StyledInputWrapper>
+          <InputTextField
+            label="Password"
             name="password"
             type="password"
             value={password}
             onChange={this.onChangeHandler}
+            hasError={errorMessages.password}
           />
-        </div>
-        <div>
-          password confirm: <StyledInput
+          { errorMessages.password && <StyledErrorMessage>{errorMessages.password}</StyledErrorMessage> }
+        </StyledInputWrapper>
+
+        <StyledInputWrapper>
+          <InputTextField
+            label="Password Confirm"
             name="passwordConfirm"
             type="password"
             value={passwordConfirm}
             onChange={this.onChangeHandler}
+            hasError={errorMessages.passwordConfirm}
           />
-        </div>
-        <div>
-          email: <StyledInput
-            name="email"
-            value={email}
-            onChange={this.onChangeHandler}
-          />
-        </div>
-        <button onClick={this.signup}>Signup</button>
-      </div>
+          { errorMessages.passwordConfirm && <StyledErrorMessage>{errorMessages.passwordConfirm}</StyledErrorMessage> }
+        </StyledInputWrapper>
+        <Button
+          onClick={this.signup}
+          className="btn-signup"
+        >
+          Signup
+        </Button>
+      </StyledSignupContainer>
     );
   }
 }
 
 export default Signup;
 
-const StyledInput = styled.input`
-  border-color: lightgrey;
+const StyledSignupContainer = styled.div`
+  padding: 15px;
+
+  .signup-arrow {
+    span {
+      background-color: ${colors.black};
+    }
+  }
+
+  .btn-signup {
+    margin-top: 35px;
+  }
+`;
+
+const StyledHeader = styled.div`
+  font-size: 32px;
+  margin-top: 30px;
+  color: ${colors.black};
+`;
+
+
+const StyledInputWrapper = styled.div`
+  position: relative;
+  margin-top: 30px;
+`;
+
+const StyledErrorMessage = styled.div`
+  color: ${colors.theme};
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  right: 0;
+  font-size: 12px;
 `;

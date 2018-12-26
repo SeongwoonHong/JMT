@@ -9,9 +9,14 @@ injectGlobal`
     font-family: 'Work Sans', sans-serif;
   }
 
+  input {
+    width: 100%;
+  }
+
   input, textarea, select, button {
     font: unset;
-
+    border: none;
+    
     &:focus, &:active {
       outline: none;
     }

@@ -64,7 +64,6 @@ class Header extends Component {
   modalToggler = () => this.setState(({ isModalOpen }) => ({ isModalOpen: !isModalOpen }));
 
   modalClose = () => {
-    console.log('this.props.filter = ', this.props.filter);
     return this.setState({ searchParam: this.props.filter }, () => {
       this.modalToggler();
     });

@@ -13,6 +13,7 @@ import Restaurant from './Restaurant';
 import Search from './Search';
 import SVGContainer from './SVGContainer';
 import Arrow from './Arrow';
+import InputTextField from './InputTextField';
 
 export {
   Button,
@@ -30,4 +31,5 @@ export {
   Search,
   SVGContainer,
   Arrow,
+  InputTextField,
 };
