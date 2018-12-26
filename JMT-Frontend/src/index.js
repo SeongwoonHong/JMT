@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
 import { CookiesProvider } from 'react-cookie';
+import { ToastContainer } from 'react-toastify';
 import { NotFound } from 'components';
 import Landing from 'modules/landing';
 import App from 'modules/app';
@@ -11,6 +12,7 @@ import Signup from 'modules/signup';
 import Login from 'modules/login';
 import EmailVerified from 'modules/email-verified';
 import history from 'utils/history';
+import 'react-toastify/dist/ReactToastify.min.css';
 import 'url-search-params-polyfill';
 import './styles';
 
@@ -39,6 +41,7 @@ ReactDOM.render(
             <Route path="/email-verified" component={EmailVerified} />
             <Route component={NotFound} />
           </Switch>
+          <ToastContainer />
         </div>
       </Router>
     </CookiesProvider>
