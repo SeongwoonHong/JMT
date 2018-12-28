@@ -1,4 +1,3 @@
-import axios from 'axios';
 /**
  * Action types
  */
@@ -20,18 +19,10 @@ export const toggleView = (view) => {
   };
 };
 
-export const isLoggedIn = () => { // a temporary action creator for proving that it's possible to call our backend APIs
-  return (dispatch) => {
-    return axios.get('/api/user/check')
-      .then((res) => {
-        dispatch(this.getMsg(res.data.msg));
-      });
-  };
-};
-
-export const loadingStart = () => {
+export const loadingStart = (requestInProcess = '') => {
   return {
     type: LOADING_START,
+    payload: requestInProcess,
   };
 };
 

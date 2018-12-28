@@ -13,6 +13,7 @@ import Signup from 'modules/signup';
 import Login from 'modules/login';
 import EmailVerified from 'modules/email-verified';
 import history from 'utils/history';
+import 'utils/axios.config';
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'url-search-params-polyfill';

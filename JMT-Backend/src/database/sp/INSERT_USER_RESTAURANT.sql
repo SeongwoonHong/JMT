@@ -1,11 +1,11 @@
--- FUNCTION: public.insert_user_restaurant(integer, integer, date)
+-- FUNCTION: public.insert_user_restaurant(integer, character varying, timestamp without time zone)
 
--- DROP FUNCTION public.insert_user_restaurant(integer, integer, date);
+-- DROP FUNCTION public.insert_user_restaurant(integer, character varying, timestamp without time zone);
 
 CREATE OR REPLACE FUNCTION public.insert_user_restaurant(
-	_user_id integer,
-	_restaurant_id integer,
-	_schedule_date date)
+	"_userId" integer,
+	"_restaurantId" character varying,
+	"_scheduleDate" timestamp without time zone)
     RETURNS void
     LANGUAGE 'plpgsql'
 
@@ -17,20 +17,20 @@ DECLARE
 BEGIN
 	INSERT INTO user_restaurant
 	(
-		user_id,
-		restaurant_id,
-		schedule_date
+		"userId",
+		"restaurantId",
+		"scheduleDate"
 	)
 	VALUES
 	(
-		_user_id,
-		_restaurant_id,
-		_schedule_date
+		"_userId",
+		"_restaurantId",
+		"_scheduleDate"
 	);
 	
 END;
 
 $BODY$;
 
-ALTER FUNCTION public.insert_user_restaurant(integer, integer, date)
+ALTER FUNCTION public.insert_user_restaurant(integer, character varying, timestamp without time zone)
     OWNER TO seong91;

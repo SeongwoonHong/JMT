@@ -4,15 +4,7 @@
 
 CREATE OR REPLACE FUNCTION public.get_user_by_email_or_displayname(
 	_text character varying)
-    RETURNS TABLE(
-      user_id integer,
-      display_name character varying,
-      password character varying,
-      email character varying,
-      avatar text,
-      verified boolean,
-      signup_date date
-    ) 
+    RETURNS TABLE("userId" integer, "displayName" character varying, password character varying, email character varying, avatar text, verified boolean, "signupDate" date) 
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -24,7 +16,7 @@ DECLARE
 BEGIN
 RETURN QUERY
 	SELECT * FROM USERS u
-	WHERE u.email = _text OR u.display_name = _text;
+	WHERE u.email = _text OR u."displayName" = _text;
 END;
 
 $BODY$;

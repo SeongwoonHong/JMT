@@ -1,21 +1,30 @@
-CREATE OR REPLACE FUNCTION update_user_profile(
+-- FUNCTION: public.update_user_profile(character varying, character varying, character varying, text)
+
+-- DROP FUNCTION public.update_user_profile(character varying, character varying, character varying, text);
+
+CREATE OR REPLACE FUNCTION public.update_user_profile(
 	_email character varying,
-	_display_name character varying,
+	"_displayName" character varying,
 	_password character varying,
-	_avatar text
-)
+	_avatar text)
     RETURNS void
     LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
 AS $BODY$
 
 DECLARE
 BEGIN
 UPDATE USERS
 SET
-	display_name = _display_name,
+	"displayName" = "_displayName",
 	password = _password,
 	avatar = _avatar
 WHERE email = _email;
 END;
 
 $BODY$;
+
+ALTER FUNCTION public.update_user_profile(character varying, character varying, character varying, text)
+    OWNER TO seong91;

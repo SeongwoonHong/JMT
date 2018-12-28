@@ -120,7 +120,7 @@ class Login extends Component {
           onClick={this.login}
           className="btn-login"
         >
-          Signup
+          Login
         </Button>
       </StyledLoginContainer>
     );

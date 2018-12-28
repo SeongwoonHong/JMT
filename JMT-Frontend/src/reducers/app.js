@@ -3,6 +3,7 @@ import { App } from 'actions';
 const initialState = {
   view: 'list',
   isLoading: false,
+  requestInProcess: null,
   filter: {}
 };
 
@@ -17,11 +18,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isLoading: true,
+        requestInProcess: action.payload.requestInProcess,
       };
     case App.LOADING_DONE:
       return {
         ...state,
         isLoading: false,
+        requestInProcess: null,
       };
     case App.UPDATE_FILTER:
       return {
