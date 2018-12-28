@@ -19,17 +19,17 @@ export const updateEmailVerifiationByEmail = (token: { email: string }) => {
   }
 }
 
-export const getUserByEmailOrDisplayName = async ({ display_name, email }) => {
+export const getUserByEmailOrDisplayName = async ({ displayName, email }) => {
   try {
-    const param = email ? email : display_name;
+    const param = email ? email : displayName;
     const data = await Query.getUserByEmailOrDisplayNameQuery(param);
     const { rows } = data;
 
     if (rows.length) {
       let duplicate: string;
 
-      if (rows[0].display_name === display_name) {
-        duplicate = 'display_name';
+      if (rows[0].displayName === displayName) {
+        duplicate = 'displayName';
       } else if (rows[0].email === email) {
         duplicate = 'email';
       }
@@ -48,12 +48,12 @@ export const getUserByEmailOrDisplayName = async ({ display_name, email }) => {
   }
 }
 
-export const signup = async ({ display_name, password, hashedPassword, email, avatar }) => {
+export const signup = async ({ displayName, password, hashedPassword, email, avatar }) => {
   try {
-    const result = await Query.signUpQuery({ display_name, password: hashedPassword, email, avatar })
+    const result = await Query.signUpQuery({ displayName, password: hashedPassword, email, avatar })
 
     sendVerificationEmail({
-      display_name,
+      displayName,
       password,
       email,
       avatar

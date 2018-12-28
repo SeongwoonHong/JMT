@@ -1,18 +1,10 @@
--- FUNCTION: public.get_all_users()
+-- FUNCTION: public.get_user_by_email(character varying)
 
--- DROP FUNCTION public.get_all_users();
+-- DROP FUNCTION public.get_user_by_email(character varying);
 
-CREATE OR REPLACE FUNCTION public.get_all_users(
-	)
-    RETURNS TABLE(
-      user_id integer,
-      display_name character varying,
-      password character varying,
-      email character varying,
-      avatar text,
-      verified boolean,
-      signup_date date
-    )
+CREATE OR REPLACE FUNCTION public.get_user_by_email(
+	_email character varying)
+    RETURNS TABLE("userId" integer, "displayName" character varying, password character varying, email character varying, avatar text, verified boolean, "signupDate" date) 
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -21,13 +13,13 @@ CREATE OR REPLACE FUNCTION public.get_all_users(
 AS $BODY$
 
 DECLARE
-users users_type;
 BEGIN
 RETURN QUERY
-SELECT * FROM users;
+SELECT * FROM USERS u
+WHERE u.email = _email;
 END;
 
 $BODY$;
 
-ALTER FUNCTION public.get_all_users()
+ALTER FUNCTION public.get_user_by_email(character varying)
     OWNER TO seong91;

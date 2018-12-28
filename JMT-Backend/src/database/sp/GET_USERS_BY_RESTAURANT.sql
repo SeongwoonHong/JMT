@@ -3,16 +3,9 @@
 -- DROP FUNCTION public.get_users_by_restaurant(integer, date);
 
 CREATE OR REPLACE FUNCTION public.get_users_by_restaurant(
-	_restaurant_id integer,
-	_schedule_date date)
-    RETURNS TABLE(
-      user_id integer,
-      display_name character varying,
-      password character varying,
-      email character varying,
-      avatar text,
-      verified boolean, signup_date date
-    )
+	"_restaurantId" integer,
+	"_scheduleDate" date)
+    RETURNS TABLE("userId" integer, "displayName" character varying, password character varying, email character varying, avatar text, verified boolean, "signupDate" date) 
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -25,19 +18,19 @@ DECLARE
 BEGIN
 	RETURN QUERY
 	SELECT 
-		u.user_id,
-		u.display_name,
+		u."userId",
+		u."displayName",
 		u.password,
 		u.email,
 		u.avatar,
 		u.verified,
-		u.signup_date
+		u."signupDate"
 	FROM users as u
 	JOIN user_restaurant as us
-	ON us.user_id = u.user_id AND us.schedule_date = _schedule_date
+	ON us."userId" = u."userId" AND us."scheduleDate" = "_scheduleDate"
 	JOIN restaurants
-	ON restaurants.id = us.restaurant_id
-	WHERE restaurants.id = _restaurant_id;
+	ON restaurants.id = us."restaurantId"
+	WHERE restaurants.id = "_restaurantId";
 	
 END;
 

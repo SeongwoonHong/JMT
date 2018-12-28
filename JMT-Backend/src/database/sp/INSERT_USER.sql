@@ -1,12 +1,12 @@
--- FUNCTION: public.insert_user(character varying, character varying, character varying, character varying)
+-- FUNCTION: public.insert_user(character varying, character varying, character varying, text)
 
--- DROP FUNCTION public.insert_user(character varying, character varying, character varying, character varying);
+-- DROP FUNCTION public.insert_user(character varying, character varying, character varying, text);
 
 CREATE OR REPLACE FUNCTION public.insert_user(
-	display_name character varying,
+	"displayName" character varying,
 	password character varying,
 	email character varying,
-	avatar character varying DEFAULT NULL::character varying)
+	avatar text DEFAULT NULL::text)
     RETURNS void
     LANGUAGE 'plpgsql'
 
@@ -17,11 +17,11 @@ AS $BODY$
 DECLARE
 BEGIN
 INSERT INTO USERS
-(display_name, password, email, avatar)
-VALUES (display_name, password, email, avatar);
+("displayName", password, email, avatar)
+VALUES ("displayName", password, email, avatar);
 END;
 
 $BODY$;
 
-ALTER FUNCTION public.insert_user(character varying, character varying, character varying, character varying)
+ALTER FUNCTION public.insert_user(character varying, character varying, character varying, text)
     OWNER TO seong91;

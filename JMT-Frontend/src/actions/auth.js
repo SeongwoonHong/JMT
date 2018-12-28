@@ -54,7 +54,7 @@ export const signup = (params) => {
     dispatch(App.loadingStart());
 
     return axios.post('/api/user/signup', {
-      display_name: params.displayName,
+      displayName: params.displayName,
       password: params.password,
       email: params.email,
     })

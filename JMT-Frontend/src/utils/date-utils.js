@@ -31,3 +31,16 @@ export const getTimeWithPeriod = (time) => {
 
   return result;
 };
+
+
+export const convertDateObject = (dateObj) => {
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth() + 1;
+  const date = dateObj.getDate();
+  const hours = dateObj.getHours();
+  const minutes = dateObj.getMinutes();
+  const seconds = dateObj.getSeconds();
+
+  return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+};
+

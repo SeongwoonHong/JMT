@@ -25,15 +25,15 @@ export const emailVerification = async (req: Request, res: Response) => {
 
 
 export const signup = async (req: Request, res: Response): Promise<Response> => {
-  const { display_name, password, email, avatar } = req.body;
+  const { displayName, password, email, avatar } = req.body;
   const schema = Joi.object().keys({
-    display_name: validationUtils.isDisplayName,
+    displayName: validationUtils.isDisplayName,
     password: validationUtils.isPassword,
     email: validationUtils.isEmail,
     avatar: validationUtils.isAvatar,
   });
   let hashedPassword: string = null;
-  const result: any = Joi.validate({ display_name, password, email, avatar }, schema);
+  const result: any = Joi.validate({ displayName, password, email, avatar }, schema);
 
   if (result.error) {
     return res.status(400).json({
@@ -45,10 +45,10 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
   try {
     hashedPassword = await bcryptUtils.hash(password);
 
-    const userRes = await userRepository.getUserByEmailOrDisplayName({ display_name, email });
+    const userRes = await userRepository.getUserByEmailOrDisplayName({ displayName, email });
 
     if (userRes.success) {
-      const result = userRepository.signup({ display_name, password, hashedPassword, email, avatar })
+      const result = userRepository.signup({ displayName, password, hashedPassword, email, avatar })
 
       return res.json(result);
     }
@@ -82,18 +82,18 @@ export const login = async (req, res: Response) => {
       return res.status(400).json(userRes);
     }
 
-    const { display_name, avatar, signup_date } = userRes.result;
+    const { userId, displayName, avatar, signupDate } = userRes.result;
 
     const token = await creatToken({
       email,
-      display_name,
-      signup_date,
+      displayName,
+      signupDate,
     })
 
     return res.json({
-      msg: 'login is succees',
       success: true,
-      token
+      token,
+      userId: userId,
     })
   } catch (e) {
     console.log(e.message);
@@ -113,14 +113,14 @@ const creatToken = (fields) => {
 }
 
 export const updateProfile = async (req, res: Response) => {
-  const { email, display_name, password, avatar } = req.body;
+  const { email, displayName, password, avatar } = req.body;
   const schema = Joi.object().keys({
     email: validationUtils.isEmail,
     password: validationUtils.isPassword,
-    display_name: validationUtils.isDisplayName,
+    displayName: validationUtils.isDisplayName,
     avatar: validationUtils.isAvatar,
   });
-  const result: any = Joi.validate({ email, display_name, password, avatar }, schema);
+  const result: any = Joi.validate({ email, displayName, password, avatar }, schema);
 
   if (result.error) {
     res.status(400).json({
@@ -130,7 +130,7 @@ export const updateProfile = async (req, res: Response) => {
   }
 
   try {
-    const userRes = await userRepository.updateUserProfile({ email, display_name, password, avatar });
+    const userRes = await userRepository.updateUserProfile({ email, displayName, password, avatar });
     
     if (!userRes.success) {
       return res.status(400).json(userRes);

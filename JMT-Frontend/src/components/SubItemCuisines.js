@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { capitalizeFirstLetter } from 'utils/string-format';
+import { capitalizeFirstLetter } from 'utils/string-utils';
 
 const SubItem = styled.label`
   flex: 1 0 auto;

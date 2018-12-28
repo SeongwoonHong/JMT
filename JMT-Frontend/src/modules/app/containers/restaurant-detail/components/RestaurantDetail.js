@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import phoneIcon from 'assets/phoneIcon.png';
 import { colors } from 'utils/colors';
 import { RatingCircle, Loader, Arrow, Button, ModalTitle } from 'components';
-import { getTimeWithPeriod } from 'utils/number-format';
+import { getTimeWithPeriod, convertDateObject } from 'utils/date-utils';
 import history from 'utils/history';
 import DatePicker from 'react-datepicker';
 import Modal from 'react-modal';
@@ -31,6 +31,7 @@ const modalStyles = {
 @connect(state => ({
   restaurants: state.Restaurants,
   app: state.App,
+  user: state.Auth.user,
 }))
 class RestaurantDetail extends Component {
   constructor(props) {
@@ -120,13 +121,13 @@ class RestaurantDetail extends Component {
 
   saveDate = () => {
     const { scheduleDate } = this.state;
+    const { dispatch, user, restaurants } = this.props;
+
     if (!scheduleDate) return false;
 
-    const timeStamp = +scheduleDate.getTime();
+    const convertedScheduleDate = convertDateObject(scheduleDate);
 
-    // TODO: call an action creator to save
-
-    console.log('timeStamp = ', timeStamp);
+    dispatch(Restaurant.joinRestaurant(user.userId, restaurants.activeRestaurant.id, convertedScheduleDate));
 
     return false;
   }
@@ -149,7 +150,7 @@ class RestaurantDetail extends Component {
             showTimeSelect
             timeFormat="HH:mm"
             timeIntervals={15}
-            dateFormat="MMMM d, yyyy h:mm aa"
+            dateFormat="YYYY-MM-dd, h:mm aa"
             timeCaption="time"
           />
         </div>

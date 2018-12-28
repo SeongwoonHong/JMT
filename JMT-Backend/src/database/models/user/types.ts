@@ -1,6 +1,6 @@
 export interface UserModel {
-  user_id: string,
-  display_name: string,
+  userId: string,
+  displayName: string,
   password: string,
   email: string,
   avatar: string,

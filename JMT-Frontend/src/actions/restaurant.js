@@ -1,5 +1,6 @@
 import axios from 'axios';
 import history from 'utils/history';
+import { toast } from 'react-toastify';
 
 import { App } from './';
 
@@ -14,6 +15,7 @@ export const SEARCH_RESTAURANT_FAIL = 'SEARCH_RESTAURANT_FAIL';
 export const GET_RESTAURANT_DETAIL = 'GET_RESTAURANT_DETAIL';
 export const GET_RESTAURANT_DETAIL_FAIL = 'GET_RESTAURANT_DETAIL_FAIL';
 export const GET_RESTAURANT_AUTOCOMPLETE = 'GET_RESTAURANT_AUTOCOMPLETE';
+export const JOIN_RESTAURANT = 'JOIN_RESTAURANT';
 /**
  * Action Creators
  */
@@ -27,7 +29,7 @@ export const getRestaurant = (data) => {
 
 export const getRestaurantDetail = (id) => {
   return (dispatch) => {
-    dispatch(App.loadingStart());
+    dispatch(App.loadingStart('getRestaurantDetail'));
 
     return axios.get('/api/restaurant/getRestaurantDetail', {
       params: {
@@ -58,7 +60,7 @@ export const searchRestaurant = ({
   return (dispatch) => {
     const { sort_by: sortBy, price } = rest;
 
-    dispatch(App.loadingStart());
+    dispatch(App.loadingStart('searchRestaurant'));
     return axios.get('/api/restaurant/searchRestaurant', {
       params: {
         location,
@@ -128,3 +130,37 @@ export const getRestaurantAutocomplete = ({
   };
 };
 
+/**
+ *
+ * @param {string} userId
+ * @param {string} restaurantId
+ * @param {string} scheduleDate ex) '2018-12-14 20:30:0'
+ */
+export const joinRestaurant = (userId, restaurantId, scheduleDate) => {
+  return (dispatch) => {
+    dispatch(App.loadingStart('joinRestaurant'));
+
+    return axios.post('/api/restaurant/joinRestaurant', {
+      userId,
+      restaurantId,
+      scheduleDate
+    })
+      .then((res) => {
+        dispatch(App.loadingDone());
+        dispatch({
+          type: JOIN_RESTAURANT,
+          payload: res.data
+        });
+
+        return toast.success('Saved', {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+      })
+      .catch(({ response }) => {
+        console.log(response.data.msg);
+        return toast.error(response.data.msg, {
+          positioin: toast.POSITION.BOTTOM_CENTER
+        });
+      });
+  };
+};

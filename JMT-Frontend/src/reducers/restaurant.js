@@ -3,6 +3,7 @@ import { Restaurant } from 'actions';
 const initialState = {
   list: [],
   activeRestaurant: {},
+  myRestaurants: [],
 };
 
 export default function (state = initialState, action) {
@@ -22,6 +23,32 @@ export default function (state = initialState, action) {
           ...action.payload,
           distance,
         },
+      };
+    case Restaurant.JOIN_RESTAURANT:
+      const duplicate = state.myRestaurants.filter(restaurant => restaurant.restaurantId === action.restaurantId);
+      const newRestaurant = {
+        restaurantId: action.restaurantId,
+        scheduleDate: action.scheduleDate,
+      };
+
+      if (duplicate.length) {
+        return {
+          ...state,
+          myRestaurants: myRestaurants.map((restaurant) => {
+            if (restaurant.restaurantId === action) {
+              return newRestaurant;
+            }
+            return restaurant;
+          })
+        };
+      }
+
+      return {
+        ...state,
+        myRestaurants: [
+          ...state.myRestaurants,
+          newRestaurant
+        ]
       };
     default:
       return state;

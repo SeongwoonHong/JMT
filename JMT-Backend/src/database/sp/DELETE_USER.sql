@@ -3,7 +3,7 @@
 -- DROP FUNCTION public.delete_user(integer);
 
 CREATE OR REPLACE FUNCTION public.delete_user(
-	_user_id integer)
+	"_userId" integer)
     RETURNS void
     LANGUAGE 'plpgsql'
 
@@ -14,7 +14,7 @@ AS $BODY$
 DECLARE
 BEGIN
 DELETE FROM USERS
-WHERE user_id = _user_id;
+WHERE "userId" = "_userId";
 END;
 
 $BODY$;
