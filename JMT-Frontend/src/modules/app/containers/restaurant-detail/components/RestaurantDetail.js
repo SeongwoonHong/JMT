@@ -4,13 +4,29 @@ import { Restaurant } from 'actions';
 import { connect } from 'react-redux';
 import phoneIcon from 'assets/phoneIcon.png';
 import { colors } from 'utils/colors';
-import { RatingCircle, Loader, Arrow } from 'components';
+import { RatingCircle, Loader, Arrow, Button, ModalTitle } from 'components';
 import { getTimeWithPeriod } from 'utils/number-format';
 import history from 'utils/history';
+import DatePicker from 'react-datepicker';
+import Modal from 'react-modal';
 
 import Map from './Map';
 import ImageSlide from './ImageSlide';
 import Categories from './Categories';
+
+const modalStyles = {
+  content: {
+    top: '80px',
+    left: '20px',
+    right: '20px',
+    bottom: '225px'
+  },
+  overlay: {
+    opacity: 1,
+    backgroundColor: colors.backgroundOverlay,
+    zIndex: 2,
+  },
+};
 
 @connect(state => ({
   restaurants: state.Restaurants,
@@ -26,6 +42,8 @@ class RestaurantDetail extends Component {
     this.state = {
       imageIndex: 0,
       id: params.get('id'),
+      scheduleDate: null,
+      isModalOpen: false,
     };
   }
 
@@ -85,7 +103,59 @@ class RestaurantDetail extends Component {
   }
 
   goToRestaurantList = () => {
-    history.goBack();
+    return history.goBack();
+  }
+
+  handleDateChange = (scheduleDate) => {
+    return this.setState({ scheduleDate });
+  }
+
+  closeModal = () => {
+    return this.setState({ isModalOpen: false });
+  }
+
+  openModal = () => {
+    return this.setState({ isModalOpen: true });
+  }
+
+  saveDate = () => {
+    const { scheduleDate } = this.state;
+    if (!scheduleDate) return false;
+
+    const timeStamp = +scheduleDate.getTime();
+
+    // TODO: call an action creator to save
+
+    console.log('timeStamp = ', timeStamp);
+
+    return false;
+  }
+
+  renderModal = () => {
+    const { scheduleDate } = this.state;
+
+    return (
+      <Modal
+        isOpen={this.state.isModalOpen}
+        style={modalStyles}
+        contentLabel="Example Modal"
+      >
+        <ModalTitle modalClose={this.closeModal} title="Select a Date" />
+        <div style={{ marginTop: '50px' }}>
+          <DatePicker
+            selected={scheduleDate}
+            onChange={this.handleDateChange}
+            placeholderText="select a date and time"
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            dateFormat="MMMM d, yyyy h:mm aa"
+            timeCaption="time"
+          />
+        </div>
+        <Button style={{ marginTop: '20px' }} onClick={this.saveDate}>Save</Button>
+      </Modal>
+    );
   }
 
   render() {
@@ -113,7 +183,6 @@ class RestaurantDetail extends Component {
       rating,
     } = restaurants.activeRestaurant;
 
-    console.log('restaurants.activeRestaurant = ', restaurants.activeRestaurant);
     return (
       <StyledRestaurantDetail>
         <StyledImageSlideWrapper>
@@ -133,6 +202,7 @@ class RestaurantDetail extends Component {
         <StyledBottom>
           <StyledArrowLeft onClick={this.decreaseIndex} isHide={imageIndex === 0} />
           <StyledArrowRight onClick={this.increaseIndex} isHide={imageIndex === photos.length - 1} />
+
           <StyledBottomTopInfo>
             <StyledRatingNumber>{rating}</StyledRatingNumber>
             <RatingCircle
@@ -145,6 +215,7 @@ class RestaurantDetail extends Component {
               <StyledDistance>{this.getDistance()}</StyledDistance>
             </StyledPriceDistanceWrapper>
           </StyledBottomTopInfo>
+
           <StyledRestaurantName>{name}</StyledRestaurantName>
           <StyledRestaurantAddress>{this.getAddress(address)}</StyledRestaurantAddress>
           <StyledHorizontalBorders>
@@ -161,6 +232,15 @@ class RestaurantDetail extends Component {
               <StyledRestaurantNumber>{displayPhone}</StyledRestaurantNumber>
             </StyledWrapperRight>
           </StyledHorizontalBorders>
+
+          <Button
+            onClick={this.openModal}
+            className="btn-restaurant-detail"
+          >
+            Join
+          </Button>
+          <StyledHr />
+          {this.renderModal()}
           <Map
             googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC50Sb3U7clyt4_TT36sj40NIXdTUaQc_E" // this key can be exposed
             loadingElement={<Loader />}
@@ -179,7 +259,9 @@ class RestaurantDetail extends Component {
 export default RestaurantDetail;
 
 const StyledRestaurantDetail = styled.div`
-
+  .btn-restaurant-detail {
+    margin: 10px 0px;
+  }
 `;
 
 const StyledImageSlideWrapper = styled.div`
@@ -281,6 +363,11 @@ const StyledHorizontalBorders = styled.div`
   height: 60px;
   border-top: solid 1px rgb(222,222,222);
   border-bottom: solid 1px rgb(222,222,222);
+`;
+
+const StyledHr = styled.hr`
+  border: solid 1px rgb(222,222,222);
+  margin-bottom: 10px;
 `;
 
 const StyledWrapperLeft = styled.div`

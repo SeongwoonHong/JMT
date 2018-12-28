@@ -28,10 +28,10 @@ const Title = styled.div`
   font-weight: bold;
 `;
 
-const ModalTitle = ({ modalClose }) => (
+const ModalTitle = ({ modalClose, title }) => (
   <TitleWrapper>
     <ModalCloser onClick={modalClose}>X</ModalCloser>
-    <Title>FILTER</Title>
+    <Title>{title}</Title>
   </TitleWrapper>
 );
 
