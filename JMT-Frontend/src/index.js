@@ -5,6 +5,7 @@ import { Router, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
 import { CookiesProvider } from 'react-cookie';
 import { ToastContainer } from 'react-toastify';
+import Modal from 'react-modal';
 import { NotFound } from 'components';
 import Landing from 'modules/landing';
 import App from 'modules/app';
@@ -13,6 +14,7 @@ import Login from 'modules/login';
 import EmailVerified from 'modules/email-verified';
 import history from 'utils/history';
 import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import 'url-search-params-polyfill';
 import './styles';
 
@@ -22,6 +24,9 @@ let TestRoutes;
 if (isDevelopment) {
   TestRoutes = require('./test/routes').default;
 }
+
+// for Accessibility
+Modal.setAppElement(document.getElementById('app'));
 
 ReactDOM.render(
   <Provider store={store}>

@@ -15,6 +15,7 @@ const CheckBox = styled.input`
   -moz-transform: scale(1); /* FF */
   -webkit-transform: scale(1); /* Safari and Chrome */
   -o-transform: scale(1); /* Opera */
+  width: initial;
 `;
 
 const SubItemCuisines = ({

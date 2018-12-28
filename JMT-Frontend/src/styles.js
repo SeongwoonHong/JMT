@@ -1,4 +1,5 @@
 import { injectGlobal } from 'styled-components';
+import { colors } from 'utils/colors';
 
 injectGlobal`
   body {
@@ -19,6 +20,17 @@ injectGlobal`
     
     &:focus, &:active {
       outline: none;
+    }
+  }
+
+  .react-datepicker__input-container,
+  .react-datepicker-wrapper {
+    width: 100%;
+
+    input {
+      font-size: 20px;
+      color: ${colors.teal};
+      text-align: center;
     }
   }
 `;

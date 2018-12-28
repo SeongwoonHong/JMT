@@ -115,7 +115,7 @@ class Header extends Component {
 
     return (
       <StyledHeader>
-        <Modal isOpen={isModalOpen} style={modalStyle} ariaHideApp={false}>
+        <Modal isOpen={isModalOpen} style={modalStyle}>
           <ModalContainer
             modalToggler={this.modalToggler}
             modalClose={this.modalClose}

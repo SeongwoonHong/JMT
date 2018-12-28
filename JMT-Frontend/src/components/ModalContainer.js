@@ -63,7 +63,7 @@ const ModalContainer = ({
 
   return (
     <ModalWrapper>
-      <ModalTitle modalClose={modalClose} />
+      <ModalTitle modalClose={modalClose} title="FILTER" />
       <ModalContents
         styleToggler={styleToggler}
         selected={selected}

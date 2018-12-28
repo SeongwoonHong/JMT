@@ -8,5 +8,6 @@ export const colors = {
   lightGrey: 'rgba(0, 0, 0, 0.4)',
   backgroundOverlay: 'rgba(0, 0, 0, 0.75)',
   inputColor: 'rgb(80, 80, 80)',
-  inputBorder: 'rgb(173, 173, 173)'
+  inputBorder: 'rgb(173, 173, 173)',
+  teal: 'rgb(0,128,128)'
 };
