@@ -101,11 +101,28 @@ export const login = async (req, res: Response) => {
   }
 }
 
-export const check = (req, res: Response): void => {
-  res.json({
-    success: true,
-    info: req.decoded
-  });
+export const check = async (req, res: Response) => {
+  try {
+    const userRes = await userRepository.checkLogin(req.decoded.email);
+    const userData = {
+      email: req.decoded.email,
+      avatar: req.decoded.avatar,
+      signupDate: req.decoded.signupDate,
+    };
+
+    return res.json({
+      success: true,
+      userData: {
+        ...userData,
+        token: req.token,
+        userId: userRes.result.userId,
+        verified: userRes.result.verified,
+        avatar: userRes.result.avatar,
+      }
+    });
+  } catch (e) {
+    return res.status(400).json(e.message);
+  }
 }
 
 const creatToken = (fields) => {

@@ -19,6 +19,7 @@ export const tokenVerifyMiddleware = (req, res: Response, next: NextFunction): v
     .then((decoded) => {
       // TODO: need to define a custom type for express request
       req.decoded = decoded;
+      req.token = token;
       next();
     })
     .catch((err) => {

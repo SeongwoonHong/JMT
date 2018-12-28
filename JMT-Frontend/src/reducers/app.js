@@ -18,7 +18,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isLoading: true,
-        requestInProcess: action.payload.requestInProcess,
+        requestInProcess: action.payload,
       };
     case App.LOADING_DONE:
       return {
