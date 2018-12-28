@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
-import { CookiesProvider } from 'react-cookie';
+import { Auth } from 'actions';
+import { CookiesProvider, Cookies } from 'react-cookie';
 import { ToastContainer } from 'react-toastify';
 import Modal from 'react-modal';
 import { NotFound } from 'components';
@@ -28,6 +29,11 @@ if (isDevelopment) {
 
 // for Accessibility
 Modal.setAppElement(document.getElementById('app'));
+
+const cookies = new Cookies();
+const token = cookies.get('JMT_AUTH_TOKEN');
+
+if (token) store.dispatch(Auth.checkLogin(token));
 
 ReactDOM.render(
   <Provider store={store}>

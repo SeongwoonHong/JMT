@@ -123,3 +123,17 @@ export const updateUserProfile = async (params) => {
     throw new Error(e);
   }
 }
+
+export const checkLogin = async (email) => {
+  try {
+    const userData = await Query.getUserByEmailQuery({ email });
+    const { rows } = userData;
+
+    return {
+      success: true,
+      result: rows[0],
+    };
+  } catch (e) {
+    throw new Error(e);
+  }
+};

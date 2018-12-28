@@ -12,7 +12,6 @@ export const SIGNUP_FAIL = 'SIGNUP_FAIL';
 export const LOGIN = 'LOGIN';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const PROFILE_IMAGE = 'PROFILE_IMAGE';
-export const PROFILE_IMAGE_FAIL = 'PROFILE_IMAGE_FAIL';
 export const TOKEN_DECODE = 'TOKEN_DECODE';
 /**
  * Action creator
@@ -51,7 +50,7 @@ export const loginFail = (error) => {
 
 export const signup = (params) => {
   return (dispatch) => {
-    dispatch(App.loadingStart());
+    dispatch(App.loadingStart('signup'));
 
     return axios.post('/api/user/signup', {
       displayName: params.displayName,
@@ -79,7 +78,7 @@ export const signup = (params) => {
 
 export const login = (params) => {
   return (dispatch) => {
-    dispatch(App.loadingStart());
+    dispatch(App.loadingStart('login'));
 
     return axios.post('/api/user/login', {
       email: params.email,
@@ -115,7 +114,7 @@ const sendPresignedUrlWithFile = (url, file) => {
 
 export const uploadProfileImage = (file, token) => {
   return (dispatch) => {
-    dispatch(App.loadingStart());
+    dispatch(App.loadingStart('uploadProfileImage'));
 
     return axios.get('/api/upload/profilePicture', {
       params: { token, fileName: file.name }
@@ -136,7 +135,7 @@ export const uploadProfileImage = (file, token) => {
 
 export const tokenDecode = (token) => {
   return (dispatch) => {
-    dispatch(App.loadingStart());
+    dispatch(App.loadingStart('tokenDecode'));
 
     return axios.get('/api/user/check', {
       params: { token }
@@ -145,7 +144,10 @@ export const tokenDecode = (token) => {
         dispatch(App.loadingDone());
 
         if (!data.success) {
-          return history.push('/'); // TODO: toaster with a message such as 'not valid token'
+          toast.error('Not a valid token', {
+            position: toast.POSITION.BOTTOM_CENTER
+          });
+          return history.push('/');
         }
 
         return false;
@@ -154,6 +156,24 @@ export const tokenDecode = (token) => {
         dispatch(App.loadingDone());
 
         return history.push('/');
+      });
+  };
+};
+
+export const checkLogin = (token) => {
+  return (dispatch) => {
+    dispatch(App.loadingStart('checkLogin'));
+
+    return axios.get('/api/user/check', {
+      params: { token }
+    })
+      .then(({ data }) => {
+        dispatch(App.loadingDone());
+
+        return dispatch(loginSuccess(data.userData));
+      })
+      .catch(() => {
+        return dispatch(App.loadingDone());
       });
   };
 };
