@@ -13,8 +13,5 @@
     "concurrently": "^4.0.1",
     "husky": "^0.15.0-rc.9"
   },
-  "dependencies": {
-    "axios": "^0.18.0",
-    "morgan": "^1.9.1"
-  }
+  "dependencies": {}
 }
