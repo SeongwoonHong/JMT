@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { colors } from 'utils/colors';
 import animate from 'gsap-promise';
-import { Button, Loader, Options } from 'components';
+import { Button, Loader, Options, Logo } from 'components';
 import { connect } from 'react-redux';
 import { App, Restaurant } from 'actions';
 import TransitionGroup from 'react-transition-group-plus';
-import logo from 'assets/logo.png';
 import { cuisineOptions, locationOptions } from 'constants';
 
 import Dropdown from './Dropdown';
@@ -27,7 +26,7 @@ class Landing extends Component {
   }
 
   componentDidMount = () => {
-    this.animateIn();
+    // this.animateIn(); for now, I disable this
   }
 
   getCurrentLocation = () => {
@@ -178,13 +177,11 @@ class Landing extends Component {
 
     return (
       <StyledLanding>
-        <StyledBackgroundOverlay
-          innerRef={el => this.circle = el}
-        />
-        <StyledLogo>
-          <img src={logo} alt="" />
-          <div>Restaurant Finder</div>
-        </StyledLogo>
+        {/* <Logo
+          width="210px"
+          height="210px"
+          text="Restaurant Finder"
+        /> */}
         <Options
           onClick={() => this.optionClickHandler('cuisines')}
           text={cuisinesText}

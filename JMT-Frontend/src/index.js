@@ -8,7 +8,7 @@ import { CookiesProvider, Cookies } from 'react-cookie';
 import { ToastContainer } from 'react-toastify';
 import Modal from 'react-modal';
 import { NotFound } from 'components';
-import Landing from 'modules/landing';
+import Home from 'modules/home';
 import App from 'modules/app';
 import Signup from 'modules/signup';
 import Login from 'modules/login';
@@ -46,7 +46,7 @@ ReactDOM.render(
                 ? <Route path="/test" component={ TestRoutes } />
                 : null
             }
-            <Route exact path="/" component={Landing} />
+            <Route exact path="/" component={Home} />
             <Route path="/main" component={App} />
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />

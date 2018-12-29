@@ -6,7 +6,7 @@ import { Restaurant } from 'actions';
 import { Header, Loader } from 'components';
 import getURLSearchParams from 'utils/get-url-params';
 import Map from './Map';
-import RestaurantList from './RestaurantList';
+import Restaurants from './Restaurants';
 
 @connect(state => ({
   restaurants: state.Restaurants,
@@ -101,7 +101,7 @@ class Main extends React.Component {
     }
 
     return (
-      <RestaurantList
+      <Restaurants
         restaurants={restaurants.list}
         onClick={this.restaurantOnClickHandler}
       />

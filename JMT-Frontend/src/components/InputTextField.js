@@ -38,7 +38,7 @@ const StyledInputTextField = styled.div`
 
 const StyledLabel = styled.label`
   font-size: 12px;
-  color: ${colors.lightGrey};
+  color: ${colors.grey};
   display: block;
 `;
 

@@ -74,7 +74,7 @@ export const searchRestaurant = ({
       .then((res) => {
         dispatch(App.loadingDone());
         dispatch(getRestaurant(res.data));
-        let url = `?cuisines=${cuisines}`;
+        let url = `/restaurant-list?cuisines=${cuisines}`;
 
         if (location) {
           url += `&location=${location}`;

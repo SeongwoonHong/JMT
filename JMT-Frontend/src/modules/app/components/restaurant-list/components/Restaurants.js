@@ -4,7 +4,7 @@ import { colors } from 'utils/colors';
 import TransitionGroup from 'react-transition-group-plus';
 import { Restaurant } from 'components';
 
-class RestaurantList extends Component {
+class Restaurants extends Component {
   render() {
     const { restaurants, onClick } = this.props;
 
@@ -37,4 +37,4 @@ const StyledRestaurantList = styled.div`
   padding: 5px 10px;
 `;
 
-export default RestaurantList;
+export default Restaurants;
