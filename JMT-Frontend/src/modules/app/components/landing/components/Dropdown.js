@@ -114,7 +114,7 @@ const StyledItemContainer = styled.div`
 `;
 
 const StyledItem = styled.div`
-  color: ${props => props.isSelected ? colors.black : colors.lightGrey};
+  color: ${props => props.isSelected ? colors.black : colors.grey};
   border-top: ${props => props.isSelected && '1px solid black'};
   border-bottom: ${props => props.isSelected && '1px solid black'};
   font-size: ${props => props.isSelected ? '18px' : '16px'};

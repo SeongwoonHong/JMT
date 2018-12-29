@@ -14,6 +14,8 @@ import Search from './Search';
 import SVGContainer from './SVGContainer';
 import Arrow from './Arrow';
 import InputTextField from './InputTextField';
+import SelectionIndicators from './SelectionIndicators';
+import Logo from './Logo';
 
 export {
   Button,
@@ -32,4 +34,6 @@ export {
   SVGContainer,
   Arrow,
   InputTextField,
+  SelectionIndicators,
+  Logo,
 };

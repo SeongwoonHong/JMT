@@ -16,10 +16,11 @@ import Categories from './Categories';
 
 const modalStyles = {
   content: {
-    top: '80px',
-    left: '20px',
-    right: '20px',
-    bottom: '225px'
+    top: '9vh',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    bottom: '19vh',
+    width: '82vw'
   },
   overlay: {
     opacity: 1,
@@ -410,7 +411,7 @@ const StyledWrapperRight = styled.div`
 const StyledCall = styled.div`
   padding: 12px 0 2px;
   font-size: 10px;
-  color: ${colors.lightGrey};
+  color: ${colors.grey};
   font-weight: bold;
 `;
 

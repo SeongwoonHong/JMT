@@ -117,7 +117,6 @@ export const check = async (req, res: Response) => {
         token: req.token,
         userId: userRes.result.userId,
         verified: userRes.result.verified,
-        avatar: userRes.result.avatar,
       }
     });
   } catch (e) {
