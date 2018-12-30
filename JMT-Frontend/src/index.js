@@ -5,7 +5,7 @@ import { Router, Route, Switch } from 'react-router-dom';
 import store from 'stores/store';
 import { Auth } from 'actions';
 import { CookiesProvider, Cookies } from 'react-cookie';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import Modal from 'react-modal';
 import { NotFound } from 'components';
 import Home from 'modules/home';
@@ -53,7 +53,10 @@ ReactDOM.render(
             <Route path="/email-verified" component={EmailVerified} />
             <Route component={NotFound} />
           </Switch>
-          <ToastContainer />
+          <ToastContainer
+            position={toast.POSITION.BOTTOM_CENTER}
+            autoClose={3000}
+          />
         </div>
       </Router>
     </CookiesProvider>

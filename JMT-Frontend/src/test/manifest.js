@@ -31,7 +31,7 @@ export default {
     },
   },
   Dropdown: {
-    components: require('modules/landing/components/Dropdown'),
+    components: require('modules/app/components/restaurant-landing/components/Dropdown'),
     props: {
       items: ['All', 'Africa Restaurant', 'Afghan Restaurant', 'American Restaurant', 'Asian Restaurant', 'Something Restaurant', 'Something2 Restaurant', 'Something3 Restaurant', 'Something4 Restaurant'],
       isOpened: true
@@ -45,7 +45,7 @@ export default {
     },
   },
   ImageSlide: {
-    components: require('modules/app/containers/restaurant-detail/components/ImageSlide'),
+    components: require('modules/app/components/restaurant-detail/components/ImageSlide'),
     props: {
       images: [
         'https://s3-media3.fl.yelpcdn.com/bphoto/Jt-heyagIeWlSGNcD6DSUw/o.jpg',

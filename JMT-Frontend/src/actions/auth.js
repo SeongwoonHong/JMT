@@ -60,17 +60,13 @@ export const signup = (params) => {
     })
       .then(() => {
         dispatch(App.loadingDone());
-        toast.success('Signup Success!', {
-          position: toast.POSITION.BOTTOM_CENTER
-        });
+        toast.success('Signup Success!');
 
         return dispatch(signupSuccess());
       })
       .catch(({ response }) => {
         dispatch(App.loadingDone());
-        toast.error(response.data.msg, {
-          position: toast.POSITION.BOTTOM_CENTER
-        });
+        toast.error(response.data.msg);
 
         return dispatch(signupFail(response.data));
       });
@@ -88,17 +84,13 @@ export const login = (params) => {
       .then(({ data }) => {
         dispatch(App.loadingDone());
         cookies.set('JMT_AUTH_TOKEN', data.token);
-        toast.success('Login Success!', {
-          position: toast.POSITION.BOTTOM_CENTER
-        });
+        toast.success('Login Success!');
 
         return dispatch(loginSuccess(data));
       })
       .catch(({ response }) => {
         dispatch(App.loadingDone());
-        toast.error(response.data.msg, {
-          position: toast.POSITION.BOTTOM_CENTER
-        });
+        toast.error(response.data.msg);
 
         return dispatch(loginFail(response.data));
       });
@@ -145,9 +137,7 @@ export const tokenDecode = (token) => {
         dispatch(App.loadingDone());
 
         if (!data.success) {
-          toast.error('Not a valid token', {
-            position: toast.POSITION.BOTTOM_CENTER
-          });
+          toast.error('Not a valid token');
           return history.push('/');
         }
 
@@ -181,6 +171,7 @@ export const checkLogin = (token) => {
 
 export const logout = () => {
   cookies.remove('JMT_AUTH_TOKEN', { path: '/' });
+  toast.success('Logout Success!');
 
   return {
     type: LOG_OUT
