@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { colors } from 'utils/colors';
 import animate from 'gsap-promise';
-import { Button, Loader, Options, Logo } from 'components';
+import { Button, Loader, Options } from 'components';
 import { connect } from 'react-redux';
 import { App, Restaurant } from 'actions';
 import TransitionGroup from 'react-transition-group-plus';
-import { cuisineOptions, locationOptions } from 'constants';
+import { cuisineOptions, locationOptions, headerHeight } from 'constants';
 
 import Dropdown from './Dropdown';
 import EnterLocation from './EnterLocation';
@@ -177,16 +176,12 @@ class Landing extends Component {
 
     return (
       <StyledLanding>
-        {/* <Logo
-          width="210px"
-          height="210px"
-          text="Restaurant Finder"
-        /> */}
         <Options
           onClick={() => this.optionClickHandler('cuisines')}
           text={cuisinesText}
           label="Cuisines"
           innerRef={el => this.cuisines = el}
+          className="cuisines-text"
         />
         <Options
           onClick={() => this.optionClickHandler('location')}
@@ -227,9 +222,13 @@ export default Landing;
 
 const StyledLanding = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - ${headerHeight}px);
   position: relative;
   overflow: hidden;
+
+  .cuisines-text {
+    margin-top: 150px;
+  }
 
   .search-button {
     position: absolute;
@@ -238,20 +237,4 @@ const StyledLanding = styled.div`
     transform: translateX(-50%);
     width: 90%;
   }
-`;
-
-const StyledBackgroundOverlay = styled.div`
-  background-image: ${colors.themeWithGradient};
-  width: 210px;
-  height: 210px;
-  border-radius: 50%;
-  margin: 30px auto;
-`;
-
-const StyledLogo = styled.div`
-  color: #fff;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 100px;
 `;

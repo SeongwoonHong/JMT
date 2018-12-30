@@ -1,218 +1,166 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import logo from 'assets/logo.png';
+import cx from 'classnames';
 import { colors } from 'utils/colors';
+import { headerHeight } from 'constants';
+import { Link } from 'react-router-dom';
+import { Auth } from 'actions';
 import { connect } from 'react-redux';
-import Modal from 'react-modal';
-import { App, Restaurant } from 'actions';
-import { withRouter } from 'react-router-dom';
-import { Search, SVGContainer } from 'components';
-import locationSVG from 'assets/location.svg';
-import filterSVG from 'assets/filter.svg';
-
-import ModalContainer from './ModalContainer';
-
-const modalStyle = {
-  overlay: {
-    opacity: 1,
-    backgroundColor: 'rgba(0,0,0,.8)'
-  },
-  content: {
-    borderRadius: '10px',
-    top: '20%',
-    left: '0%',
-    right: '0%',
-    bottom: 'auto',
-    display: 'flex'
-  }
-};
 
 @connect(state => ({
-  view: state.App.view,
-  filter: state.App.filter,
+  user: state.Auth.user
 }))
-@withRouter
 class Header extends Component {
   state = {
-    searchValue: '',
-    isModalOpen: false,
-    selected: 'Sort',
-    searchParam: this.props.filter || {}
+    isMenuOpened: false,
   };
 
-  filterToggler = (category, param) => {
-    const { searchParam } = this.state;
-    let newSearchParam = { ...searchParam };
-
-    if (category === 'sort') {
-      newSearchParam.sort = newSearchParam.sort === param ? '' : param;
-    } else if (!newSearchParam[category]) {
-      newSearchParam[category] = [param];
-    } else if (newSearchParam[category].indexOf(param) > -1) {
-      newSearchParam = {
-        ...searchParam,
-        [category]: searchParam[category].filter(item => item !== param),
-      };
-    } else {
-      newSearchParam[category].push(param);
-    }
-
-    return this.setState({ searchParam: newSearchParam });
+  toggleHamburger = () => {
+    return this.setState({ isMenuOpened: !this.state.isMenuOpened });
   }
 
-  styleToggler = current => this.setState({ selected: current })
-
-  modalToggler = () => this.setState(({ isModalOpen }) => ({ isModalOpen: !isModalOpen }));
-
-  modalClose = () => {
-    return this.setState({ searchParam: this.props.filter }, () => {
-      this.modalToggler();
-    });
-  }
-
-  toggleView = (view) => {
+  logout = () => {
     const { dispatch } = this.props;
 
-    return dispatch(App.toggleView(view));
-  };
-
-  searchKeyDown = (e) => {
-    const {
-      // restaurantLocation,
-      // latitude,
-      // longitude,
-      dispatch,
-    } = this.props;
-    const { value } = e.target;
-    const esc = 27;
-
-    if (e.keyCode === esc) {
-      return this.initializeSearchValue();
-    }
-
-    if (this.lastRequestId) clearTimeout(this.lastRequestId);
-
-    if (value.length >= 2) {
-      this.lastRequestId = setTimeout(async () => {
-        const data = await dispatch(Restaurant.getRestaurantAutocomplete({ keyword: value }));
-        console.log(data);
-      }, 1500);
-    }
-
-    return false;
-  };
-
-  searchChange = (e) => {
-    return this.setState({ searchValue: e.target.value });
-  };
-
-  initializeSearchValue = () => this.setState({ searchValue: '' });
+    return dispatch(Auth.logout());
+  }
 
   render() {
-    const { view, restaurantLocation } = this.props;
-    const {
-      searchValue, isModalOpen, selected, searchParam
-    } = this.state;
+    const { isMenuOpened } = this.state;
+    const { user } = this.props;
 
     return (
       <StyledHeader>
-        <Modal isOpen={isModalOpen} style={modalStyle}>
-          <ModalContainer
-            modalToggler={this.modalToggler}
-            modalClose={this.modalClose}
-            selected={selected}
-            searchParam={searchParam}
-            styleToggler={this.styleToggler}
-            filterToggler={this.filterToggler}
-          />
-        </Modal>
-        <StyledHeaderTopText>
-          <div>Find Restaurants</div>
-          <div>
-            <StyledSpan
-              onClick={() => this.toggleView('map')}
-              style={{
-                boxShadow: view !== 'map' && '0 0 0 1px lightgrey inset',
-                backgroundColor: view === 'map' && colors.theme,
-                color: view === 'map' && 'white',
-                borderTopLeftRadius: '5px',
-                borderBottomLeftRadius: '5px'
-              }}
-            >
-              Map
-            </StyledSpan>
-            <StyledSpan
-              onClick={() => this.toggleView('list')}
-              style={{
-                boxShadow: view !== 'list' && '0 0 0 1px lightgrey inset',
-                backgroundColor: view === 'list' && colors.theme,
-                color: view === 'list' && 'white',
-                borderTopRightRadius: '5px',
-                borderBottomRightRadius: '5px'
-              }}
-            >
-              List
-            </StyledSpan>
-          </div>
-        </StyledHeaderTopText>
-        <StyledHeaderMiddleText>
-          <SVGContainer svg={locationSVG} />{restaurantLocation}
-        </StyledHeaderMiddleText>
-        <StyledHeaderBottomText>
-          <Search
-            value={searchValue}
-            onKeyDown={this.searchKeyDown}
-            onChange={this.searchChange}
-          />
-          <SVGContainer
-            svg={filterSVG}
-            onClick={this.modalToggler}
-          />
-        </StyledHeaderBottomText>
+        <StyledHamburger
+          className={cx({ isMenuOpened })}
+          onClick={this.toggleHamburger}
+        >
+          <span />
+          <span />
+          <span />
+        </StyledHamburger>
+        <StyledLogo src={logo} alt="" />
+        <StyledMenuContainer isMenuOpened={isMenuOpened}>
+          <StyledMenu>
+            <Link to="/" className="menu-item home">Home</Link>
+            {
+              user ?
+                <div>
+                  <Link to="#" className="menu-item">My profile</Link>
+                  <div onClick={this.logout} className="menu-item">Log out</div>
+                </div>
+                :
+                <Link to="/login" className="menu-item">Log in</Link>
+            }
+          </StyledMenu>
+        </StyledMenuContainer>
       </StyledHeader>
     );
   }
 }
 
-const StyledHeader = styled.div`
-  background-color: ${colors.white};
-  padding: 20px;
-`;
-
-const StyledHeaderTopText = styled.div`
-  font-weight: bold;
-  font-size: 23px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StyledHeaderMiddleText = styled.div`
-  margin-top: 10px;
-  border: none;
-`;
-
-const StyledHeaderBottomText = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-`;
-
-const StyledSpan = styled.span`
-  padding: 0.3rem 0.7rem;
-  cursor: pointer;
-  font-size: 0.8rem;
-
-  &:hover,
-  &:focus {
-    box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.35) inset,
-      0 0 0 0 rgba(34, 36, 38, 0.15) inset !important;
-  }
-
-  &:active {
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset,
-      0 1px 4px 0 rgba(34, 36, 38, 0.15) inset !important;
-  }
-`;
-
 export default Header;
+
+const StyledHeader = styled.div`
+  background-color: ${colors.lightTheme};
+  position: relative;
+  height: ${headerHeight}px;
+  width: 100%;
+`;
+
+const StyledLogo = styled.img`
+  width: 60px;
+  height: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const StyledHamburger = styled.div`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+
+  span {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    top: 50%;
+    margin-top: -1px;
+    left: 0;
+    display: block;
+    background: ${colors.white};
+    transition: .5s;
+    border-radius: 10px;
+  }
+
+  span:first-child {
+    top: 3px;
+  }
+
+  span:last-child {
+    top: 17px; 
+  }      
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.isMenuOpened { 
+    span {
+      opacity: 0;
+      top: 50%;
+    }
+
+    span:first-child {
+      opacity: 1;
+      transform: rotate(405deg);
+    }
+
+    span:last-child {
+      opacity: 1;
+      transform: rotate(-405deg);
+    }
+  }
+`;
+
+const StyledMenuContainer = styled.div`
+  display: ${props => props.isMenuOpened ? 'block' : 'none'};
+  position: relative;
+`;
+
+const StyledMenu = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 40%;
+  height: 100vh;
+  background-color: ${colors.lightBlue};
+  z-index: 2;
+  text-align: center;
+  text-transform: uppercase;
+  box-shadow: 2px 0px 5px 0px rgba(0,0,0,0.35);
+
+  .menu-item {
+    padding: 20px 0px 10px 0px;
+    color: ${colors.white};
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+
+    &.home {
+      padding-top: 150px;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+`;

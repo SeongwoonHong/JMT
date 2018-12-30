@@ -7,7 +7,6 @@ export const LOADING_START = 'LOADING_START';
 export const LOADING_DONE = 'LOADING_DONE';
 export const UPDATE_FILTER = 'UPDATE_FILTER';
 
-
 /**
  * Action Creators
  */

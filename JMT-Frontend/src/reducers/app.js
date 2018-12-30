@@ -4,7 +4,7 @@ const initialState = {
   view: 'list',
   isLoading: false,
   requestInProcess: null,
-  filter: {}
+  filter: {},
 };
 
 export default function (state = initialState, action) {

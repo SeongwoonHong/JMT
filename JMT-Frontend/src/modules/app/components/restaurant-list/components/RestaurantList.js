@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { Restaurant } from 'actions';
-import { Header, Loader } from 'components';
+import { Loader } from 'components';
 import getURLSearchParams from 'utils/get-url-params';
 import Map from './Map';
 import Restaurants from './Restaurants';
+import SubHeader from './SubHeader';
 
 @connect(state => ({
   restaurants: state.Restaurants,
@@ -118,7 +119,7 @@ class Main extends React.Component {
 
     return (
       <StyledDiv>
-        <Header
+        <SubHeader
           restaurantLocation={location || 'Current Location'}
           latitude={latitude}
           longitude={longitude}

@@ -14,3 +14,4 @@ export const categories = [ /** Menu Category and Sub menus */
     subItems: ['$', '$$', '$$$', '$$$$']
   },
 ];
+export const headerHeight = 45;
