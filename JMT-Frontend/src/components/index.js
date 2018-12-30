@@ -1,7 +1,6 @@
 import Button from './Button';
 import FilterSubCategory from './FilterSubCategory';
 import GoogleMap from './GoogleMap';
-import Header from './Header';
 import Loader from './Loader';
 import ModalContainer from './ModalContainer';
 import ModalContents from './ModalContents';
@@ -16,12 +15,12 @@ import Arrow from './Arrow';
 import InputTextField from './InputTextField';
 import SelectionIndicators from './SelectionIndicators';
 import Logo from './Logo';
+import Header from './Header';
 
 export {
   Button,
   FilterSubCategory,
   GoogleMap,
-  Header,
   Loader,
   ModalContainer,
   ModalContents,
@@ -36,4 +35,5 @@ export {
   InputTextField,
   SelectionIndicators,
   Logo,
+  Header,
 };

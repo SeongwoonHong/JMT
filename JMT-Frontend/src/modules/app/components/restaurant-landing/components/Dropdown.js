@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Button } from 'components';
 import { colors } from 'utils/colors';
 import animate from 'gsap-promise';
+import { headerHeight } from 'constants';
 
 const contentHeight = '375px';
 
@@ -85,7 +86,7 @@ export default Dropdown;
 const StyledDropdown = styled.div`
   border-radius: 10px;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - ${headerHeight}px);
   position: absolute;
   top: 0;
   left: 0;

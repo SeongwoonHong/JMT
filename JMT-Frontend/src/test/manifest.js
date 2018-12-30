@@ -6,8 +6,8 @@ export default {
     props: {
     },
   },
-  Header: {
-    components: require('components/Header'),
+  SubHeader: {
+    components: require('modules/app/components/restaurant-list/components/SubHeader'),
     props: {
     },
   },
@@ -67,6 +67,11 @@ export default {
     props: {
       className: 'right',
     },
-  }
+  },
+  Header: {
+    components: require('components/Header'),
+    props: {
+    },
+  },
 };
 

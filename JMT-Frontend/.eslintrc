@@ -42,6 +42,8 @@
     "react/no-unused-state": "error",
     "max-len": 0,
     "no-confusing-arrow": 0,
-    "no-case-declarations": 0
+    "no-case-declarations": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-a11y/click-events-have-key-events": 0
   }
 }

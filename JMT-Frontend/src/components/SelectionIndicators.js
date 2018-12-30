@@ -7,7 +7,7 @@ class SelectionIndicators extends Component {
   render() {
     const {
       progressSections,
-      selectedIndex,
+      currentIndex,
       className,
       onClick
     } = this.props;
@@ -21,8 +21,8 @@ class SelectionIndicators extends Component {
                 key={progress.id}
                 onClick={() => onClick(i)}
                 className={cx('indicator', {
-                  selected: i <= selectedIndex,
-                  current: progress.id === selectedIndex
+                  selected: i <= currentIndex,
+                  current: progress.id === currentIndex
                 })}
               />
             );
@@ -49,13 +49,14 @@ const StyledButton = styled.button`
   border-radius: 50%;
   margin: 0px 8px;
   cursor: pointer;
+  padding: 0;
+  transition: transform 0.3s ease-out, background 0.3s ease-out;
 
   &.selected {
     background-color: ${colors.grey};
   }
 
   &.current {
-    width: 10px;
-    height: 10px;
+    transform: scale(1.3);
   }
 `;

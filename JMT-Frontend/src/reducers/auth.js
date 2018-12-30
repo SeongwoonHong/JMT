@@ -32,6 +32,8 @@ export default function (state = initialState, action) {
         user: null,
         error: action.payload,
       };
+    case Auth.LOG_OUT:
+      return initialState;
     default:
       return state;
   }
