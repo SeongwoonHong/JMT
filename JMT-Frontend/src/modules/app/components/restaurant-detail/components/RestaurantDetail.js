@@ -164,9 +164,7 @@ class RestaurantDetail extends Component {
     const { restaurants, app } = this.props;
     const { imageIndex } = this.state;
 
-    if (!Object.keys(restaurants.activeRestaurant).length) return null;
-
-    if (app.isLoading) {
+    if (app.isLoading || !Object.keys(restaurants.activeRestaurant).length) {
       return <Loader />;
     }
 
@@ -190,7 +188,13 @@ class RestaurantDetail extends Component {
         <StyledImageSlideWrapper>
           <Arrow
             className="arrow-container left"
-            onClick={this.goToRestaurantList}
+            onClick={this.decreaseIndex}
+            isHide={imageIndex === 0}
+          />
+          <Arrow
+            className="arrow-container right"
+            onClick={this.increaseIndex}
+            isHide={imageIndex === photos.length - 1}
           />
           <ImageSlide
             images={photos}
@@ -202,9 +206,6 @@ class RestaurantDetail extends Component {
           />
         </StyledImageSlideWrapper>
         <StyledBottom>
-          <StyledArrowLeft onClick={this.decreaseIndex} isHide={imageIndex === 0} />
-          <StyledArrowRight onClick={this.increaseIndex} isHide={imageIndex === photos.length - 1} />
-
           <StyledBottomTopInfo>
             <StyledRatingNumber>{rating}</StyledRatingNumber>
             <RatingCircle
@@ -278,9 +279,17 @@ const StyledImageSlideWrapper = styled.div`
 
   .arrow-container {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 1;
+
+    &.left {
+      left: 10px;
+    }
+
+    &.right {
+      right: 10px;
+    }
   }
 `;
 
@@ -296,27 +305,6 @@ const StyledRatingNumber = styled.span`
   color: ${colors.lightTheme};
   font-size: 25px;
   margin-right: 10px;
-`;
-
-const StyledArrowLeft = styled.span`
-  display: ${props => props.isHide ? 'none' : 'inline-block'};
-  width: 0;
-  height: 0;
-  border: 0 solid transparent;
-  border-top-width: 8px;
-  border-bottom-width: 7px;
-  border-right: 15px solid ${colors.theme};
-  margin-right: 5px;
-`;
-
-const StyledArrowRight = styled.span`
-  display: ${props => props.isHide ? 'none' : 'inline-block'};
-  width: 0;
-  height: 0;
-  border: 0 solid transparent;
-  border-bottom-width: 8px;
-  border-top-width: 7px;
-  border-left: 15px solid ${colors.theme};
 `;
 
 const StyledReviewNumber = styled.span`

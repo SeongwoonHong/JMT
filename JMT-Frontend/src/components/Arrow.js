@@ -9,6 +9,7 @@ class Arrow extends Component {
         className={this.props.className}
         style={this.props.style}
         onClick={this.props.onClick}
+        isHide={this.props.isHide}
       >
         <span />
         <span />
@@ -26,7 +27,7 @@ const StyledArrow = styled.span`
   width: 25px;
   height: 25px;
   position: relative;
-  display: inline-block;
+  display: ${props => props.isHide ? 'none' : 'inline-block'};
 
   &.left {
     span:nth-child(4) {
