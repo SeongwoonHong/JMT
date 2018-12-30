@@ -152,15 +152,11 @@ export const joinRestaurant = (userId, restaurantId, scheduleDate) => {
           payload: res.data
         });
 
-        return toast.success('Saved', {
-          position: toast.POSITION.BOTTOM_CENTER
-        });
+        return toast.success('Saved');
       })
       .catch(({ response }) => {
         console.log(response.data.msg);
-        return toast.error(response.data.msg, {
-          positioin: toast.POSITION.BOTTOM_CENTER
-        });
+        return toast.error(response.data.msg);
       });
   };
 };
