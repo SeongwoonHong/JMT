@@ -45,7 +45,10 @@ class Categories extends Component {
         {
           categories.map((category) => {
             return (
-              <StyledCategory onClick={() => this.onClickHandler(category.route, category.isReady)}>
+              <StyledCategory
+                onClick={() => this.onClickHandler(category.route, category.isReady)}
+                key={category.name}
+              >
                 <StyledText>
                   { category.name }
                 </StyledText>

@@ -73,7 +73,7 @@ export const signup = (params) => {
   };
 };
 
-export const login = (params) => {
+export const login = (params, reRoute) => {
   return (dispatch) => {
     dispatch(App.loadingStart('login'));
 
@@ -85,6 +85,7 @@ export const login = (params) => {
         dispatch(App.loadingDone());
         cookies.set('JMT_AUTH_TOKEN', data.token);
         toast.success('Login Success!');
+        history.push(reRoute);
 
         return dispatch(loginSuccess(data));
       })

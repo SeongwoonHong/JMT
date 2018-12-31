@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Auth } from 'actions';
-import { Loader, Arrow, InputTextField, Button } from 'components';
+import { Link, withRouter } from 'react-router-dom';
+import { Loader, InputTextField, Button } from 'components';
 import { withCookies, Cookies } from 'react-cookie';
 import inputValidator from 'utils/input-validator';
 import history from 'utils/history';
 import { colors } from 'utils/colors';
 
+@withRouter
 @withCookies
 @connect(state => ({
   app: state.App,
@@ -41,16 +43,21 @@ class Login extends Component {
   }
 
   login = () => {
-    const { dispatch } = this.props;
+    const { dispatch, location: { state } } = this.props;
     const { email, password } = this.state;
     const errorMessages = this.validateInputs(email, password);
+    let reRoute = '/';
 
     this.initializeErrorMessages();
     if (!this.isInputValidationPassed(errorMessages)) {
       return this.setState({ errorMessages });
     }
 
-    return dispatch(Auth.login({ email, password }));
+    if (state) {
+      reRoute = state.prevRoute;
+    }
+
+    return dispatch(Auth.login({ email, password }, reRoute));
   }
 
 
@@ -88,11 +95,7 @@ class Login extends Component {
 
     return (
       <StyledLoginContainer>
-        <Arrow
-          className="login-arrow left"
-          onClick={() => history.goBack()}
-        />
-        <StyledHeader>Login</StyledHeader>
+        <StyledHeader>LOGIN</StyledHeader>
 
         <StyledInputWrapper>
           <InputTextField
@@ -122,6 +125,9 @@ class Login extends Component {
         >
           Login
         </Button>
+        <StyledSignupLink to="/signup">
+          Don't have an account? Sign up
+        </StyledSignupLink>
       </StyledLoginContainer>
     );
   }
@@ -162,4 +168,15 @@ const StyledErrorMessage = styled.div`
   left: 0;
   right: 0;
   font-size: 12px;
+`;
+
+const StyledSignupLink = styled(({ className, children, ...rest }) => (
+  <Link className={className} {...rest}>
+    {children}
+  </Link>
+))`
+  color: ${colors.theme};
+  margin-top: 10px;
+  float: right;
+  display: block;
 `;

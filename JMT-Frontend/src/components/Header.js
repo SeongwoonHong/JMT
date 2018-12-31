@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import logo from 'assets/logo.png';
 import cx from 'classnames';
 import { colors } from 'utils/colors';
+import history from 'utils/history';
 import { headerHeight } from 'constants';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Auth } from 'actions';
 import { connect } from 'react-redux';
 
+@withRouter
 @connect(state => ({
   user: state.Auth.user
 }))
@@ -30,19 +32,24 @@ class Header extends Component {
 
   render() {
     const { isMenuOpened } = this.state;
-    const { user } = this.props;
+    const { user, hideHamburgerMenu } = this.props;
 
     return (
       <StyledHeader>
         <StyledHamburger
           className={cx({ isMenuOpened })}
           onClick={this.toggleHamburger}
+          hideHamburgerMenu={hideHamburgerMenu}
         >
           <span />
           <span />
           <span />
         </StyledHamburger>
-        <StyledLogo src={logo} alt="" />
+        <StyledLogo
+          src={logo}
+          alt=""
+          onClick={() => history.push('/')}
+        />
         <StyledMenuContainer isMenuOpened={isMenuOpened}>
           <StyledMenu>
             <StyledDiv>
@@ -54,7 +61,17 @@ class Header extends Component {
                     <div onClick={this.logout} className="menu-item">Log out</div>
                   </div>
                   :
-                  <Link to="/login" className="menu-item">Log in</Link>
+                  <Link
+                    to={{
+                      pathname: '/login',
+                      state: {
+                        prevRoute: this.props.location.pathname + this.props.location.search
+                      }
+                    }}
+                    className="menu-item"
+                  >
+                    Log in
+                  </Link>
               }
             </StyledDiv>
           </StyledMenu>
@@ -86,6 +103,7 @@ const StyledLogo = styled.img`
 `;
 
 const StyledHamburger = styled.div`
+  display: ${props => props.hideHamburgerMenu ? 'none' : 'block'};
   position: absolute;
   width: 20px;
   height: 20px;
@@ -150,7 +168,7 @@ const StyledMenu = styled.div`
   width: 45%;
   height: 100vh;
   background-color: ${colors.lightBlue};
-  z-index: 2;
+  z-index: 3;
   text-align: center;
   text-transform: uppercase;
   box-shadow: 2px 0px 5px 0px rgba(0,0,0,0.35);
@@ -184,5 +202,5 @@ const StyledBackgroundOverlay = styled.div`
   background-color: ${colors.backgroundOverlay};
   width: 100vw;
   height: 100vh;
-  z-index: 1;
+  z-index: 2;
 `;

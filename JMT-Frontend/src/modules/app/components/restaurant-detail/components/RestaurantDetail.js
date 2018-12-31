@@ -8,6 +8,7 @@ import { RatingCircle, Loader, Arrow, Button, ModalTitle } from 'components';
 import { getTimeWithPeriod, convertDateObject } from 'utils/date-utils';
 import history from 'utils/history';
 import DatePicker from 'react-datepicker';
+import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 
 import Map from './Map';
@@ -117,6 +118,12 @@ class RestaurantDetail extends Component {
   }
 
   openModal = () => {
+    const { user } = this.props;
+
+    if (!user) {
+      return toast.error('You need to login to join');
+    }
+
     return this.setState({ isModalOpen: true });
   }
 
