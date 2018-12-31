@@ -61,17 +61,30 @@ class Header extends Component {
                     <div onClick={this.logout} className="menu-item">Log out</div>
                   </div>
                   :
-                  <Link
-                    to={{
-                      pathname: '/login',
-                      state: {
-                        prevRoute: this.props.location.pathname + this.props.location.search
-                      }
-                    }}
-                    className="menu-item"
-                  >
-                    Log in
-                  </Link>
+                  <div>
+                    <Link
+                      to={{
+                        pathname: '/login',
+                        state: {
+                          prevRoute: this.props.location.pathname + this.props.location.search
+                        }
+                      }}
+                      className="menu-item"
+                    >
+                      Log in
+                    </Link>
+                    <Link
+                      to={{
+                        pathname: '/signup',
+                        state: {
+                          prevRoute: this.props.location.pathname + this.props.location.search
+                        }
+                      }}
+                      className="menu-item"
+                    >
+                      Sign up
+                    </Link>
+                  </div>
               }
             </StyledDiv>
           </StyledMenu>

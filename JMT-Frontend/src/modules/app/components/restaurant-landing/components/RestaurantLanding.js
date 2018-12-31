@@ -89,7 +89,7 @@ class Landing extends Component {
     } = this.state;
 
     if (locationText === 'Select Location') {
-      return toast.error('You need to select location to search');
+      return toast.info('You need to select location to search');
     }
 
     return dispatch(Restaurant.searchRestaurant({

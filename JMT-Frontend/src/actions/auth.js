@@ -61,6 +61,7 @@ export const signup = (params) => {
       .then(() => {
         dispatch(App.loadingDone());
         toast.success('Signup Success!');
+        history.push('/login');
 
         return dispatch(signupSuccess());
       })
@@ -83,7 +84,7 @@ export const login = (params, reRoute) => {
     })
       .then(({ data }) => {
         dispatch(App.loadingDone());
-        cookies.set('JMT_AUTH_TOKEN', data.token);
+        cookies.set('JMT_AUTH_TOKEN', data.token, { path: '/' });
         toast.success('Login Success!');
         history.push(reRoute);
 

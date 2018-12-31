@@ -121,7 +121,7 @@ class RestaurantDetail extends Component {
     const { user } = this.props;
 
     if (!user) {
-      return toast.error('You need to login to join');
+      return toast.info('You need to login to join');
     }
 
     return this.setState({ isModalOpen: true });

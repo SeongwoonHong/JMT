@@ -37,7 +37,7 @@ const ModalContainer = ({
     let url = '';
 
     if (!searchParam.cuisines) {
-      toast.error('You need to select at least one cuisine');
+      toast.info('You need to select at least one cuisine');
     }
 
     dispatch(App.updateFilter(searchParam));
