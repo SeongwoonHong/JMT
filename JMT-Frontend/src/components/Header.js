@@ -23,6 +23,8 @@ class Header extends Component {
   logout = () => {
     const { dispatch } = this.props;
 
+    this.setState({ isMenuOpened: false });
+
     return dispatch(Auth.logout());
   }
 
@@ -43,17 +45,22 @@ class Header extends Component {
         <StyledLogo src={logo} alt="" />
         <StyledMenuContainer isMenuOpened={isMenuOpened}>
           <StyledMenu>
-            <Link to="/" className="menu-item home">Home</Link>
-            {
-              user ?
-                <div>
-                  <Link to="#" className="menu-item">My profile</Link>
-                  <div onClick={this.logout} className="menu-item">Log out</div>
-                </div>
-                :
-                <Link to="/login" className="menu-item">Log in</Link>
-            }
+            <StyledDiv>
+              <Link to="/" className="menu-item">Home</Link>
+              {
+                user ?
+                  <div>
+                    <Link to="#" className="menu-item">My profile</Link>
+                    <div onClick={this.logout} className="menu-item">Log out</div>
+                  </div>
+                  :
+                  <Link to="/login" className="menu-item">Log in</Link>
+              }
+            </StyledDiv>
           </StyledMenu>
+          <StyledBackgroundOverlay
+            onClick={this.toggleHamburger}
+          />
         </StyledMenuContainer>
       </StyledHeader>
     );
@@ -140,7 +147,7 @@ const StyledMenu = styled.div`
   left: 0;
   right: 0;
   top: 0;
-  width: 40%;
+  width: 45%;
   height: 100vh;
   background-color: ${colors.lightBlue};
   z-index: 2;
@@ -155,12 +162,27 @@ const StyledMenu = styled.div`
     display: block;
     text-decoration: none;
 
-    &.home {
-      padding-top: 150px;
-    }
-
     &:focus {
       outline: none;
     }
   }
+`;
+
+const StyledDiv = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 100px;
+  width: 100%;
+`;
+
+const StyledBackgroundOverlay = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: ${colors.backgroundOverlay};
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
 `;
