@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Auth } from 'actions';
-import { Loader, InputTextField, Button, Arrow } from 'components';
+import { Link } from 'react-router-dom';
+import { Loader, InputTextField, Button } from 'components';
 import inputValidator from 'utils/input-validator';
 import { colors } from 'utils/colors';
-import history from 'utils/history';
 
 @connect(state => ({
   app: state.App,
@@ -105,11 +105,7 @@ class Signup extends Component {
 
     return (
       <StyledSignupContainer>
-        <Arrow
-          className="signup-arrow left"
-          onClick={() => history.goBack()}
-        />
-        <StyledHeader>Sign up</StyledHeader>
+        <StyledHeader>SIGN UP</StyledHeader>
         <StyledInputWrapper>
           <InputTextField
             label="Email"
@@ -161,6 +157,14 @@ class Signup extends Component {
         >
           Signup
         </Button>
+        <StyledFooter>
+          <StyledFooterText to="/login">
+            Login
+          </StyledFooterText>
+          <StyledFooterText to="/forgot-password">
+            Forgot password?
+          </StyledFooterText>
+        </StyledFooter>
       </StyledSignupContainer>
     );
   }
@@ -201,4 +205,21 @@ const StyledErrorMessage = styled.div`
   left: 0;
   right: 0;
   font-size: 12px;
+`;
+
+const StyledFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const StyledFooterText = styled(({ className, children, ...rest }) => (
+  <Link className={className} {...rest}>
+    {children}
+  </Link>
+))`
+  color: ${colors.theme};
+  margin-top: 10px;
+  float: right;
+  display: block;
 `;

@@ -5,6 +5,7 @@ import { Button, Loader, Options } from 'components';
 import { connect } from 'react-redux';
 import { App, Restaurant } from 'actions';
 import TransitionGroup from 'react-transition-group-plus';
+import { toast } from 'react-toastify';
 import { cuisineOptions, locationOptions, headerHeight } from 'constants';
 
 import Dropdown from './Dropdown';
@@ -88,7 +89,7 @@ class Landing extends Component {
     } = this.state;
 
     if (locationText === 'Select Location') {
-      return false;
+      return toast.error('You need to select location to search');
     }
 
     return dispatch(Restaurant.searchRestaurant({

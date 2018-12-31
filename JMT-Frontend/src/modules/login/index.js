@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Header } from 'components';
 
 import Login from './components/Login';
 
@@ -16,9 +17,12 @@ class LoginContainer extends Component {
     }
 
     return (
-      <Switch>
-        <Route path="/" component={Login} />
-      </Switch>
+      <div>
+        <Header hideHamburgerMenu />
+        <Switch>
+          <Route path="/" component={Login} />
+        </Switch>
+      </div>
     );
   }
 }
