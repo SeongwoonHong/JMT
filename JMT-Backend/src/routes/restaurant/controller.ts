@@ -69,7 +69,6 @@ export const searchRestaurant = async (req: Request, res: Response) => {
     endpoint += `&price=${price}`;
   }
 
-  console.log('endpoint = ', endpoint);
   try {
     const data = await axios.get(endpoint);
     const { data: { businesses } } = data;

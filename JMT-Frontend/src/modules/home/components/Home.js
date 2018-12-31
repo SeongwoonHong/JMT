@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { colors } from 'utils/colors';
-import history from 'utils/history';
 import { SelectionIndicators, Button, Header } from 'components';
 
 const progressSections = [
@@ -46,7 +45,7 @@ class Home extends Component {
         />
         <Button
           className="btn-home"
-          onClick={() => history.push('/main/categories')}
+          to="/main/categories"
         >
           {
             currentIndex === progressSections.length - 1 ?

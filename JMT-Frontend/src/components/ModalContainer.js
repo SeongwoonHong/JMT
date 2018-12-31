@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { App } from 'actions';
+import { toast } from 'react-toastify';
 import history from 'utils/history';
 import ModalTitle from './ModalTitle';
 import ModalContents from './ModalContents';
@@ -35,10 +36,14 @@ const ModalContainer = ({
     const longitude = getParamsFromURL('longitude');
     let url = '';
 
+    if (!searchParam.cuisines) {
+      toast.error('You need to select at least one cuisine');
+    }
+
     dispatch(App.updateFilter(searchParam));
 
     if (searchParam.cuisines && searchParam.cuisines.length) {
-      url += `/main?cuisines=${searchParam.cuisines.join(',')}`;
+      url += `/main/restaurant-list?cuisines=${searchParam.cuisines.join(',')}`;
     } else {
       return false; // TODO - when a user did not select any cuisine in filter modal
     }
