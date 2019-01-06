@@ -16,6 +16,8 @@ class User {
     this.router.post('/signUp', controllers.signup);
     this.router.post('/login', controllers.login);
     this.router.post('/updateProfile', tokenVerifyMiddleware, controllers.updateProfile);
+    this.router.post('/sendResetPasswordEmail', controllers.sendResetPasswordEmail);
+    this.router.post('/updatePassword', controllers.updatePassword);
   }
 }
 

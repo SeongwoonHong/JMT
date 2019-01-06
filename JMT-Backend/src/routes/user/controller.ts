@@ -2,11 +2,10 @@ import { Request, Response } from 'express';
 import * as Joi from 'joi';
 
 import * as userRepository from '@db/models/user/repositories';
-import db from '@db/index'
-import UserQuery from '@db/models/user/queries';
 import * as bcryptUtils from '@utils/bcrypt-utils';
 import * as validationUtils from '@utils/validation-utils';
 import * as jwtUtils from '@utils/jwt-utils';
+import * as mailUtils from '@utils/mail-utils';
 // TODO - how to properly handle errors (through the app)
 
 export const emailVerification = async (req: Request, res: Response) => {
@@ -154,6 +153,74 @@ export const updateProfile = async (req, res: Response) => {
 
     return res.json({
       success: true
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).json(e.message);
+  }
+};
+
+export const sendResetPasswordEmail = async (req, res: Response) => {
+  const { email } = req.body;
+  const schema = Joi.object().keys({
+    email: validationUtils.isEmail,
+  });
+  const result: any = Joi.validate({ email }, schema);
+
+  if (result.error) {
+    res.status(400).json({
+      msg: result.error,
+      success: false,
+    });
+  }
+
+  try {
+    const userData = await userRepository.getUserByEmail(email);
+
+    if (!userData.success) {
+      return res.status(400).json({
+        success: false,
+        msg: 'Account does not exist',
+      });
+    }
+
+    const token = await creatToken({
+      email,
+    });
+    const url = `http://localhost:3000/forgot-password?t=${token}`;
+
+    mailUtils.sendResetPasswordMail(email, url);
+
+    return res.json({
+      success: true
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).json(e.message);
+  }
+};
+
+export const updatePassword = async (req, res: Response) => {
+  const { password, token } = req.body;
+  const schema = Joi.object().keys({
+    password: validationUtils.isPassword,
+  });
+  const result: any = Joi.validate({ password }, schema);
+
+  if (result.error) {
+    res.status(400).json({
+      msg: result.error,
+      success: false,
+    });
+  }
+
+  try {
+    const decoded = await jwtUtils.verify(token);
+    const hashedPassword: string = await bcryptUtils.hash(password);
+    await userRepository.updatePassword({ email: decoded.email, password: hashedPassword });
+
+    return res.json({
+      success: true,
     });
   } catch (e) {
     console.log(e.message);

@@ -27,7 +27,7 @@ export const createEmailToken = (payload): Promise<string> => {
       if (err) reject(err)
       const url = `http://localhost:3000/api/user/emailVerification/${emailToken}`;
 
-      mailUtils.sendMail(payload, url);
+      mailUtils.sendSignupVerificationMail(payload, url);
       resolve(emailToken);
     });
   })
