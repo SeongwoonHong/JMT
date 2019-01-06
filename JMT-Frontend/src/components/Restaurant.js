@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 import animate from 'gsap-promise';
 
 class Restaurant extends Component {

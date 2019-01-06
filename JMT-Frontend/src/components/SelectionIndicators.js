@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import cx from 'classnames';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 
 class SelectionIndicators extends Component {
   render() {

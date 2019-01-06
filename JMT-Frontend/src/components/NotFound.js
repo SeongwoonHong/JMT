@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Button } from 'components';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 
 class NotFound extends Component {
   render() {

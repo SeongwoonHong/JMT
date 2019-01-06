@@ -5,7 +5,7 @@ import { Auth } from 'actions';
 import { Link } from 'react-router-dom';
 import { Loader, InputTextField, Button } from 'components';
 import inputValidator from 'utils/input-validator';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 
 @connect(state => ({
   app: state.App,

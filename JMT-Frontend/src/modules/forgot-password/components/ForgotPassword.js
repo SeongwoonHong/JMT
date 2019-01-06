@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { InputTextField, Button, Loader } from 'components';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 import inputValidator from 'utils/input-validator';
 import { User, Auth } from 'actions';
 import { connect } from 'react-redux';

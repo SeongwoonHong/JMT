@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Button } from 'components';
-import { colors } from 'utils/colors';
+import { colors, headerHeight } from 'constants';
 import animate from 'gsap-promise';
-import { headerHeight } from 'constants';
 
 const contentHeight = '375px';
 
