@@ -71,7 +71,7 @@ export const signup = async ({ displayName, password, hashedPassword, email, ava
 export const login = async ({ email, password }) => {
   try {
     let passwordMatched: boolean = false;
-    const userData = getUserByEmail(email);
+    const userData = await getUserByEmail(email);
 
     if (!userData.success) {
       return {
@@ -163,7 +163,7 @@ export const getUserByEmail: any = async (email: string) => {
 
     return {
       success: true,
-      result: rows,
+      rows,
     };
   } catch (e) {
     throw new Error(e);

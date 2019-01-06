@@ -2,5 +2,6 @@ export {
   cuisineOptions,
   locationOptions,
   categories,
-  headerHeight
+  headerHeight,
+  colors,
 } from './constants';

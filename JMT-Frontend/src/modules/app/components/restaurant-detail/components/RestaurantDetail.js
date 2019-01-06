@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Restaurant } from 'actions';
 import { connect } from 'react-redux';
 import phoneIcon from 'assets/phoneIcon.png';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 import { RatingCircle, Loader, Arrow, Button, ModalTitle } from 'components';
 import { getTimeWithPeriod, convertDateObject } from 'utils/date-utils';
 import history from 'utils/history';

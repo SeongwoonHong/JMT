@@ -59,7 +59,7 @@ export const sendResetPasswordEmail = (email) => {
         return dispatch({
           type: SEND_RESET_PASSWORD_EMAIL_FAILURE,
           success: false,
-          msg: response.data.msgs
+          msg: response.data.msg,
         });
       });
   };

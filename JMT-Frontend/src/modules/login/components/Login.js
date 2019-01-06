@@ -7,7 +7,7 @@ import { Loader, InputTextField, Button } from 'components';
 import { withCookies, Cookies } from 'react-cookie';
 import inputValidator from 'utils/input-validator';
 import history from 'utils/history';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 
 @withRouter
 @withCookies

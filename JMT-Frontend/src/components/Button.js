@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 import { Link } from 'react-router-dom';
 
 class Button extends Component {
