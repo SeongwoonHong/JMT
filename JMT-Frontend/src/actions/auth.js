@@ -11,9 +11,9 @@ export const SIGNUP = 'SIGNUP';
 export const SIGNUP_FAIL = 'SIGNUP_FAIL';
 export const LOGIN = 'LOGIN';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
-export const PROFILE_IMAGE = 'PROFILE_IMAGE';
 export const TOKEN_DECODE = 'TOKEN_DECODE';
 export const LOG_OUT = 'LOG_OUT';
+
 /**
  * Action creator
 */
@@ -95,35 +95,6 @@ export const login = (params, reRoute) => {
         toast.error(response.data.msg);
 
         return dispatch(loginFail(response.data));
-      });
-  };
-};
-
-const sendPresignedUrlWithFile = (url, file) => {
-  return axios.put(url, file, {
-    headers: {
-      'Content-Type': file.type
-    }
-  });
-};
-
-export const uploadProfileImage = (file, token) => {
-  return (dispatch) => {
-    dispatch(App.loadingStart('uploadProfileImage'));
-
-    return axios.get('/api/upload/profilePicture', {
-      params: { token, fileName: file.name }
-    })
-      .then(({ data }) => {
-        sendPresignedUrlWithFile(data.url, file)
-          .then(() => dispatch(App.loadingDone()))
-          .catch((e) => {
-            dispatch(App.loadingDone());
-            console.log(e);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
 };

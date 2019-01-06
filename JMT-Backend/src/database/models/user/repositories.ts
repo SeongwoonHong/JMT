@@ -71,16 +71,16 @@ export const signup = async ({ displayName, password, hashedPassword, email, ava
 export const login = async ({ email, password }) => {
   try {
     let passwordMatched: boolean = false;
-    const userData = await Query.getUserByEmailQuery({ email });
-    const { rows } = userData;
+    const userData = getUserByEmail(email);
 
-    if (!rows.length) {
+    if (!userData.success) {
       return {
         msg: 'account does not exist',
         success: false,
       };
     }
 
+    const { rows } = userData;
     const { verified } = rows[0];
 
     passwordMatched = await bcryptUtils.compare(password, rows[0].password);
@@ -114,7 +114,7 @@ const sendVerificationEmail = (fields) => {
 
 export const updateUserProfile = async (params) => {
   try {
-    await Query.updateUserProfile(params);
+    await Query.updateUserProfileQuery(params);
 
     return {
       success: true,
@@ -124,7 +124,7 @@ export const updateUserProfile = async (params) => {
   }
 }
 
-export const checkLogin = async (email) => {
+export const checkLogin = async (email: string) => {
   try {
     const userData = await Query.getUserByEmailQuery({ email });
     const { rows } = userData;
@@ -132,6 +132,38 @@ export const checkLogin = async (email) => {
     return {
       success: true,
       result: rows[0],
+    };
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const updatePassword = async ({ email, password }) => {
+  try {
+    await Query.updatePasswordQuery({ email, password });
+
+    return {
+      success: true,
+    };
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+export const getUserByEmail: any = async (email: string) => {
+  try {
+    const userData = await Query.getUserByEmailQuery({ email });
+    const { rows } = userData;
+
+    if (!rows.length) {
+      return {
+        success: false,
+      };
+    }
+
+    return {
+      success: true,
+      result: rows,
     };
   } catch (e) {
     throw new Error(e);
