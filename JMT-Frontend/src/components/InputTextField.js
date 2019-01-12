@@ -12,6 +12,7 @@ class InputTextField extends Component {
       name,
       onBlur,
       hasError,
+      disabled,
     } = this.props;
 
     return (
@@ -24,6 +25,7 @@ class InputTextField extends Component {
             value={value}
             onChange={onChange}
             onBlur={onBlur}
+            disabled={disabled}
           />
         </StyledInputContainer>
       </StyledInputTextField>
@@ -49,4 +51,6 @@ const StyledInputContainer = styled.div`
 const StyledInput = styled.input`
   font-size: 18px;
   color: ${colors.inputColor};
+  background-color: ${props => props.disabled && colors.lightGrey};
+  opacity: ${props => props.disabled && '0.5'};
 `;

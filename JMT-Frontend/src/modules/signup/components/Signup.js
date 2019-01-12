@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Loader, InputTextField, Button } from 'components';
 import inputValidator from 'utils/input-validator';
 import { colors } from 'constants';
+import getURLSearchParams from 'utils/get-url-params';
 
 @connect(state => ({
   app: state.App,
@@ -17,12 +18,42 @@ class Signup extends Component {
     passwordConfirm: '',
     email: '',
     errorMessages: {},
+    isTokenVerified: false,
+    isEmailSent: false,
+    avatar: null,
+  }
+
+  componentWillMount = () => {
+    this.token = getURLSearchParams(this.props.location.search, 't');
+    const { dispatch } = this.props;
+
+    if (!this.token) {
+      return false;
+    }
+
+    return dispatch(Auth.tokenDecode(this.token))
+      .then((res) => {
+        this.setState({ isTokenVerified: true, email: res.email });
+      });
   }
 
   onChangeHandler = (e) => {
     const { name, value } = e.target;
 
     return this.setState({ [name]: value });
+  }
+
+  onFileChange = (e) => {
+    const avatar = e.target.files[0];
+    const form = new FormData();
+    const reader = new FileReader();
+
+    form.append('file', avatar);
+    reader.readAsDataURL(avatar);
+
+    return reader.onload = () => {
+      return this.setState({ avatar: reader.result });
+    };
   }
 
   signup = () => {
@@ -32,6 +63,7 @@ class Signup extends Component {
       password,
       passwordConfirm,
       email,
+      avatar,
     } = this.state;
 
     this.initializeErrorMessages();
@@ -46,8 +78,8 @@ class Signup extends Component {
       password,
       passwordConfirm,
       email,
-    }))
-      .then(res => console.log('res = ', res));
+      avatar
+    }, this.token));
   }
 
   isInputValidationPassed = (errorObject) => {
@@ -89,8 +121,26 @@ class Signup extends Component {
     return errorMessages;
   }
 
-  render() {
-    const { app } = this.props;
+  sendEmail = () => {
+    const { email } = this.state;
+    const errorMessages = {};
+
+    if (inputValidator.isEmpty(email)) {
+      errorMessages.email = 'Email is required';
+    } else if (!inputValidator.isEmail(email)) {
+      errorMessages.email = 'Invalid Email Address';
+    }
+
+    if (Object.keys(errorMessages).length) {
+      return this.setState({ errorMessages });
+    }
+
+    this.setState({ isEmailSent: true });
+
+    return Auth.sendSignupEmail(email);
+  }
+
+  renderSignup = () => {
     const {
       displayName,
       password,
@@ -99,13 +149,8 @@ class Signup extends Component {
       errorMessages,
     } = this.state;
 
-    if (app.isLoading) {
-      return <Loader />;
-    }
-
     return (
       <StyledSignupContainer>
-        <StyledHeader>SIGN UP</StyledHeader>
         <StyledInputWrapper>
           <InputTextField
             label="Email"
@@ -113,6 +158,7 @@ class Signup extends Component {
             value={email}
             onChange={this.onChangeHandler}
             hasError={errorMessages.email}
+            disabled
           />
           { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
         </StyledInputWrapper>
@@ -151,11 +197,45 @@ class Signup extends Component {
           />
           { errorMessages.passwordConfirm && <StyledErrorMessage>{errorMessages.passwordConfirm}</StyledErrorMessage> }
         </StyledInputWrapper>
+        <StyledInputWrapper>
+          <div>Avatar</div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={this.onFileChange}
+          />
+        </StyledInputWrapper>
         <Button
           onClick={this.signup}
           className="btn-signup"
         >
           Signup
+        </Button>
+      </StyledSignupContainer>
+    );
+  }
+
+  renderSendEmail = () => {
+    const { email, errorMessages } = this.state;
+
+    return (
+      <StyledSignupContainer>
+        <StyledInputWrapper>
+          <InputTextField
+            label="Email"
+            name="email"
+            value={email}
+            onChange={this.onChangeHandler}
+            hasError={errorMessages.email}
+          />
+          { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
+        </StyledInputWrapper>
+
+        <Button
+          onClick={this.sendEmail}
+          className="btn-signup"
+        >
+          Send Email
         </Button>
         <StyledFooter>
           <StyledFooterText to="/login">
@@ -165,6 +245,35 @@ class Signup extends Component {
             Forgot password?
           </StyledFooterText>
         </StyledFooter>
+      </StyledSignupContainer>
+    );
+  }
+
+  render() {
+    const { app } = this.props;
+    const {
+      isTokenVerified,
+      isEmailSent,
+    } = this.state;
+
+    if (app.isLoading) {
+      return <Loader />;
+    }
+
+    if (isEmailSent) {
+      return (
+        <StyledSignupContainer>
+          Please check your email boi!
+        </StyledSignupContainer>
+      );
+    }
+
+    return (
+      <StyledSignupContainer>
+        <StyledHeader>SIGN UP</StyledHeader>
+        {
+          isTokenVerified ? this.renderSignup() : this.renderSendEmail()
+        }
       </StyledSignupContainer>
     );
   }

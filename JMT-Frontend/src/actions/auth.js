@@ -57,6 +57,7 @@ export const signup = (params) => {
       displayName: params.displayName,
       password: params.password,
       email: params.email,
+      avatar: params.avatar,
     })
       .then(() => {
         dispatch(App.loadingDone());
@@ -66,10 +67,8 @@ export const signup = (params) => {
         return dispatch(signupSuccess());
       })
       .catch(({ response }) => {
-        dispatch(App.loadingDone());
         toast.error(response.data.msg);
-
-        return dispatch(signupFail(response.data));
+        dispatch(App.loadingDone());
       });
   };
 };
@@ -103,7 +102,7 @@ export const tokenDecode = (token) => {
   return (dispatch) => {
     dispatch(App.loadingStart('tokenDecode'));
 
-    return axios.get('/api/user/check', {
+    return axios.get('/api/user/verifyToken', {
       params: { token }
     })
       .then(({ data }) => {
@@ -114,7 +113,7 @@ export const tokenDecode = (token) => {
           return history.push('/');
         }
 
-        return false;
+        return data.decoded;
       })
       .catch(() => {
         dispatch(App.loadingDone());
@@ -128,7 +127,7 @@ export const checkLogin = (token) => {
   return (dispatch) => {
     dispatch(App.loadingStart('checkLogin'));
 
-    return axios.get('/api/user/check', {
+    return axios.get('/api/user/checkUser', {
       params: { token }
     })
       .then(({ data }) => {
@@ -149,4 +148,8 @@ export const logout = () => {
   return {
     type: LOG_OUT
   };
+};
+
+export const sendSignupEmail = (email) => {
+  return axios.post('/api/user/sendSignupEmail', { email });
 };
