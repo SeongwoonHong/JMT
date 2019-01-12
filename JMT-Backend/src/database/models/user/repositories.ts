@@ -52,13 +52,6 @@ export const signup = async ({ displayName, password, hashedPassword, email, ava
   try {
     const result = await Query.signUpQuery({ displayName, password: hashedPassword, email, avatar })
 
-    sendVerificationEmail({
-      displayName,
-      password,
-      email,
-      avatar
-    });
-
     return {
       result,
       success: true
@@ -81,7 +74,6 @@ export const login = async ({ email, password }) => {
     }
 
     const { rows } = userData;
-    const { verified } = rows[0];
 
     passwordMatched = await bcryptUtils.compare(password, rows[0].password);
 
@@ -92,13 +84,6 @@ export const login = async ({ email, password }) => {
       };
     }
 
-    if (!verified) {
-      return {
-        success: false,
-        msg: 'Please verify your email',
-      };
-    }
-
     return {
       result: rows[0],
       success: true,
@@ -106,10 +91,6 @@ export const login = async ({ email, password }) => {
   } catch (e) {
     throw new Error(e);
   }
-}
-
-const sendVerificationEmail = (fields) => {
-  return jwtUtils.createEmailToken(fields);
 }
 
 export const updateUserProfile = async (params) => {

@@ -5,7 +5,7 @@
 CREATE OR REPLACE FUNCTION public.get_users_by_restaurant(
 	"_restaurantId" integer,
 	"_scheduleDate" date)
-    RETURNS TABLE("userId" integer, "displayName" character varying, password character varying, email character varying, avatar text, verified boolean, "signupDate" date) 
+    RETURNS TABLE("userId" integer, "displayName" character varying, password character varying, email character varying, avatar text, "signupDate" date) 
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -23,7 +23,6 @@ BEGIN
 		u.password,
 		u.email,
 		u.avatar,
-		u.verified,
 		u."signupDate"
 	FROM users as u
 	JOIN user_restaurant as us

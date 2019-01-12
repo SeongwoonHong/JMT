@@ -5,5 +5,4 @@ export interface UserModel {
   email: string,
   avatar: string,
   signupDate: string,
-  verified: boolean,
 };

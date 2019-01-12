@@ -1,27 +1,46 @@
 import { Request, Response } from 'express';
 import * as Joi from 'joi';
-
 import * as userRepository from '@db/models/user/repositories';
 import * as bcryptUtils from '@utils/bcrypt-utils';
 import * as validationUtils from '@utils/validation-utils';
 import * as jwtUtils from '@utils/jwt-utils';
 import * as mailUtils from '@utils/mail-utils';
+import axios from 'axios';
+import s3 from '@utils/s3';
+import * as uuid from 'uuid/v1';
 // TODO - how to properly handle errors (through the app)
 
-export const emailVerification = async (req: Request, res: Response) => {
-  try {
-    const token = await jwtUtils.verify(req.params.t);
-    userRepository.updateEmailVerifiationByEmail(token);
+export const sendSignupEmail = async (req: Request, res: Response): Promise<Response> => {
+  const { email } = req.body;
+  const schema = Joi.object().keys({
+    email: validationUtils.isEmail,
+  });
+  const validationResult = Joi.validate({ email }, schema);
 
-    return res.redirect(`http://localhost:3000/email-verified?t=${req.params.t}`);
-  } catch (e) {
+  if (validationResult.error) {
     return res.status(400).json({
-      msg: 'Invalid token',
+      msg: validationResult.error.details[0].message,
       success: false,
     });
   }
-}
 
+  try {
+    const payload = {
+      email
+    };
+    const token = await jwtUtils.createToken(payload, 'signup');
+    const url = `http://localhost:3000/signup?t=${token}`;
+
+    mailUtils.sendSignupVerificationMail(payload, url);
+
+    return res.json({
+      success: true
+    });
+  } catch (e) {
+    console.log(e);
+    return res.json(400).json(e);
+  }
+}
 
 export const signup = async (req: Request, res: Response): Promise<Response> => {
   const { displayName, password, email, avatar } = req.body;
@@ -29,10 +48,9 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
     displayName: validationUtils.isDisplayName,
     password: validationUtils.isPassword,
     email: validationUtils.isEmail,
-    avatar: validationUtils.isAvatar,
   });
   let hashedPassword: string = null;
-  const result: any = Joi.validate({ displayName, password, email, avatar }, schema);
+  const result: any = Joi.validate({ displayName, password, email }, schema);
 
   if (result.error) {
     return res.status(400).json({
@@ -46,16 +64,85 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
 
     const userRes = await userRepository.getUserByEmailOrDisplayName({ displayName, email });
 
+    /**
+     * when the user does not exist on our server
+     */
     if (userRes.success) {
-      const result = userRepository.signup({ displayName, password, hashedPassword, email, avatar })
+      let bucketObject;
 
-      return res.json(result);
+      if (avatar) {
+        bucketObject = await getPresignedUrlFromS3(email, avatar);
+
+        await sendPresignedUrlWithFile(bucketObject.url, avatar);
+      }
+
+      const result = await userRepository.signup({ displayName, password, hashedPassword, email, avatar: bucketObject ? bucketObject.key : '' })
+
+      return res.json({
+        result,
+        url: bucketObject && bucketObject.url
+      });
     }
 
     return res.status(400).json(userRes)
   } catch (e) {
     console.log(e);
     return res.status(400).json(e);
+  }
+}
+
+/**
+ * upload profile picture
+ */
+const getPresignedUrlFromS3 = async (email: string, avatar) => {
+  const key = `${email}/${uuid()}.jpeg`;
+  const { AWS_BUCKET: Bucket } = process.env;
+  const type = avatar.split(';')[0].split('/')[1]
+
+  try {
+    const presignedUrl = await s3.getSignedUrl('putObject', {
+      Bucket,
+      Key: key,
+      ContentEncoding: 'base64',
+      ContentType: `image/${type}`,
+    });
+
+    return {
+      url: presignedUrl,
+      key
+    };
+  } catch (e) {
+    console.log(e.message);
+    return {
+      success: false
+    }
+  }
+};
+
+const sendPresignedUrlWithFile = async (url: string, file) => {
+  try {
+    const type = file.split(';')[0].split('/')[1]
+    const buffer = Buffer.from(file.replace(/^data:image\/\w+;base64,/, ""),'base64');
+    const {
+      YELP_API_KEY: yelpApiKey
+    } = process.env;
+
+    delete axios.defaults.headers['Authorization'];
+  
+    const result = await axios.put(url, buffer, {
+      headers: {
+        'Content-Type': `image/${type}`,
+        'Content-Encoding': 'base64'
+      },
+    });
+
+    axios.defaults.headers['Authorization'] = `Bearer ${yelpApiKey}`;
+
+    return result;
+  }
+  catch (e) {
+    console.log(e.message);
+    throw new Error(e);
   }
 }
 
@@ -82,12 +169,7 @@ export const login = async (req, res: Response) => {
     }
 
     const { userId, displayName, avatar, signupDate } = userRes.result;
-
-    const token = await creatToken({
-      email,
-      displayName,
-      signupDate,
-    })
+    const token = await jwtUtils.createToken({ email, displayName, signupDate });
 
     return res.json({
       success: true,
@@ -100,9 +182,9 @@ export const login = async (req, res: Response) => {
   }
 }
 
-export const check = async (req, res: Response) => {
+export const checkUser = async (req, res: Response) => {
   try {
-    const userRes = await userRepository.checkLogin(req.decoded.email);
+    const userRes = await userRepository.getUserByEmail(req.decoded.email);
     const userData = {
       email: req.decoded.email,
       avatar: req.decoded.avatar,
@@ -114,17 +196,12 @@ export const check = async (req, res: Response) => {
       userData: {
         ...userData,
         token: req.token,
-        userId: userRes.result.userId,
-        verified: userRes.result.verified,
+        userId: userRes.rows.userId,
       }
     });
   } catch (e) {
     return res.status(400).json(e.message);
   }
-}
-
-const creatToken = (fields) => {
-  return jwtUtils.createToken(fields);
 }
 
 export const updateProfile = async (req, res: Response) => {
@@ -183,10 +260,7 @@ export const sendResetPasswordEmail = async (req, res: Response) => {
         msg: 'Account does not exist',
       });
     }
-
-    const token = await creatToken({
-      email,
-    });
+    const token = await jwtUtils.createToken({ email }, 'userInfo', '1d');
     const url = `http://localhost:3000/forgot-password?t=${token}`;
 
     mailUtils.sendResetPasswordMail(email, url);
@@ -226,4 +300,22 @@ export const updatePassword = async (req, res: Response) => {
     console.log(e.message);
     return res.status(400).json(e.message);
   }
+};
+
+export const verifyToken = async (req, res: Response) => {
+  console.log('req.query.token = ', req.query.token);
+  return jwtUtils.verify(req.query.token)
+    .then((decoded) => {
+      // TODO: need to define a custom type for express request
+      return res.json({
+        success: true,
+        decoded,
+      });
+    })
+    .catch((err) => {
+      return res.status(403).json({
+        success: false,
+        msg: err.message,
+      })
+    })
 };
