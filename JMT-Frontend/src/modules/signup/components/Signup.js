@@ -5,7 +5,7 @@ import { Auth } from 'actions';
 import { Link } from 'react-router-dom';
 import { Loader, InputTextField, Button } from 'components';
 import inputValidator from 'utils/input-validator';
-import { colors } from 'constants';
+import { colors, defaultProfilePicture } from 'constants';
 import getURLSearchParams from 'utils/get-url-params';
 
 @connect(state => ({
@@ -20,7 +20,7 @@ class Signup extends Component {
     errorMessages: {},
     isTokenVerified: false,
     isEmailSent: false,
-    avatar: null,
+    avatar: defaultProfilePicture
   }
 
   componentWillMount = () => {
@@ -198,13 +198,22 @@ class Signup extends Component {
           { errorMessages.passwordConfirm && <StyledErrorMessage>{errorMessages.passwordConfirm}</StyledErrorMessage> }
         </StyledInputWrapper>
         <StyledInputWrapper>
-          <div>Avatar</div>
-          <input
+          <InputTextField
+            label="Avatar"
+            name="avatar"
             type="file"
             accept="image/*"
+            className="avatar-field"
             onChange={this.onFileChange}
           />
         </StyledInputWrapper>
+        {
+          this.state.avatar && (
+            <StyledImagePreview>
+              <img src={this.state.avatar} alt="" />
+            </StyledImagePreview>
+          )
+        }
         <Button
           onClick={this.signup}
           className="btn-signup"
@@ -290,6 +299,12 @@ const StyledSignupContainer = styled.div`
     }
   }
 
+  .avatar-field {
+    input {
+      font-size: 14px;
+    }
+  }
+
   .btn-signup {
     margin-top: 35px;
   }
@@ -331,4 +346,20 @@ const StyledFooterText = styled(({ className, children, ...rest }) => (
   margin-top: 10px;
   float: right;
   display: block;
+`;
+
+const StyledImagePreview = styled.div`
+  margin-top: 10px;
+  border-left: 5px solid ${colors.lightGrey};
+  border-right: 5px solid ${colors.lightGrey};
+  border-top: 5px solid ${colors.lightGrey};
+  border-bottom: 5px solid ${colors.lightGrey};
+
+  img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: block;
+    margin: 5px auto;
+  }
 `;
