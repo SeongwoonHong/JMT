@@ -6,7 +6,7 @@ CREATE OR REPLACE FUNCTION public.insert_user(
 	"displayName" character varying,
 	password character varying,
 	email character varying,
-	avatar text DEFAULT NULL::text)
+	"profilePicture" text DEFAULT NULL::text)
     RETURNS void
     LANGUAGE 'plpgsql'
 
@@ -17,8 +17,8 @@ AS $BODY$
 DECLARE
 BEGIN
 INSERT INTO USERS
-("displayName", password, email, avatar)
-VALUES ("displayName", password, email, avatar);
+("displayName", password, email, "profilePicture")
+VALUES ("displayName", password, email, "profilePicture");
 END;
 
 $BODY$;

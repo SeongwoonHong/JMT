@@ -20,7 +20,7 @@ class Signup extends Component {
     errorMessages: {},
     isTokenVerified: false,
     isEmailSent: false,
-    avatar: defaultProfilePicture
+    profilePicture: defaultProfilePicture
   }
 
   componentWillMount = () => {
@@ -44,15 +44,15 @@ class Signup extends Component {
   }
 
   onFileChange = (e) => {
-    const avatar = e.target.files[0];
+    const profilePicture = e.target.files[0];
     const form = new FormData();
     const reader = new FileReader();
 
-    form.append('file', avatar);
-    reader.readAsDataURL(avatar);
+    form.append('file', profilePicture);
+    reader.readAsDataURL(profilePicture);
 
     return reader.onload = () => {
-      return this.setState({ avatar: reader.result });
+      return this.setState({ profilePicture: reader.result });
     };
   }
 
@@ -63,7 +63,7 @@ class Signup extends Component {
       password,
       passwordConfirm,
       email,
-      avatar,
+      profilePicture,
     } = this.state;
 
     this.initializeErrorMessages();
@@ -78,7 +78,7 @@ class Signup extends Component {
       password,
       passwordConfirm,
       email,
-      avatar
+      profilePicture
     }, this.token));
   }
 
@@ -199,18 +199,18 @@ class Signup extends Component {
         </StyledInputWrapper>
         <StyledInputWrapper>
           <InputTextField
-            label="Avatar"
-            name="avatar"
+            label="profile picture"
+            name="profilePicture"
             type="file"
             accept="image/*"
-            className="avatar-field"
+            className="profilePicture-field"
             onChange={this.onFileChange}
           />
         </StyledInputWrapper>
         {
-          this.state.avatar && (
+          this.state.profilePicture && (
             <StyledImagePreview>
-              <img src={this.state.avatar} alt="" />
+              <img src={this.state.profilePicture} alt="" />
             </StyledImagePreview>
           )
         }
@@ -299,7 +299,7 @@ const StyledSignupContainer = styled.div`
     }
   }
 
-  .avatar-field {
+  .profilePicture-field {
     input {
       font-size: 14px;
     }

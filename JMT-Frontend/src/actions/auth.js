@@ -57,7 +57,7 @@ export const signup = (params) => {
       displayName: params.displayName,
       password: params.password,
       email: params.email,
-      avatar: params.avatar,
+      profilePicture: params.profilePicture,
     })
       .then(() => {
         dispatch(App.loadingDone());
