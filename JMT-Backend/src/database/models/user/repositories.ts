@@ -48,9 +48,9 @@ export const getUserByEmailOrDisplayName = async ({ displayName, email }) => {
   }
 }
 
-export const signup = async ({ displayName, password, hashedPassword, email, avatar }) => {
+export const signup = async ({ displayName, password, hashedPassword, email, profilePicture }) => {
   try {
-    const result = await Query.signUpQuery({ displayName, password: hashedPassword, email, avatar })
+    const result = await Query.signUpQuery({ displayName, password: hashedPassword, email, profilePicture })
 
     return {
       result,

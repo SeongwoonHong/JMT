@@ -43,7 +43,7 @@ export const sendSignupEmail = async (req: Request, res: Response): Promise<Resp
 }
 
 export const signup = async (req: Request, res: Response): Promise<Response> => {
-  const { displayName, password, email, avatar } = req.body;
+  const { displayName, password, email, profilePicture } = req.body;
   const schema = Joi.object().keys({
     displayName: validationUtils.isDisplayName,
     password: validationUtils.isPassword,
@@ -70,13 +70,13 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
     if (userRes.success) {
       let bucketObject;
 
-      if (avatar) {
-        bucketObject = await getPresignedUrlFromS3(email, avatar);
+      if (profilePicture) {
+        bucketObject = await getPresignedUrlFromS3(email, profilePicture);
 
-        await sendPresignedUrlWithFile(bucketObject.url, avatar);
+        await sendPresignedUrlWithFile(bucketObject.url, profilePicture);
       }
 
-      const result = await userRepository.signup({ displayName, password, hashedPassword, email, avatar: bucketObject ? bucketObject.key : '' })
+      const result = await userRepository.signup({ displayName, password, hashedPassword, email, profilePicture: bucketObject ? bucketObject.key : '' })
 
       return res.json({
         result,
@@ -94,10 +94,10 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
 /**
  * upload profile picture
  */
-const getPresignedUrlFromS3 = async (email: string, avatar) => {
+const getPresignedUrlFromS3 = async (email: string, profilePicture) => {
   const key = `${email}/${uuid()}.jpeg`;
   const { AWS_BUCKET: Bucket } = process.env;
-  const type = avatar.split(';')[0].split('/')[1]
+  const type = profilePicture.split(';')[0].split('/')[1]
 
   try {
     const presignedUrl = await s3.getSignedUrl('putObject', {
@@ -168,7 +168,7 @@ export const login = async (req, res: Response) => {
       return res.status(400).json(userRes);
     }
 
-    const { userId, displayName, avatar, signupDate } = userRes.result;
+    const { userId, displayName, profilePicture, signupDate } = userRes.result;
     const token = await jwtUtils.createToken({ email, displayName, signupDate });
 
     return res.json({
@@ -187,7 +187,7 @@ export const checkUser = async (req, res: Response) => {
     const userRes = await userRepository.getUserByEmail(req.decoded.email);
     const userData = {
       email: req.decoded.email,
-      avatar: req.decoded.avatar,
+      profilePicture: req.decoded.profilePicture,
       signupDate: req.decoded.signupDate,
     };
 
@@ -205,14 +205,14 @@ export const checkUser = async (req, res: Response) => {
 }
 
 export const updateProfile = async (req, res: Response) => {
-  const { email, displayName, password, avatar } = req.body;
+  const { email, displayName, password, profilePicture } = req.body;
   const schema = Joi.object().keys({
     email: validationUtils.isEmail,
     password: validationUtils.isPassword,
     displayName: validationUtils.isDisplayName,
-    avatar: validationUtils.isAvatar,
+    profilePicture: validationUtils.isprofilePicture,
   });
-  const result: any = Joi.validate({ email, displayName, password, avatar }, schema);
+  const result: any = Joi.validate({ email, displayName, password, profilePicture }, schema);
 
   if (result.error) {
     res.status(400).json({
@@ -222,7 +222,7 @@ export const updateProfile = async (req, res: Response) => {
   }
 
   try {
-    const userRes = await userRepository.updateUserProfile({ email, displayName, password, avatar });
+    const userRes = await userRepository.updateUserProfile({ email, displayName, password, profilePicture });
     
     if (!userRes.success) {
       return res.status(400).json(userRes);
