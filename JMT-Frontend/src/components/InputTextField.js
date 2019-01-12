@@ -13,10 +13,11 @@ class InputTextField extends Component {
       onBlur,
       hasError,
       disabled,
+      className,
     } = this.props;
 
     return (
-      <StyledInputTextField>
+      <StyledInputTextField className={className}>
         <StyledLabel>{label}</StyledLabel>
         <StyledInputContainer hasError={hasError}>
           <StyledInput
@@ -26,6 +27,7 @@ class InputTextField extends Component {
             onChange={onChange}
             onBlur={onBlur}
             disabled={disabled}
+            {...this.props}
           />
         </StyledInputContainer>
       </StyledInputTextField>

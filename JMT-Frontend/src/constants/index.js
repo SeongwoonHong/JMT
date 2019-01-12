@@ -4,4 +4,5 @@ export {
   categories,
   headerHeight,
   colors,
+  defaultProfilePicture,
 } from './constants';
