@@ -50,8 +50,8 @@ class Header extends Component {
           onClick={() => history.push('/')}
         />
         <StyledMenuContainer isMenuOpened={isMenuOpened}>
-          <StyledMenu>
-            <StyledDiv>
+          <StyledMenu className="header-menu">
+            <StyledDiv className="menu-items">
               <Link to="/" className="menu-item">Home</Link>
               {
                 user ?
@@ -168,8 +168,18 @@ const StyledHamburger = styled.div`
 `;
 
 const StyledMenuContainer = styled.div`
-  display: ${props => props.isMenuOpened ? 'block' : 'none'};
+  visibility: ${props => props.isMenuOpened ? 'initial' : 'hidden'};
   position: relative;
+
+  ${props => props.isMenuOpened && `
+    .header-menu {
+      width: 45%;
+    }
+
+    .menu-items {
+      display: block;
+    }
+  `};
 `;
 
 const StyledMenu = styled.div`
@@ -177,12 +187,12 @@ const StyledMenu = styled.div`
   left: 0;
   right: 0;
   top: 0;
-  width: 45%;
+  width: 0%;
   height: 100vh;
   background-color: ${colors.lightBlue};
   z-index: 3;
-  text-align: center;
   text-transform: uppercase;
+  transition: all 0.5s ease-out;
   box-shadow: 2px 0px 5px 0px rgba(0,0,0,0.35);
 
   .menu-item {
@@ -199,11 +209,9 @@ const StyledMenu = styled.div`
 `;
 
 const StyledDiv = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 100px;
-  width: 100%;
+  display: none;
+  white-space: nowrap;
+  margin: 100px 40px;
 `;
 
 const StyledBackgroundOverlay = styled.div`
