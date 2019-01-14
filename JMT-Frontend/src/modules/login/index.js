@@ -18,7 +18,7 @@ class LoginContainer extends Component {
 
     return (
       <div>
-        <Header hideHamburgerMenu />
+        <Header />
         <Switch>
           <Route path="/" component={Login} />
         </Switch>

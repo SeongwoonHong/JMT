@@ -200,7 +200,7 @@ class Signup extends Component {
         <StyledInputWrapper>
           <InputTextField
             label="profile picture"
-            name="profilePicture"
+            name="ProfilePicture"
             type="file"
             accept="image/*"
             className="profilePicture-field"

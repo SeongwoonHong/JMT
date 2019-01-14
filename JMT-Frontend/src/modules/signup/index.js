@@ -9,7 +9,7 @@ class SignupContainer extends Component {
   render() {
     return (
       <div>
-        <Header hideHamburgerMenu />
+        <Header />
         <Switch>
           <Route path="/signup" component={Signup} />
         </Switch>
