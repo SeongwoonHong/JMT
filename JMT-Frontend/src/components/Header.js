@@ -8,6 +8,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Auth } from 'actions';
 import { connect } from 'react-redux';
 
+const routesToHideHamburgerMenu = ['/login', '/signup', '/forgot-password', '/email-verified'];
 @withRouter
 @connect(state => ({
   user: state.Auth.user
@@ -29,16 +30,18 @@ class Header extends Component {
     return dispatch(Auth.logout());
   }
 
+  shouldHamburgerMenuHide = () => routesToHideHamburgerMenu.includes(this.props.location.pathname);
+
   render() {
     const { isMenuOpened } = this.state;
-    const { user, hideHamburgerMenu } = this.props;
+    const { user } = this.props;
 
     return (
       <StyledHeader>
         <StyledHamburger
           className={cx({ isMenuOpened })}
           onClick={this.toggleHamburger}
-          hideHamburgerMenu={hideHamburgerMenu}
+          hideHamburgerMenu={this.shouldHamburgerMenuHide()}
         >
           <span />
           <span />
