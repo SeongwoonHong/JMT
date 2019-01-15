@@ -74,6 +74,8 @@ class Login extends Component {
 
     if (inputValidator.isEmpty(email)) {
       errorMessages.email = 'Email is required';
+    } else if (!inputValidator.isEmail(email)) {
+      errorMessages.email = 'Invalid Email Address';
     }
 
     if (inputValidator.isEmpty(password)) {
@@ -85,13 +87,18 @@ class Login extends Component {
     return errorMessages;
   }
 
-  render() {
+  renderLoader = () => {
     const { app } = this.props;
-    const { email, password, errorMessages } = this.state;
 
     if (app.isLoading) {
       return <Loader />;
     }
+
+    return null;
+  }
+
+  render() {
+    const { email, password, errorMessages } = this.state;
 
     return (
       <StyledLoginContainer>
@@ -104,6 +111,7 @@ class Login extends Component {
             value={email}
             onChange={this.onChangeHandler}
             hasError={errorMessages.email}
+            required
           />
           { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
         </StyledInputWrapper>
@@ -116,6 +124,7 @@ class Login extends Component {
             value={password}
             onChange={this.onChangeHandler}
             hasError={errorMessages.password}
+            required
           />
           { errorMessages.password && <StyledErrorMessage>{errorMessages.password}</StyledErrorMessage> }
         </StyledInputWrapper>
@@ -125,9 +134,13 @@ class Login extends Component {
         >
           Login
         </Button>
-        <StyledSignupLink to="/signup">
+        <StyledFooterText to="/signup">
           Don't have an account? Sign up
-        </StyledSignupLink>
+        </StyledFooterText>
+        <StyledFooterText to="/forgot-password">
+          Forgot password?
+        </StyledFooterText>
+        {this.renderLoader()}
       </StyledLoginContainer>
     );
   }
@@ -153,6 +166,7 @@ const StyledHeader = styled.div`
   font-size: 32px;
   margin-top: 30px;
   color: ${colors.black};
+  text-align: center;
 `;
 
 
@@ -170,7 +184,7 @@ const StyledErrorMessage = styled.div`
   font-size: 12px;
 `;
 
-const StyledSignupLink = styled(({ className, children, ...rest }) => (
+const StyledFooterText = styled(({ className, children, ...rest }) => (
   <Link className={className} {...rest}>
     {children}
   </Link>

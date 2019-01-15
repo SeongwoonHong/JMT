@@ -159,6 +159,7 @@ class Signup extends Component {
             onChange={this.onChangeHandler}
             hasError={errorMessages.email}
             disabled
+            required
           />
           { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
         </StyledInputWrapper>
@@ -170,6 +171,7 @@ class Signup extends Component {
             value={displayName}
             onChange={this.onChangeHandler}
             hasError={errorMessages.displayName}
+            required
           />
           { errorMessages.displayName && <StyledErrorMessage>{errorMessages.displayName}</StyledErrorMessage> }
         </StyledInputWrapper>
@@ -182,25 +184,27 @@ class Signup extends Component {
             value={password}
             onChange={this.onChangeHandler}
             hasError={errorMessages.password}
+            required
           />
           { errorMessages.password && <StyledErrorMessage>{errorMessages.password}</StyledErrorMessage> }
         </StyledInputWrapper>
 
         <StyledInputWrapper>
           <InputTextField
-            label="Password Confirm"
+            label="Confirm Password"
             name="passwordConfirm"
             type="password"
             value={passwordConfirm}
             onChange={this.onChangeHandler}
             hasError={errorMessages.passwordConfirm}
+            required
           />
           { errorMessages.passwordConfirm && <StyledErrorMessage>{errorMessages.passwordConfirm}</StyledErrorMessage> }
         </StyledInputWrapper>
         <StyledInputWrapper>
           <InputTextField
-            label="profile picture"
-            name="ProfilePicture"
+            label="Profile picture"
+            name="profilePicture"
             type="file"
             accept="image/*"
             className="profilePicture-field"
@@ -236,6 +240,7 @@ class Signup extends Component {
             value={email}
             onChange={this.onChangeHandler}
             hasError={errorMessages.email}
+            required
           />
           { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
         </StyledInputWrapper>
@@ -250,24 +255,26 @@ class Signup extends Component {
           <StyledFooterText to="/login">
             Login
           </StyledFooterText>
-          <StyledFooterText to="/forgot-password">
-            Forgot password?
-          </StyledFooterText>
         </StyledFooter>
       </StyledSignupContainer>
     );
   }
 
-  render() {
+  renderLoader = () => {
     const { app } = this.props;
-    const {
-      isTokenVerified,
-      isEmailSent,
-    } = this.state;
 
     if (app.isLoading) {
       return <Loader />;
     }
+
+    return null;
+  }
+
+  render() {
+    const {
+      isTokenVerified,
+      isEmailSent,
+    } = this.state;
 
     if (isEmailSent) {
       return (
@@ -283,6 +290,7 @@ class Signup extends Component {
         {
           isTokenVerified ? this.renderSignup() : this.renderSendEmail()
         }
+        {this.renderLoader()}
       </StyledSignupContainer>
     );
   }
@@ -314,6 +322,7 @@ const StyledHeader = styled.div`
   font-size: 32px;
   margin-top: 30px;
   color: ${colors.black};
+  text-align: center;
 `;
 
 
