@@ -14,11 +14,15 @@ class InputTextField extends Component {
       hasError,
       disabled,
       className,
+      required,
     } = this.props;
 
     return (
       <StyledInputTextField className={className}>
-        <StyledLabel>{label}</StyledLabel>
+        <StyledLabel>
+          { label }
+          { required && <StyledAsterisk>*</StyledAsterisk> }
+        </StyledLabel>
         <StyledInputContainer hasError={hasError}>
           <StyledInput
             type={type}
@@ -38,6 +42,12 @@ class InputTextField extends Component {
 export default InputTextField;
 
 const StyledInputTextField = styled.div`
+`;
+
+const StyledAsterisk = styled.span`
+  color: ${colors.theme};
+  vertical-align: middle;
+  margin-left: 5px;
 `;
 
 const StyledLabel = styled.label`

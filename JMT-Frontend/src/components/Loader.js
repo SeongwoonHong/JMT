@@ -24,7 +24,8 @@ const StyledLoader = styled.div`
   position: absolute;
   top: 0;
   background-color: rgba(255,255,255,0.7);
- 
+  left: 0;
+
   > div {
     width: 1rem;
     height: 1rem;
