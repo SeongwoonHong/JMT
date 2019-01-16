@@ -125,6 +125,7 @@ class ForgotPassword extends Component {
             name="email"
             label="Email"
             value={email}
+            required
             onChange={this.onChangeHandler}
           />
           { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
@@ -160,6 +161,7 @@ class ForgotPassword extends Component {
             name="password"
             label="Password"
             value={password}
+            required
             onChange={this.onChangeHandler}
           />
           { errorMessages.password && <StyledErrorMessage>{errorMessages.password}</StyledErrorMessage> }
@@ -170,6 +172,7 @@ class ForgotPassword extends Component {
             name="passwordConfirm"
             label="Password Confirm"
             value={passwordConfirm}
+            required
             onChange={this.onChangeHandler}
           />
           { errorMessages.passwordConfirm && <StyledErrorMessage>{errorMessages.passwordConfirm}</StyledErrorMessage> }

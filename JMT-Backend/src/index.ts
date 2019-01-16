@@ -41,7 +41,6 @@ class App {
   private routes(): void {
     this.express.use('/api/user', routes.User);
     this.express.use('/api/restaurant', routes.Restaurant);
-    this.express.use('/api/upload', routes.Upload);
     this.express.use('/api/group', routes.Group);
   }
 }
