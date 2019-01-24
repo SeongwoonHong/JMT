@@ -41,11 +41,9 @@ ReactDOM.render(
       <Router history={history}>
         <div>
           <Switch>
-            {
-              isDevelopment
-                ? <Route path="/test" component={ TestRoutes } />
-                : null
-            }
+            {isDevelopment ? (
+              <Route path="/test" component={TestRoutes} />
+            ) : null}
             <Route exact path="/" component={Home} />
             <Route path="/main" component={App} />
             <Route path="/signup" component={Signup} />
@@ -61,6 +59,5 @@ ReactDOM.render(
       </Router>
     </CookiesProvider>
   </Provider>,
-  document.getElementById('app'),
+  document.getElementById('app')
 );
-

@@ -16,6 +16,7 @@ import InputTextField from './InputTextField';
 import SelectionIndicators from './SelectionIndicators';
 import Logo from './Logo';
 import Header from './Header';
+import Comment from './Comment';
 
 export {
   Button,
@@ -36,4 +37,5 @@ export {
   SelectionIndicators,
   Logo,
   Header,
+  Comment
 };

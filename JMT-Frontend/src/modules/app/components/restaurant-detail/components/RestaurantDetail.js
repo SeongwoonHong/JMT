@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Restaurant } from 'actions';
+import { Restaurant, Group } from 'actions';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import phoneIcon from 'assets/phoneIcon.png';
 import { colors } from 'utils/colors';
 import { RatingCircle, Loader, Arrow, Button, ModalTitle } from 'components';
@@ -26,14 +27,15 @@ const modalStyles = {
   overlay: {
     opacity: 1,
     backgroundColor: colors.backgroundOverlay,
-    zIndex: 2,
-  },
+    zIndex: 2
+  }
 };
 
+@withRouter
 @connect(state => ({
   restaurants: state.Restaurants,
   app: state.App,
-  user: state.Auth.user,
+  user: state.Auth.user
 }))
 class RestaurantDetail extends Component {
   constructor(props) {
@@ -46,17 +48,19 @@ class RestaurantDetail extends Component {
       imageIndex: 0,
       id: params.get('id'),
       scheduleDate: null,
-      isModalOpen: false,
+      isModalOpen: false
     };
   }
 
   componentWillMount = () => {
-    const { dispatch } = this.props;
+    const { dispatch, activeGroup, fromGroupPage } = this.props;
     const { id } = this.state;
-
+    if (fromGroupPage) {
+      dispatch(Group.getGroup(activeGroup.restaurantid));
+      return dispatch(Restaurant.getRestaurantDetail(activeGroup.restaurantid));
+    }
     return dispatch(Restaurant.getRestaurantDetail(id));
-  }
-
+  };
   /**
    * returns a time string
    * ex) '1.30pm - 2.30am', '6pm - 9.30pm'
@@ -77,15 +81,17 @@ class RestaurantDetail extends Component {
       return '';
     }
 
-    return `${getTimeWithPeriod(hoursObj.start)} - ${getTimeWithPeriod(hoursObj.end)}`;
-  }
+    return `${getTimeWithPeriod(hoursObj.start)} - ${getTimeWithPeriod(
+      hoursObj.end
+    )}`;
+  };
 
   /**
    * @param {array} address
    */
   getAddress = (address) => {
     return address.reduce((acc, value) => `${acc + value} `, '');
-  }
+  };
 
   getDistance = () => {
     const { distance } = this.props.restaurants.activeRestaurant;
@@ -95,27 +101,27 @@ class RestaurantDetail extends Component {
     }
 
     return 'N/A';
-  }
+  };
 
   increaseIndex = () => {
     return this.setState({ imageIndex: this.state.imageIndex + 1 });
-  }
+  };
 
   decreaseIndex = () => {
     return this.setState({ imageIndex: this.state.imageIndex - 1 });
-  }
+  };
 
   goToRestaurantList = () => {
     return history.goBack();
-  }
+  };
 
   handleDateChange = (scheduleDate) => {
     return this.setState({ scheduleDate });
-  }
+  };
 
   closeModal = () => {
     return this.setState({ isModalOpen: false });
-  }
+  };
 
   openModal = () => {
     const { user } = this.props;
@@ -125,7 +131,7 @@ class RestaurantDetail extends Component {
     }
 
     return this.setState({ isModalOpen: true });
-  }
+  };
 
   saveDate = () => {
     const { scheduleDate } = this.state;
@@ -135,10 +141,16 @@ class RestaurantDetail extends Component {
 
     const convertedScheduleDate = convertDateObject(scheduleDate);
 
-    dispatch(Restaurant.joinRestaurant(user.userId, restaurants.activeRestaurant.id, convertedScheduleDate));
+    dispatch(
+      Restaurant.joinRestaurant(
+        user.userId,
+        restaurants.activeRestaurant.id,
+        convertedScheduleDate
+      )
+    );
 
     return false;
-  }
+  };
 
   renderModal = () => {
     const { scheduleDate } = this.state;
@@ -162,13 +174,15 @@ class RestaurantDetail extends Component {
             timeCaption="time"
           />
         </div>
-        <Button style={{ marginTop: '20px' }} onClick={this.saveDate}>Save</Button>
+        <Button style={{ marginTop: '20px' }} onClick={this.saveDate}>
+          Save
+        </Button>
       </Modal>
     );
-  }
+  };
 
   render() {
-    const { restaurants, app } = this.props;
+    const { restaurants, app, fromGroupPage } = this.props;
     const { imageIndex } = this.state;
 
     if (app.isLoading || !Object.keys(restaurants.activeRestaurant).length) {
@@ -179,15 +193,13 @@ class RestaurantDetail extends Component {
       display_phone: displayPhone,
       coordinates,
       categories,
-      location: {
-        display_address: address,
-      },
+      location: { display_address: address },
       photos,
       hours,
       price,
       review_count: reviewCount,
       name,
-      rating,
+      rating
     } = restaurants.activeRestaurant;
 
     return (
@@ -203,10 +215,7 @@ class RestaurantDetail extends Component {
             onClick={this.increaseIndex}
             isHide={imageIndex === photos.length - 1}
           />
-          <ImageSlide
-            images={photos}
-            currentIndex={imageIndex}
-          />
+          <ImageSlide images={photos} currentIndex={imageIndex} />
           <Categories
             categories={categories}
             className="categories-container"
@@ -227,11 +236,17 @@ class RestaurantDetail extends Component {
           </StyledBottomTopInfo>
 
           <StyledRestaurantName>{name}</StyledRestaurantName>
-          <StyledRestaurantAddress>{this.getAddress(address)}</StyledRestaurantAddress>
+          <StyledRestaurantAddress>
+            {this.getAddress(address)}
+          </StyledRestaurantAddress>
           <StyledHorizontalBorders>
             <StyledWrapperLeft>
-              <StyledRestaurantStatus>{hours && hours[0].is_open_now ? 'OPEN NOW' : 'CLOSE NOW'}</StyledRestaurantStatus>
-              <StyledRestaurantOpenTime>{this.getHours()}</StyledRestaurantOpenTime>
+              <StyledRestaurantStatus>
+                {hours && hours[0].is_open_now ? 'OPEN NOW' : 'CLOSE NOW'}
+              </StyledRestaurantStatus>
+              <StyledRestaurantOpenTime>
+                {this.getHours()}
+              </StyledRestaurantOpenTime>
             </StyledWrapperLeft>
             <StyledVerticalBorder />
             <StyledWrapperRight>
@@ -243,14 +258,20 @@ class RestaurantDetail extends Component {
             </StyledWrapperRight>
           </StyledHorizontalBorders>
 
-          <Button
-            onClick={this.openModal}
-            className="btn-restaurant-detail"
-          >
-            Join
-          </Button>
-          <StyledHr />
-          {this.renderModal()}
+          {fromGroupPage ? (
+            ''
+          ) : (
+            <React.Fragment>
+              <Button
+                onClick={this.openModal}
+                className="btn-restaurant-detail"
+              >
+                Join
+              </Button>
+              <StyledHr />
+              {this.renderModal()}
+            </React.Fragment>
+          )}
           <Map
             googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC50Sb3U7clyt4_TT36sj40NIXdTUaQc_E" // this key can be exposed
             loadingElement={<Loader />}
@@ -358,25 +379,25 @@ const StyledHorizontalBorders = styled.div`
   margin: 20px 0;
   width: 100%;
   height: 60px;
-  border-top: solid 1px rgb(222,222,222);
-  border-bottom: solid 1px rgb(222,222,222);
+  border-top: solid 1px rgb(222, 222, 222);
+  border-bottom: solid 1px rgb(222, 222, 222);
 `;
 
 const StyledHr = styled.hr`
-  border: solid 1px rgb(222,222,222);
+  border: solid 1px rgb(222, 222, 222);
   margin-bottom: 10px;
 `;
 
 const StyledWrapperLeft = styled.div`
-  float:left;
-  width:44%;
+  float: left;
+  width: 44%;
   height: 60px;
   display: inline;
 `;
 
 const StyledVerticalBorder = styled.div`
   float: left;
-  border-right: solid 2px rgb(222,222,222);
+  border-right: solid 2px rgb(222, 222, 222);
   width: 1px;
   height: 60px;
   display: inline-block;
@@ -396,10 +417,10 @@ const StyledRestaurantOpenTime = styled.div`
 `;
 
 const StyledWrapperRight = styled.div`
-  float:left;
+  float: left;
   padding: 0 0 0 17px;
-  width:50%;
-  height:60px;
+  width: 50%;
+  height: 60px;
   display: inline;
 `;
 
@@ -417,14 +438,13 @@ const StyledRestaurantNumber = styled.div`
 `;
 
 const StyledPhoneIcon = styled.div`
-  width:39px;
-  height:39px;
+  width: 39px;
+  height: 39px;
   float: right;
   margin: 10px 0 0;
-  border: solid 1px rgb(222,222,222);
+  border: solid 1px rgb(222, 222, 222);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
-
