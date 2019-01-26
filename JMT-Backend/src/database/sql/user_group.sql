@@ -1,7 +1,7 @@
 CREATE TABLE public.user_group
 (
-    user_id integer NOT NULL,
-    group_id integer NOT NULL
+    "userId" integer NOT NULL,
+    "groupId" integer NOT NULL
 )
 WITH (
     OIDS = FALSE
