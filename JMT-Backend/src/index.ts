@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as express from 'express';
+import * as compression from 'compression';
 import * as morgan from 'morgan';
 
 import * as routes from './routes';
@@ -32,6 +33,7 @@ class App {
       )
     );
     this.express.use(morgan('dev'));
+    this.express.use(compression());
     this.express.use(express.urlencoded({ extended: false }));
     this.express.use(express.json({ limit: '50mb' }));
   }
