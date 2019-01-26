@@ -4,5 +4,7 @@ import * as Restaurant from './restaurant';
 import * as GoogleMap from './googleMap';
 import * as Auth from './auth';
 import * as Group from './group';
+import * as User from './user';
 
-export { App, Alert, Restaurant, GoogleMap, Auth, Group };
+export { App, Alert, Restaurant, GoogleMap, Auth, User, Group };
+

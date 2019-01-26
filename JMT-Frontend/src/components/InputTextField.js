@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 
 class InputTextField extends Component {
   render() {
@@ -12,10 +12,12 @@ class InputTextField extends Component {
       name,
       onBlur,
       hasError,
+      disabled,
+      className,
     } = this.props;
 
     return (
-      <StyledInputTextField>
+      <StyledInputTextField className={className}>
         <StyledLabel>{label}</StyledLabel>
         <StyledInputContainer hasError={hasError}>
           <StyledInput
@@ -24,6 +26,8 @@ class InputTextField extends Component {
             value={value}
             onChange={onChange}
             onBlur={onBlur}
+            disabled={disabled}
+            {...this.props}
           />
         </StyledInputContainer>
       </StyledInputTextField>
@@ -49,4 +53,6 @@ const StyledInputContainer = styled.div`
 const StyledInput = styled.input`
   font-size: 18px;
   color: ${colors.inputColor};
+  background-color: ${props => props.disabled && colors.lightGrey};
+  opacity: ${props => props.disabled && '0.5'};
 `;

@@ -11,9 +11,9 @@ export const SIGNUP = 'SIGNUP';
 export const SIGNUP_FAIL = 'SIGNUP_FAIL';
 export const LOGIN = 'LOGIN';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
-export const PROFILE_IMAGE = 'PROFILE_IMAGE';
 export const TOKEN_DECODE = 'TOKEN_DECODE';
 export const LOG_OUT = 'LOG_OUT';
+
 /**
  * Action creator
 */
@@ -57,6 +57,7 @@ export const signup = (params) => {
       displayName: params.displayName,
       password: params.password,
       email: params.email,
+      profilePicture: params.profilePicture,
     })
       .then(() => {
         dispatch(App.loadingDone());
@@ -66,10 +67,8 @@ export const signup = (params) => {
         return dispatch(signupSuccess());
       })
       .catch(({ response }) => {
-        dispatch(App.loadingDone());
         toast.error(response.data.msg);
-
-        return dispatch(signupFail(response.data));
+        dispatch(App.loadingDone());
       });
   };
 };
@@ -99,40 +98,11 @@ export const login = (params, reRoute) => {
   };
 };
 
-const sendPresignedUrlWithFile = (url, file) => {
-  return axios.put(url, file, {
-    headers: {
-      'Content-Type': file.type
-    }
-  });
-};
-
-export const uploadProfileImage = (file, token) => {
-  return (dispatch) => {
-    dispatch(App.loadingStart('uploadProfileImage'));
-
-    return axios.get('/api/upload/profilePicture', {
-      params: { token, fileName: file.name }
-    })
-      .then(({ data }) => {
-        sendPresignedUrlWithFile(data.url, file)
-          .then(() => dispatch(App.loadingDone()))
-          .catch((e) => {
-            dispatch(App.loadingDone());
-            console.log(e);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-};
-
 export const tokenDecode = (token) => {
   return (dispatch) => {
     dispatch(App.loadingStart('tokenDecode'));
 
-    return axios.get('/api/user/check', {
+    return axios.get('/api/user/verifyToken', {
       params: { token }
     })
       .then(({ data }) => {
@@ -143,7 +113,7 @@ export const tokenDecode = (token) => {
           return history.push('/');
         }
 
-        return false;
+        return data.decoded;
       })
       .catch(() => {
         dispatch(App.loadingDone());
@@ -157,7 +127,7 @@ export const checkLogin = (token) => {
   return (dispatch) => {
     dispatch(App.loadingStart('checkLogin'));
 
-    return axios.get('/api/user/check', {
+    return axios.get('/api/user/checkUser', {
       params: { token }
     })
       .then(({ data }) => {
@@ -178,4 +148,8 @@ export const logout = () => {
   return {
     type: LOG_OUT
   };
+};
+
+export const sendSignupEmail = (email) => {
+  return axios.post('/api/user/sendSignupEmail', { email });
 };

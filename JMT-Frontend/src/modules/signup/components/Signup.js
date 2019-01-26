@@ -5,7 +5,8 @@ import { Auth } from 'actions';
 import { Link } from 'react-router-dom';
 import { Loader, InputTextField, Button } from 'components';
 import inputValidator from 'utils/input-validator';
-import { colors } from 'utils/colors';
+import { colors, defaultProfilePicture } from 'constants';
+import getURLSearchParams from 'utils/get-url-params';
 
 @connect(state => ({
   app: state.App,
@@ -17,12 +18,42 @@ class Signup extends Component {
     passwordConfirm: '',
     email: '',
     errorMessages: {},
+    isTokenVerified: false,
+    isEmailSent: false,
+    profilePicture: defaultProfilePicture
+  }
+
+  componentWillMount = () => {
+    this.token = getURLSearchParams(this.props.location.search, 't');
+    const { dispatch } = this.props;
+
+    if (!this.token) {
+      return false;
+    }
+
+    return dispatch(Auth.tokenDecode(this.token))
+      .then((res) => {
+        this.setState({ isTokenVerified: true, email: res.email });
+      });
   }
 
   onChangeHandler = (e) => {
     const { name, value } = e.target;
 
     return this.setState({ [name]: value });
+  }
+
+  onFileChange = (e) => {
+    const profilePicture = e.target.files[0];
+    const form = new FormData();
+    const reader = new FileReader();
+
+    form.append('file', profilePicture);
+    reader.readAsDataURL(profilePicture);
+
+    return reader.onload = () => {
+      return this.setState({ profilePicture: reader.result });
+    };
   }
 
   signup = () => {
@@ -32,6 +63,7 @@ class Signup extends Component {
       password,
       passwordConfirm,
       email,
+      profilePicture,
     } = this.state;
 
     this.initializeErrorMessages();
@@ -46,8 +78,8 @@ class Signup extends Component {
       password,
       passwordConfirm,
       email,
-    }))
-      .then(res => console.log('res = ', res));
+      profilePicture
+    }, this.token));
   }
 
   isInputValidationPassed = (errorObject) => {
@@ -89,8 +121,26 @@ class Signup extends Component {
     return errorMessages;
   }
 
-  render() {
-    const { app } = this.props;
+  sendEmail = () => {
+    const { email } = this.state;
+    const errorMessages = {};
+
+    if (inputValidator.isEmpty(email)) {
+      errorMessages.email = 'Email is required';
+    } else if (!inputValidator.isEmail(email)) {
+      errorMessages.email = 'Invalid Email Address';
+    }
+
+    if (Object.keys(errorMessages).length) {
+      return this.setState({ errorMessages });
+    }
+
+    this.setState({ isEmailSent: true });
+
+    return Auth.sendSignupEmail(email);
+  }
+
+  renderSignup = () => {
     const {
       displayName,
       password,
@@ -99,13 +149,8 @@ class Signup extends Component {
       errorMessages,
     } = this.state;
 
-    if (app.isLoading) {
-      return <Loader />;
-    }
-
     return (
       <StyledSignupContainer>
-        <StyledHeader>SIGN UP</StyledHeader>
         <StyledInputWrapper>
           <InputTextField
             label="Email"
@@ -113,6 +158,7 @@ class Signup extends Component {
             value={email}
             onChange={this.onChangeHandler}
             hasError={errorMessages.email}
+            disabled
           />
           { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
         </StyledInputWrapper>
@@ -151,11 +197,54 @@ class Signup extends Component {
           />
           { errorMessages.passwordConfirm && <StyledErrorMessage>{errorMessages.passwordConfirm}</StyledErrorMessage> }
         </StyledInputWrapper>
+        <StyledInputWrapper>
+          <InputTextField
+            label="profile picture"
+            name="profilePicture"
+            type="file"
+            accept="image/*"
+            className="profilePicture-field"
+            onChange={this.onFileChange}
+          />
+        </StyledInputWrapper>
+        {
+          this.state.profilePicture && (
+            <StyledImagePreview>
+              <img src={this.state.profilePicture} alt="" />
+            </StyledImagePreview>
+          )
+        }
         <Button
           onClick={this.signup}
           className="btn-signup"
         >
           Signup
+        </Button>
+      </StyledSignupContainer>
+    );
+  }
+
+  renderSendEmail = () => {
+    const { email, errorMessages } = this.state;
+
+    return (
+      <StyledSignupContainer>
+        <StyledInputWrapper>
+          <InputTextField
+            label="Email"
+            name="email"
+            value={email}
+            onChange={this.onChangeHandler}
+            hasError={errorMessages.email}
+          />
+          { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
+        </StyledInputWrapper>
+
+        <Button
+          onClick={this.sendEmail}
+          className="btn-signup"
+        >
+          Send Email
         </Button>
         <StyledFooter>
           <StyledFooterText to="/login">
@@ -165,6 +254,35 @@ class Signup extends Component {
             Forgot password?
           </StyledFooterText>
         </StyledFooter>
+      </StyledSignupContainer>
+    );
+  }
+
+  render() {
+    const { app } = this.props;
+    const {
+      isTokenVerified,
+      isEmailSent,
+    } = this.state;
+
+    if (app.isLoading) {
+      return <Loader />;
+    }
+
+    if (isEmailSent) {
+      return (
+        <StyledSignupContainer>
+          Please check your email boi!
+        </StyledSignupContainer>
+      );
+    }
+
+    return (
+      <StyledSignupContainer>
+        <StyledHeader>SIGN UP</StyledHeader>
+        {
+          isTokenVerified ? this.renderSignup() : this.renderSendEmail()
+        }
       </StyledSignupContainer>
     );
   }
@@ -178,6 +296,12 @@ const StyledSignupContainer = styled.div`
   .signup-arrow {
     span {
       background-color: ${colors.black};
+    }
+  }
+
+  .profilePicture-field {
+    input {
+      font-size: 14px;
     }
   }
 
@@ -222,4 +346,20 @@ const StyledFooterText = styled(({ className, children, ...rest }) => (
   margin-top: 10px;
   float: right;
   display: block;
+`;
+
+const StyledImagePreview = styled.div`
+  margin-top: 10px;
+  border-left: 5px solid ${colors.lightGrey};
+  border-right: 5px solid ${colors.lightGrey};
+  border-top: 5px solid ${colors.lightGrey};
+  border-bottom: 5px solid ${colors.lightGrey};
+
+  img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: block;
+    margin: 5px auto;
+  }
 `;

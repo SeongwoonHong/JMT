@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import history from 'utils/history';
 import styled from 'styled-components';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 
 const categories = [
   {

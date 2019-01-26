@@ -3,7 +3,6 @@ export interface UserModel {
   displayName: string,
   password: string,
   email: string,
-  avatar: string,
+  profilePicture: string,
   signupDate: string,
-  verified: boolean,
 };

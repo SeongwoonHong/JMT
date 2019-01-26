@@ -6,12 +6,12 @@ const {
   JWT_ISSUER: issuer,
 } = process.env;
 
-export const createToken = (payload: object): Promise<string> => {
+export const createToken = (payload: object, subject = '', expiresIn = '7d'): Promise<string> => {
   return new Promise((resolve, reject) => {
     jwt.sign(payload, secret, {
-      expiresIn: '7d',
+      expiresIn,
       issuer,
-      subject: 'userInfo'
+      subject
     }, (err, token: string) => {
       if (err) reject(err)
       resolve(token);
@@ -25,9 +25,9 @@ export const createEmailToken = (payload): Promise<string> => {
       expiresIn: '1d',
     }, (err, emailToken) => {
       if (err) reject(err)
-      const url = `http://localhost:3000/api/user/emailVerification/${emailToken}`;
+      const url = `http://localhost:3000/email-verified?t=${emailToken}`;
 
-      mailUtils.sendMail(payload, url);
+      mailUtils.sendSignupVerificationMail(payload, url);
       resolve(emailToken);
     });
   })

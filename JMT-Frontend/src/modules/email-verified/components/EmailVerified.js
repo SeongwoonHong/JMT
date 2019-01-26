@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Button, Loader } from 'components';
 import getURLSearchParams from 'utils/get-url-params';
-import { Auth } from 'actions';
+import { User, Auth } from 'actions';
 
 @withRouter
 @connect(state => ({
@@ -39,7 +39,7 @@ class EmailVerified extends Component {
 
     if (!file) return false;
 
-    return dispatch(Auth.uploadProfileImage(file, token));
+    return dispatch(User.uploadProfileImage(file, token));
   }
 
   renderLoader = () => {

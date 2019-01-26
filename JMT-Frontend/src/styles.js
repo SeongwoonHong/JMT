@@ -1,5 +1,5 @@
 import { injectGlobal } from 'styled-components';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 
 injectGlobal`
   body {

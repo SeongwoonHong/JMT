@@ -11,11 +11,14 @@ class User {
   }
 
   private routes = (): void => {
-    this.router.get('/check', tokenVerifyMiddleware, controllers.check);
-    this.router.get('/emailVerification/:t', controllers.emailVerification);
+    this.router.get('/checkUser', tokenVerifyMiddleware, controllers.checkUser);
     this.router.post('/signUp', controllers.signup);
     this.router.post('/login', controllers.login);
     this.router.post('/updateProfile', tokenVerifyMiddleware, controllers.updateProfile);
+    this.router.post('/sendResetPasswordEmail', controllers.sendResetPasswordEmail);
+    this.router.post('/updatePassword', controllers.updatePassword);
+    this.router.post('/sendSignupEmail', controllers.sendSignupEmail);
+    this.router.get('/verifyToken', controllers.verifyToken);
   }
 }
 

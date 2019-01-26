@@ -6,4 +6,4 @@ export const isPassword = Joi.string().min(6).max(20).required();
 
 export const isEmail = Joi.string().email().required();
 
-export const isAvatar = Joi.string().allow(null);
+export const isprofilePicture = Joi.string().allow(null);
