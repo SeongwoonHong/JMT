@@ -22,10 +22,15 @@ class App {
       }
     );
 
-    this.express.use(morgan(':method :url :status :res[content-length] - :response-time ms [:date[web]] ', {
-      skip: (req, res) => res.statusCode < 400,
-      stream: accessLogStream
-    }));
+    this.express.use(
+      morgan(
+        ':method :url :status :res[content-length] - :response-time ms [:date[web]] ',
+        {
+          skip: (req, res) => res.statusCode < 400,
+          stream: accessLogStream
+        }
+      )
+    );
     this.express.use(morgan('dev'));
     this.express.use(express.urlencoded({ extended: false }));
     this.express.use(express.json({ limit: '50mb' }));
@@ -35,6 +40,7 @@ class App {
     this.express.use('/api/user', routes.User);
     this.express.use('/api/restaurant', routes.Restaurant);
     this.express.use('/api/upload', routes.Upload);
+    this.express.use('/api/group', routes.Group);
   }
 }
 
