@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION public.get_comments_by_user(IN "_userId" integer)
-    RETURNS TABLE("id" integer, "groupId" integer, userId integer, content character varying, date date)
+    RETURNS TABLE("id" integer, "groupId" integer, "userId" integer, content character varying, date date)
     LANGUAGE 'plpgsql'
     VOLATILE
     PARALLEL UNSAFE
@@ -15,7 +15,7 @@ BEGIN
 		c."content",
 		c."date"
 	FROM comments as c
-	WHERE c.userId = "_userId";
+	WHERE c."userId" = "_userId";
 	
 END;
 

@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION public.get_groups_by_restaurant(IN "_restaurantId" character varying)
-    RETURNS TABLE(id integer, date date, categoryid integer, restaurantid character varying, restaurantname character varying)
+    RETURNS TABLE(id integer, date date, "categoryId" integer, "restaurantId" character varying, "restaurantName" character varying)
     LANGUAGE 'plpgsql'
     VOLATILE
     PARALLEL UNSAFE
@@ -12,11 +12,11 @@ BEGIN
 	SELECT 
 		gr."id",
 		gr."date",
-		gr.categoryId,
-		gr.restaurantId,
-		gr.restaurantName
+		gr."categoryId",
+		gr."restaurantId",
+		gr."restaurantName"
 	FROM groups as gr
-	WHERE gr.restaurantId = "_restaurantId";
+	WHERE gr."restaurantId" = "_restaurantId";
 	
 END;
 

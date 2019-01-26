@@ -36,7 +36,7 @@ create table if not exists user_restaurant
 	"userId" serial not null,
 	"scheduleDate" timestamp(4),
 	"restaurantId" varchar(40),
-	group_id integer not null
+	"groupId" integer not null
 );
 
 alter table user_restaurant owner to seong91;
@@ -45,17 +45,17 @@ create table if not exists groups
 (
 	id integer,
 	date timestamp(4) not null,
-	category_id integer not null,
-	restaurant_id varchar(40) not null,
-	restaurant_name varchar(200) not null
+	"categoryId" integer not null,
+	"restaurantId" varchar(40) not null,
+	"restaurantName" varchar(200) not null
 );
 
 alter table groups owner to seong91;
 
 create table if not exists user_group
 (
-	user_id integer not null,
-	group_id integer not null
+	"userId" integer not null,
+	"groupId" integer not null
 );
 
 alter table user_group owner to seong91;
@@ -65,8 +65,8 @@ create table if not exists comments
 	id integer not null
 		constraint comments_pkey
 			primary key,
-	group_id integer not null,
-	user_id integer not null,
+	"groupId" integer not null,
+	"userId" integer not null,
 	content varchar(200) not null,
 	date timestamp(4) not null
 );

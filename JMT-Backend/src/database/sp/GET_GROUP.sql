@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION public.get_group(IN "_id" integer)
-    RETURNS TABLE("id" integer, "date" date, categoryId integer, restaurantId character varying, restaurantName character varying)
+    RETURNS TABLE("id" integer, "date" date, "categoryId" integer, "restaurantId" character varying, "restaurantName" character varying)
     LANGUAGE 'plpgsql'
     VOLATILE
     PARALLEL UNSAFE
