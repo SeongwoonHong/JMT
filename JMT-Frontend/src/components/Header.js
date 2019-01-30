@@ -59,7 +59,7 @@ class Header extends Component {
               {
                 user ?
                   <div>
-                    <Link to="#" className="menu-item">My profile</Link>
+                    <Link to="/main/user/my-account" className="menu-item">My Account</Link>
                     <div onClick={this.logout} className="menu-item">Log out</div>
                   </div>
                   :

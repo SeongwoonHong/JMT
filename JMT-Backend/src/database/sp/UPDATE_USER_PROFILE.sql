@@ -5,8 +5,7 @@
 CREATE OR REPLACE FUNCTION public.update_user_profile(
 	_email character varying,
 	"_displayName" character varying,
-	_password character varying,
-	"_profilePicture" text)
+	_password character varying)
     RETURNS void
     LANGUAGE 'plpgsql'
 
@@ -19,8 +18,7 @@ BEGIN
 UPDATE USERS
 SET
 	"displayName" = "_displayName",
-	password = _password,
-	"profilePicture" = "_profilePicture"
+	password = _password
 WHERE email = _email;
 END;
 

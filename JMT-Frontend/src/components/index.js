@@ -17,6 +17,7 @@ import SelectionIndicators from './SelectionIndicators';
 import Logo from './Logo';
 import Header from './Header';
 import Comment from './Comment';
+import MaterialIcon from './MaterialIcon';
 
 export {
   Button,
@@ -37,5 +38,6 @@ export {
   SelectionIndicators,
   Logo,
   Header,
-  Comment
+  Comment,
+  MaterialIcon,
 };
