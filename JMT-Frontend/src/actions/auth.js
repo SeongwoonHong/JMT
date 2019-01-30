@@ -131,9 +131,9 @@ export const checkLogin = (token) => {
       params: { token }
     })
       .then(({ data }) => {
-        dispatch(App.loadingDone());
+        dispatch(loginSuccess(data.userData));
 
-        return dispatch(loginSuccess(data.userData));
+        return dispatch(App.loadingDone());
       })
       .catch(() => {
         return dispatch(App.loadingDone());

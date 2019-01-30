@@ -23,6 +23,12 @@ injectGlobal`
     }
   }
 
+  div {
+    &:focus, &:active {
+      outline: none;
+    }
+  }
+
   .react-datepicker__input-container,
   .react-datepicker-wrapper {
     width: 100%;

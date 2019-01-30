@@ -175,6 +175,9 @@ export const login = async (req, res: Response) => {
       success: true,
       token,
       userId: userId,
+      displayName,
+      email,
+      profilePicture,
     })
   } catch (e) {
     console.log(e.message);
@@ -196,7 +199,9 @@ export const checkUser = async (req, res: Response) => {
       userData: {
         ...userData,
         token: req.token,
-        userId: userRes.rows.userId,
+        displayName: userRes.rows[0].displayName,
+        profilePicture: userRes.rows[0].profilePicture,
+        userId: userRes.rows[0].userId,
       }
     });
   } catch (e) {
@@ -205,14 +210,12 @@ export const checkUser = async (req, res: Response) => {
 }
 
 export const updateProfile = async (req, res: Response) => {
-  const { email, displayName, password, profilePicture } = req.body;
+  const { displayName, password } = req.body;
   const schema = Joi.object().keys({
-    email: validationUtils.isEmail,
     password: validationUtils.isPassword,
-    displayName: validationUtils.isDisplayName,
-    profilePicture: validationUtils.isprofilePicture,
+    displayName: validationUtils.isDisplayName
   });
-  const result: any = Joi.validate({ email, displayName, password, profilePicture }, schema);
+  const result: any = Joi.validate({ displayName, password }, schema);
 
   if (result.error) {
     res.status(400).json({
@@ -220,9 +223,13 @@ export const updateProfile = async (req, res: Response) => {
       success: false,
     })
   }
+  let hashedPassword: string = null;
+  const { email } = req.decoded;
 
   try {
-    const userRes = await userRepository.updateUserProfile({ email, displayName, password, profilePicture });
+    hashedPassword = await bcryptUtils.hash(password);
+
+    const userRes = await userRepository.updateUserProfile({ email, displayName, password: hashedPassword });
     
     if (!userRes.success) {
       return res.status(400).json(userRes);
@@ -303,7 +310,6 @@ export const updatePassword = async (req, res: Response) => {
 };
 
 export const verifyToken = async (req, res: Response) => {
-  console.log('req.query.token = ', req.query.token);
   return jwtUtils.verify(req.query.token)
     .then((decoded) => {
       // TODO: need to define a custom type for express request
