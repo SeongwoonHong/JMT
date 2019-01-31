@@ -27,7 +27,24 @@ export const getGroupsByUser = async (req, res: Response) => {
   } catch (e) {
     return res.status(404).json({
       success: false,
-      msg: e.message,
-    })
+      msg: e.message
+    });
+  }
+};
+
+export const checkUserGroup = async (req: Request, res: Response) => {
+  const { id } = req.query;
+
+  try {
+    const result = await groupRepository.checkUserGroup(id);
+
+    console.log(result);
+
+    return res.json(result);
+  } catch (e) {
+    return res.status(404).json({
+      success: false,
+      msg: e.message
+    });
   }
 };

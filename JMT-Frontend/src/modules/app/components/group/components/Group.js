@@ -7,7 +7,8 @@ import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 
 @connect(state => ({
-  group: state.Group
+  group: state.Group,
+  user: state.Auth.user
 }))
 class Group extends Component {
   constructor(props) {
