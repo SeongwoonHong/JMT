@@ -11,6 +11,7 @@ const ModalCloser = styled.div`
   display: flex;
   font-size: 1.3rem;
   align-items: center;
+  cursor: pointer;
 
   :hover {
     color: red;

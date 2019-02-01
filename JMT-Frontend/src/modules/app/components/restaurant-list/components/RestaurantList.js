@@ -125,13 +125,6 @@ class Main extends React.Component {
           longitude={longitude}
         />
         {this.renderView()}
-        {/* {
-          alert.isVisible &&
-          <div>
-            <div>Alert message = {alert.msg}</div>
-            <div>Alert type = {alert.type}</div>
-          </div>
-        } */}
       </StyledDiv>
     );
   }

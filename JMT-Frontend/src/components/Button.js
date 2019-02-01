@@ -48,6 +48,7 @@ const StyledButton = styled(({ className, children, ...rest }) => rest.to ?
   justify-content: center;
   align-items: center;
   text-decoration: none;
+  cursor: pointer;
 `;
 
 const StyledButtonText = styled.div`

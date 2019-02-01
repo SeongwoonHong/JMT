@@ -42,6 +42,7 @@ class InputTextField extends Component {
 export default InputTextField;
 
 const StyledInputTextField = styled.div`
+  cursor: pointer;
 `;
 
 const StyledAsterisk = styled.span`

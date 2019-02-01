@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { App } from './';
 
 /**
@@ -8,6 +9,8 @@ export const SEND_RESET_PASSWORD_EMAIL_SUCCESS = 'SEND_RESET_PASSWORD_EMAIL_SUCC
 export const SEND_RESET_PASSWORD_EMAIL_FAILURE = 'SEND_RESET_PASSWORD_EMAIL_FAILURE';
 export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS';
 export const UPDATE_PROFILE_FAILURE = 'UPDATE_PROFILE_FAILURE';
+export const UPDATE_PROFILE_PICTURE_SUCCESS = 'UPDATE_PROFILE_PICTURE_SUCCESS';
+export const UPDATE_PROFILE_PICTURE_FAILURE = 'UPDATE_PROFILE_PICTURE_FAILURE';
 /**
  * Action creator
 */
@@ -79,6 +82,37 @@ export const updateProfile = (params) => {
           msg: response.data.msg,
         });
         dispatch(App.loadingDone());
+      });
+  };
+};
+
+
+export const updateProfilePicture = (profilePicture) => {
+  return (dispatch) => {
+    dispatch(App.loadingStart('updateProfilePicture'));
+
+    return axios.post('/api/user/updateProfilePicture', {
+      profilePicture,
+    })
+      .then((res) => {
+        // TODO
+        console.log('res = ', res);
+        dispatch({
+          type: UPDATE_PROFILE_PICTURE_SUCCESS,
+          payload: res.data.profilePicture
+        });
+        dispatch(App.loadingDone());
+        toast.success('Successfully updated');
+      })
+      .catch(({ response }) => {
+        console.log(err);
+        dispatch({
+          type: UPDATE_PROFILE_PICTURE_FAILURE,
+          success: false,
+          msg: response.data.msg,
+        });
+        dispatch(App.loadingDone());
+        toast.error(response.data.msg);
       });
   };
 };

@@ -150,3 +150,15 @@ export const getUserByEmail: any = async (email: string) => {
     throw new Error(e);
   }
 };
+
+export const updateProfilePicture = async ({ id, profilePicture }) => {
+  try {
+    await Query.updateProfilePictureQuery({id, profilePicture });
+
+    return {
+      success: true,
+    };
+  } catch (e) {
+    throw new Error(e);
+  }
+};
