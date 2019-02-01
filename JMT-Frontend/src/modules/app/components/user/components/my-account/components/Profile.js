@@ -15,7 +15,6 @@ class Profile extends Component {
     password: '',
     passwordConfirm: '',
     displayName: this.props.user.displayName,
-    profilePicture: this.props.user.profilePicture,
     errorMessages: {},
   }
 
@@ -25,26 +24,12 @@ class Profile extends Component {
     return this.setState({ [name]: value });
   }
 
-  onFileChange = (e) => {
-    const profilePicture = e.target.files[0];
-    const form = new FormData();
-    const reader = new FileReader();
-
-    form.append('file', profilePicture);
-    reader.readAsDataURL(profilePicture);
-
-    return reader.onload = () => {
-      return this.setState({ profilePicture: reader.result });
-    };
-  }
-
   saveProfile = () => {
     const { dispatch } = this.props;
     const {
       displayName,
       password,
       passwordConfirm,
-      profilePicture,
     } = this.state;
 
     this.initializeErrorMessages();
@@ -57,7 +42,6 @@ class Profile extends Component {
     return dispatch(User.updateProfile({
       displayName,
       password,
-      profilePicture
     }));
   }
 
@@ -168,7 +152,7 @@ export default Profile;
 
 const StyledProfile = styled.div`
   .profile-btn {
-    margin-top: 20px;
+    margin-top: 30px;
   }
 `;
 

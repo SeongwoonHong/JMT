@@ -9,7 +9,7 @@ const {
 
 class S3 {
   public s3;
-  
+
   constructor() {
     this.initialize();
   }

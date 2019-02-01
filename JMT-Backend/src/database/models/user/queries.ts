@@ -29,6 +29,10 @@ class Query {
   public static updatePasswordQuery = (params): Promise<any> => {
     return db.executeSP('UPDATE_PASSWORD', params);
   }
+
+  public static updateProfilePictureQuery = (params): Promise<any> => {
+    return db.executeSP('UPDATE_PROFILE_PICTURE', params);
+  }
 }
 
 export default Query;

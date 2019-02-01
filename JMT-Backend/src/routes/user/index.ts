@@ -19,6 +19,7 @@ class User {
     this.router.post('/updatePassword', controllers.updatePassword);
     this.router.post('/sendSignupEmail', controllers.sendSignupEmail);
     this.router.get('/verifyToken', controllers.verifyToken);
+    this.router.post('/updateProfilePicture', tokenVerifyMiddleware, controllers.updateProfilePicture);
   }
 }
 

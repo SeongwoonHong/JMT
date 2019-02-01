@@ -169,7 +169,7 @@ export const login = async (req, res: Response) => {
     }
 
     const { userId, displayName, profilePicture, signupDate } = userRes.result;
-    const token = await jwtUtils.createToken({ email, displayName, signupDate });
+    const token = await jwtUtils.createToken({ email, displayName, signupDate, userId });
 
     return res.json({
       success: true,
@@ -325,3 +325,33 @@ export const verifyToken = async (req, res: Response) => {
       })
     })
 };
+
+export const updateProfilePicture = async (req, res: Response) => {
+  const { email } = req.decoded;
+  const { profilePicture } = req.body; //base64
+  const { AWS_BUCKET: Bucket } = process.env;
+
+  try {
+    const userRes = await userRepository.getUserByEmail(email);
+    const { profilePicture: currentProfilePicture, userId } = userRes.rows[0];
+    let bucketObject;
+    let params = {
+      Bucket,
+      Key: currentProfilePicture,
+    }
+
+    await s3.deleteObject(params).promise();
+    bucketObject = await getPresignedUrlFromS3(email, profilePicture);
+    await sendPresignedUrlWithFile(bucketObject.url, profilePicture);
+    await userRepository.updateProfilePicture({ id: userId, profilePicture: bucketObject.key });
+
+    return res.json({
+      success: true,
+      profilePicture: bucketObject.key,
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).json(e.message);
+  }
+};
+
