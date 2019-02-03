@@ -32,6 +32,14 @@ export default function (state = initialState, action) {
         user: null,
         error: action.payload,
       };
+    case User.UPDATE_PROFILE_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          displayName: action.payload,
+        }
+      };
     case User.UPDATE_PROFILE_PICTURE_SUCCESS:
       return {
         ...state,

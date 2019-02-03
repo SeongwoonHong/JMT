@@ -30,13 +30,13 @@ const modalStyles = {
 const menus = [
   {
     index: 0,
-    name: 'My List',
-    icon: 'list_alt',
+    name: 'Profile',
+    icon: 'account_box',
   },
   {
     index: 1,
-    name: 'Profile',
-    icon: 'account_box',
+    name: 'My List',
+    icon: 'list_alt',
   },
   {
     index: 2,
@@ -97,9 +97,9 @@ class MyAccount extends Component {
   renderTabBody = (currentIndex) => {
     switch (currentIndex) {
       case 0:
-        return <MyList />;
-      case 1:
         return <Profile />;
+      case 1:
+        return <MyList />;
       case 2:
         return <Message />;
       default:

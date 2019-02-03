@@ -236,7 +236,8 @@ export const updateProfile = async (req, res: Response) => {
     }
 
     return res.json({
-      success: true
+      success: true,
+      displayName,
     });
   } catch (e) {
     console.log(e.message);

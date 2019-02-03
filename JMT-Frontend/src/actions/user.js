@@ -68,9 +68,10 @@ export const updateProfile = (params) => {
     })
       .then((res) => {
         // TODO
+        console.log('res = ', res);
         dispatch({
           type: UPDATE_PROFILE_SUCCESS,
-          payload: res
+          payload: res.data.displayName,
         });
         dispatch(App.loadingDone());
       })
