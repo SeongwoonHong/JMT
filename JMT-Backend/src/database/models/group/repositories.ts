@@ -13,3 +13,17 @@ export const getGroup = async id => {
     throw new Error(e);
   }
 };
+
+export const getGroupsByUser = async (userId) => {
+  try {
+    const groupData = await Query.getGroupsByUser(userId);
+    const { rows } = groupData;
+
+    return {
+      success: true,
+      result: rows,
+    }
+  } catch (e) {
+    throw new Error(e);
+  }
+};

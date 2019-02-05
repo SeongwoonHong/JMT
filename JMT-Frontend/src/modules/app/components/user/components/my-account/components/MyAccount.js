@@ -249,6 +249,11 @@ const StyledMenuText = styled.div`
 
 const StyledTabBodyContainer = styled.div`
   padding: 20px;
+  background-color: ${colors.lightPink};
+
+  input {
+    background-color: initial;
+  }
 `;
 
 const StyledInputWrapper = styled.div`

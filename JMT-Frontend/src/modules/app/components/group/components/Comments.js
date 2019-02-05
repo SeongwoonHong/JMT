@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 import TransitionGroup from 'react-transition-group-plus';
 import { Comment } from 'components';
 

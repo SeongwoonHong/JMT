@@ -64,6 +64,10 @@ const StyledInputContainer = styled.div`
 const StyledInput = styled.input`
   font-size: 18px;
   color: ${colors.inputColor};
-  background-color: ${props => props.disabled && colors.lightGrey};
-  opacity: ${props => props.disabled && '0.5'};
+
+  ${props => props.disabled && `
+    background-color: ${colors.lightGrey};
+    opacity: 0.5;
+    cursor: not-allowed;
+  `};
 `;

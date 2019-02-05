@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { colors } from 'utils/colors';
+import { colors } from 'constants';
 import { Loader } from 'components';
 import Comments from './Comments';
 
