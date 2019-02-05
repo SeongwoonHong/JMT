@@ -33,7 +33,7 @@ export const getTimeWithPeriod = (time) => {
 };
 
 
-export const convertDateObject = (dateObj) => {
+export const convertDateObject = (dateObj, isSeconds = true) => {
   const year = dateObj.getFullYear();
   const month = dateObj.getMonth() + 1;
   const date = dateObj.getDate();
@@ -41,6 +41,9 @@ export const convertDateObject = (dateObj) => {
   const minutes = dateObj.getMinutes();
   const seconds = dateObj.getSeconds();
 
-  return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
-};
+  if (isSeconds) {
+    return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+  }
 
+  return `${year}-${month}-${date} ${hours}:${minutes}`;
+};

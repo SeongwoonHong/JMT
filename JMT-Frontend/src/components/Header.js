@@ -59,7 +59,7 @@ class Header extends Component {
               {
                 user ?
                   <div>
-                    <Link to="/main/user/my-account" className="menu-item">My Account</Link>
+                    <Link to="/main/user/my-account" className="menu-item" onClick={() => this.setState({ isMenuOpened: false })}>My Account</Link>
                     <div onClick={this.logout} className="menu-item">Log out</div>
                   </div>
                   :

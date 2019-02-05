@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import { App } from './';
 
@@ -10,6 +11,10 @@ export const INSERT_COMMENT = 'INSERT_COMMENT';
 export const INSERT_COMMENT_FAIL = 'INSERT_COMMENT_FAIL';
 export const GET_GROUP = 'GET_GROUP';
 export const GET_GROUP_FAIL = 'GET_GROUP_FAIL';
+export const SUB_LOADING_START = 'SUB_LOADING_START';
+export const SUB_LOADING_DONE = 'SUB_LOADING_DONE';
+export const GET_GROUPS_BY_USER = 'GET_GROUPS_BY_USER';
+export const GET_GROUPS_BY_USER_FAIL = 'GET_GROUPS_BY_USER_FAIL';
 /**
  * Action Creators
  */
@@ -57,6 +62,30 @@ export const insertComment = (data) => {
           type: INSERT_COMMENT_FAIL,
           payload: e
         });
+      });
+  };
+};
+
+export const getGroupsByUser = () => {
+  return (dispatch) => {
+    dispatch({
+      type: SUB_LOADING_START,
+      payload: 'getGroupsByUser',
+    });
+
+    return axios.get('/api/group/getGroupsByUser')
+      .then((res) => {
+        dispatch({ type: SUB_LOADING_DONE });
+        dispatch({
+          type: GET_GROUPS_BY_USER,
+          payload: res.data.result,
+        });
+      })
+      .catch(({ response }) => {
+        console.log(response.data.msg);
+        toast.error(response.data.msg);
+        dispatch({ type: SUB_LOADING_DONE });
+        dispatch(App.loadingDone());
       });
   };
 };

@@ -16,3 +16,18 @@ export const getGroup = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getGroupsByUser = async (req, res: Response) => {
+  const { userId } = req.decoded;
+
+  try {
+    const result = await groupRepository.getGroupsByUser(userId);
+
+    return res.json(result);
+  } catch (e) {
+    return res.status(404).json({
+      success: false,
+      msg: e.message,
+    })
+  }
+};

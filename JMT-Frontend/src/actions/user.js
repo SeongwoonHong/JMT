@@ -67,13 +67,12 @@ export const updateProfile = (params) => {
       password: params.password,
     })
       .then((res) => {
-        // TODO
-        console.log('res = ', res);
         dispatch({
           type: UPDATE_PROFILE_SUCCESS,
           payload: res.data.displayName,
         });
         dispatch(App.loadingDone());
+        toast.success('Successfully updated');
       })
       .catch(({ response }) => {
         console.log(err);
@@ -83,6 +82,7 @@ export const updateProfile = (params) => {
           msg: response.data.msg,
         });
         dispatch(App.loadingDone());
+        toast.error(response.data.msg);
       });
   };
 };
@@ -96,8 +96,6 @@ export const updateProfilePicture = (profilePicture) => {
       profilePicture,
     })
       .then((res) => {
-        // TODO
-        console.log('res = ', res);
         dispatch({
           type: UPDATE_PROFILE_PICTURE_SUCCESS,
           payload: res.data.profilePicture
