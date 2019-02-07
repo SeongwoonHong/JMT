@@ -1,4 +1,4 @@
-export default class Group {
+export class Group {
   public id?: number;
   public date: string;
   public categoryId: number;
@@ -13,3 +13,4 @@ export default class Group {
     this.restaurantName = group.restaurantName;
   }
 }
+

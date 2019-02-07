@@ -57,8 +57,10 @@ class RestaurantDetail extends Component {
     const { id } = this.state;
     if (fromGroupPage) {
       dispatch(Group.getGroup(activeGroup.restaurantid));
+
       return dispatch(Restaurant.getRestaurantDetail(activeGroup.restaurantid));
     }
+
     return dispatch(Restaurant.getRestaurantDetail(id));
   };
   /**
@@ -135,7 +137,7 @@ class RestaurantDetail extends Component {
 
   saveDate = () => {
     const { scheduleDate } = this.state;
-    const { dispatch, user, restaurants } = this.props;
+    const { dispatch, restaurants } = this.props;
 
     if (!scheduleDate) return false;
 
@@ -143,9 +145,9 @@ class RestaurantDetail extends Component {
 
     dispatch(
       Restaurant.joinRestaurant(
-        user.userId,
+        convertedScheduleDate,
         restaurants.activeRestaurant.id,
-        convertedScheduleDate
+        restaurants.activeRestaurant.name,
       )
     );
 

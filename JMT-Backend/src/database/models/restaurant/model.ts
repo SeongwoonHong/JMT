@@ -22,3 +22,11 @@ export default class Restaurant {
     this.longitude = restaurant.longitude;
   }
 }
+
+export interface joinRestaurantParams {
+  userId: number;
+  date: string;
+  restaurantId: string,
+  restaurantName: string,
+}
+

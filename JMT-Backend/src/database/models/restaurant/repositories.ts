@@ -1,16 +1,14 @@
 import db from '@db/index';
 
+import { joinRestaurantParams } from './model';
 import Query from './queries';
 
-export const joinRestaurant = async ({ userId, restaurantId, scheduleDate }) => {
+export const joinRestaurant = async (params: joinRestaurantParams) => {
   try {
-    const result = await Query.joinRestaurant({ userId, restaurantId, scheduleDate });
+    const result = await Query.joinRestaurant(params);
 
     return {
-      sucess: true,
-      userId,
-      restaurantId,
-      scheduleDate,
+      success: true,
     }
   } catch (e) {
     throw new Error(e);
