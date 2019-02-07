@@ -16,6 +16,7 @@ export const GET_RESTAURANT_DETAIL = 'GET_RESTAURANT_DETAIL';
 export const GET_RESTAURANT_DETAIL_FAIL = 'GET_RESTAURANT_DETAIL_FAIL';
 export const GET_RESTAURANT_AUTOCOMPLETE = 'GET_RESTAURANT_AUTOCOMPLETE';
 export const JOIN_RESTAURANT = 'JOIN_RESTAURANT';
+export const JOIN_RESTAURANT_FAIL = 'JOIN_RESTAURANT_FAIL';
 /**
  * Action Creators
  */
@@ -132,31 +133,29 @@ export const getRestaurantAutocomplete = ({
 
 /**
  *
- * @param {string} userId
+ * @param {string} date ex) '2018-12-14 20:30:0'
  * @param {string} restaurantId
- * @param {string} scheduleDate ex) '2018-12-14 20:30:0'
+ * @param {string} restaurantName
  */
-export const joinRestaurant = (userId, restaurantId, scheduleDate) => {
+export const joinRestaurant = (date, restaurantId, restaurantName) => {
   return (dispatch) => {
     dispatch(App.loadingStart('joinRestaurant'));
 
     return axios.post('/api/restaurant/joinRestaurant', {
-      userId,
+      date,
       restaurantId,
-      scheduleDate
+      restaurantName,
     })
       .then((res) => {
+        console.log('res = ', res);
+        dispatch({ type: JOIN_RESTAURANT });
         dispatch(App.loadingDone());
-        dispatch({
-          type: JOIN_RESTAURANT,
-          payload: res.data
-        });
-
-        return toast.success('Saved');
       })
       .catch(({ response }) => {
         console.log(response.data.msg);
-        return toast.error(response.data.msg);
+        toast.error(response.data.msg);
+        dispatch({ type: JOIN_RESTAURANT_FAIL });
+        dispatch(App.loadingDone());
       });
   };
 };

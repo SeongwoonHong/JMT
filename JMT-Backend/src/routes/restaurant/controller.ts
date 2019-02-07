@@ -101,16 +101,23 @@ export const getRestaurantAutoComplete = async (req: Request, res: Response) => 
 }
 
 export const joinRestaurant = async (req, res: Response) => {
-  const { userId, restaurantId, scheduleDate } = req.body;
+  const { userId } = req.decoded;
+  const { date, restaurantId, restaurantName } = req.body;
 
   try {
-    const result = await restaurantRepository.joinRestaurant({ userId, restaurantId, scheduleDate });
+    await restaurantRepository.joinRestaurant({ userId, date, restaurantId, restaurantName });
 
-    return res.json(result);
+    return res.json({
+      success: true,
+      userId,
+      date,
+      restaurantId,
+      restaurantName,
+    });
   } catch (e) {
     return res.status(404).json({
       success: false,
       msg: e.message,
-    });
+    })
   }
 };
