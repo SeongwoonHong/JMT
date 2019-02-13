@@ -104,7 +104,7 @@ export const updateProfilePicture = (profilePicture) => {
         toast.success('Successfully updated');
       })
       .catch(({ response }) => {
-        console.log(err);
+        console.log(response.data.msg);
         dispatch({
           type: UPDATE_PROFILE_PICTURE_FAILURE,
           success: false,
