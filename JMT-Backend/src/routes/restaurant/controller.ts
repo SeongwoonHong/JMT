@@ -105,6 +105,15 @@ export const joinRestaurant = async (req, res: Response) => {
   const { date, restaurantId, restaurantName } = req.body;
 
   try {
+    const userRes = await restaurantRepository.getUserFromUserRestaurant({ userId, date, restaurantId });
+
+    if (!userRes.success) {
+      return res.status(400).json({
+        success: false,
+        msg: userRes.msg,
+      });
+    }
+
     await restaurantRepository.joinRestaurant({ userId, date, restaurantId, restaurantName });
 
     return res.json({

@@ -23,10 +23,9 @@ export default class Restaurant {
   }
 }
 
-export interface joinRestaurantParams {
+export interface userRestaurant {
   userId: number;
   date: string;
   restaurantId: string,
   restaurantName: string,
 }
-

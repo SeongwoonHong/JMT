@@ -146,13 +146,13 @@ export const joinRestaurant = (date, restaurantId, restaurantName) => {
       restaurantId,
       restaurantName,
     })
-      .then((res) => {
-        console.log('res = ', res);
+      .then(() => {
         dispatch({ type: JOIN_RESTAURANT });
         dispatch(App.loadingDone());
+        toast.success('Saved');
       })
       .catch(({ response }) => {
-        console.log(response.data.msg);
+        console.log(response.data);
         toast.error(response.data.msg);
         dispatch({ type: JOIN_RESTAURANT_FAIL });
         dispatch(App.loadingDone());

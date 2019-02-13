@@ -355,4 +355,3 @@ export const updateProfilePicture = async (req, res: Response) => {
     return res.status(400).json(e.message);
   }
 };
-

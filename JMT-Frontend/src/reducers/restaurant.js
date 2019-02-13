@@ -34,7 +34,7 @@ export default function (state = initialState, action) {
       if (duplicate.length) {
         return {
           ...state,
-          myRestaurants: myRestaurants.map((restaurant) => {
+          myRestaurants: state.myRestaurants.map((restaurant) => {
             if (restaurant.restaurantId === action) {
               return newRestaurant;
             }
