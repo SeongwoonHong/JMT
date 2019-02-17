@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Restaurant, Group } from 'actions';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import phoneIcon from 'assets/phoneIcon.png';
 import { colors } from 'constants';
 import { RatingCircle, Loader, Arrow, Button, ModalTitle } from 'components';
@@ -174,6 +174,7 @@ class RestaurantDetail extends Component {
             timeCaption="time"
           />
         </div>
+        <Link to="/main/group?id=1">test link</Link>
         <Button style={{ marginTop: '20px' }} onClick={this.saveDate}>
           Save
         </Button>

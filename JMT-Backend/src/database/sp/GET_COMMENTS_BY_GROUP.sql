@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION public.get_comments_by_group(IN "_groupId" integer)
-    RETURNS TABLE("id" integer, "groupId" integer, "userId" integer, content character varying, date date)
+    RETURNS TABLE("id" integer, "groupId" integer, "userId" integer, "content" character varying, "date" date)
     LANGUAGE 'plpgsql'
     VOLATILE
     PARALLEL UNSAFE

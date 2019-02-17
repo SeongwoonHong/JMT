@@ -10,17 +10,20 @@ import s3 from '@utils/s3';
 import * as uuid from 'uuid/v1';
 // TODO - how to properly handle errors (through the app)
 
-export const sendSignupEmail = async (req: Request, res: Response): Promise<Response> => {
+export const sendSignupEmail = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   const { email } = req.body;
   const schema = Joi.object().keys({
-    email: validationUtils.isEmail,
+    email: validationUtils.isEmail
   });
   const validationResult = Joi.validate({ email }, schema);
 
   if (validationResult.error) {
     return res.status(400).json({
       msg: validationResult.error.details[0].message,
-      success: false,
+      success: false
     });
   }
 
@@ -40,14 +43,17 @@ export const sendSignupEmail = async (req: Request, res: Response): Promise<Resp
     console.log(e);
     return res.json(400).json(e);
   }
-}
+};
 
-export const signup = async (req: Request, res: Response): Promise<Response> => {
+export const signup = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   const { displayName, password, email, profilePicture } = req.body;
   const schema = Joi.object().keys({
     displayName: validationUtils.isDisplayName,
     password: validationUtils.isPassword,
-    email: validationUtils.isEmail,
+    email: validationUtils.isEmail
   });
   let hashedPassword: string = null;
   const result: any = Joi.validate({ displayName, password, email }, schema);
@@ -55,14 +61,17 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
   if (result.error) {
     return res.status(400).json({
       msg: result.error.details[0].message,
-      success: false,
-    })
+      success: false
+    });
   }
 
   try {
     hashedPassword = await bcryptUtils.hash(password);
 
-    const userRes = await userRepository.getUserByEmailOrDisplayName({ displayName, email });
+    const userRes = await userRepository.getUserByEmailOrDisplayName({
+      displayName,
+      email
+    });
 
     /**
      * when the user does not exist on our server
@@ -76,7 +85,13 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
         await sendPresignedUrlWithFile(bucketObject.url, profilePicture);
       }
 
-      const result = await userRepository.signup({ displayName, password, hashedPassword, email, profilePicture: bucketObject ? bucketObject.key : '' })
+      const result = await userRepository.signup({
+        displayName,
+        password,
+        hashedPassword,
+        email,
+        profilePicture: bucketObject ? bucketObject.key : ''
+      });
 
       return res.json({
         result,
@@ -84,12 +99,12 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
       });
     }
 
-    return res.status(400).json(userRes)
+    return res.status(400).json(userRes);
   } catch (e) {
     console.log(e);
     return res.status(400).json(e);
   }
-}
+};
 
 /**
  * upload profile picture
@@ -97,14 +112,14 @@ export const signup = async (req: Request, res: Response): Promise<Response> => 
 const getPresignedUrlFromS3 = async (email: string, profilePicture) => {
   const key = `${email}/${uuid()}.jpeg`;
   const { AWS_BUCKET: Bucket } = process.env;
-  const type = profilePicture.split(';')[0].split('/')[1]
+  const type = profilePicture.split(';')[0].split('/')[1];
 
   try {
     const presignedUrl = await s3.getSignedUrl('putObject', {
       Bucket,
       Key: key,
       ContentEncoding: 'base64',
-      ContentType: `image/${type}`,
+      ContentType: `image/${type}`
     });
 
     return {
@@ -115,50 +130,50 @@ const getPresignedUrlFromS3 = async (email: string, profilePicture) => {
     console.log(e.message);
     return {
       success: false
-    }
+    };
   }
 };
 
 const sendPresignedUrlWithFile = async (url: string, file) => {
   try {
-    const type = file.split(';')[0].split('/')[1]
-    const buffer = Buffer.from(file.replace(/^data:image\/\w+;base64,/, ""),'base64');
-    const {
-      YELP_API_KEY: yelpApiKey
-    } = process.env;
+    const type = file.split(';')[0].split('/')[1];
+    const buffer = Buffer.from(
+      file.replace(/^data:image\/\w+;base64,/, ''),
+      'base64'
+    );
+    const { YELP_API_KEY: yelpApiKey } = process.env;
 
     delete axios.defaults.headers['Authorization'];
-  
+
     const result = await axios.put(url, buffer, {
       headers: {
         'Content-Type': `image/${type}`,
         'Content-Encoding': 'base64'
-      },
+      }
     });
 
     axios.defaults.headers['Authorization'] = `Bearer ${yelpApiKey}`;
 
     return result;
-  }
-  catch (e) {
+  } catch (e) {
     console.log(e.message);
     throw new Error(e);
   }
-}
+};
 
 export const login = async (req, res: Response) => {
   const { email, password } = req.body;
   const schema = Joi.object().keys({
     email: validationUtils.isEmail,
-    password: validationUtils.isPassword,
+    password: validationUtils.isPassword
   });
   const result: any = Joi.validate({ email, password }, schema);
 
   if (result.error) {
     res.status(400).json({
       msg: result.error.details[0].message,
-      success: false,
-    })
+      success: false
+    });
   }
 
   try {
@@ -169,7 +184,12 @@ export const login = async (req, res: Response) => {
     }
 
     const { userId, displayName, profilePicture, signupDate } = userRes.result;
-    const token = await jwtUtils.createToken({ email, displayName, signupDate, userId });
+    const token = await jwtUtils.createToken({
+      email,
+      displayName,
+      signupDate,
+      userId
+    });
 
     return res.json({
       success: true,
@@ -177,21 +197,22 @@ export const login = async (req, res: Response) => {
       userId: userId,
       displayName,
       email,
-      profilePicture,
-    })
+      profilePicture
+    });
   } catch (e) {
     console.log(e.message);
     return res.status(400).json(e.message);
   }
-}
+};
 
 export const checkUser = async (req, res: Response) => {
   try {
     const userRes = await userRepository.getUserByEmail(req.decoded.email);
+
     const userData = {
       email: req.decoded.email,
       profilePicture: req.decoded.profilePicture,
-      signupDate: req.decoded.signupDate,
+      signupDate: req.decoded.signupDate
     };
 
     return res.json({
@@ -201,13 +222,13 @@ export const checkUser = async (req, res: Response) => {
         token: req.token,
         displayName: userRes.rows[0].displayName,
         profilePicture: userRes.rows[0].profilePicture,
-        userId: userRes.rows[0].userId,
+        userId: userRes.rows[0].userId
       }
     });
   } catch (e) {
     return res.status(400).json(e.message);
   }
-}
+};
 
 export const updateProfile = async (req, res: Response) => {
   const { displayName, password } = req.body;
@@ -220,8 +241,8 @@ export const updateProfile = async (req, res: Response) => {
   if (result.error) {
     res.status(400).json({
       msg: result.error,
-      success: false,
-    })
+      success: false
+    });
   }
   let hashedPassword: string = null;
   const { email } = req.decoded;
@@ -229,15 +250,19 @@ export const updateProfile = async (req, res: Response) => {
   try {
     hashedPassword = await bcryptUtils.hash(password);
 
-    const userRes = await userRepository.updateUserProfile({ email, displayName, password: hashedPassword });
-    
+    const userRes = await userRepository.updateUserProfile({
+      email,
+      displayName,
+      password: hashedPassword
+    });
+
     if (!userRes.success) {
       return res.status(400).json(userRes);
     }
 
     return res.json({
       success: true,
-      displayName,
+      displayName
     });
   } catch (e) {
     console.log(e.message);
@@ -248,14 +273,14 @@ export const updateProfile = async (req, res: Response) => {
 export const sendResetPasswordEmail = async (req, res: Response) => {
   const { email } = req.body;
   const schema = Joi.object().keys({
-    email: validationUtils.isEmail,
+    email: validationUtils.isEmail
   });
   const result: any = Joi.validate({ email }, schema);
 
   if (result.error) {
     res.status(400).json({
       msg: result.error,
-      success: false,
+      success: false
     });
   }
 
@@ -265,7 +290,7 @@ export const sendResetPasswordEmail = async (req, res: Response) => {
     if (!userData.success) {
       return res.status(400).json({
         success: false,
-        msg: 'Account does not exist',
+        msg: 'Account does not exist'
       });
     }
     const token = await jwtUtils.createToken({ email }, 'userInfo', '1d');
@@ -285,24 +310,27 @@ export const sendResetPasswordEmail = async (req, res: Response) => {
 export const updatePassword = async (req, res: Response) => {
   const { password, token } = req.body;
   const schema = Joi.object().keys({
-    password: validationUtils.isPassword,
+    password: validationUtils.isPassword
   });
   const result: any = Joi.validate({ password }, schema);
 
   if (result.error) {
     res.status(400).json({
       msg: result.error,
-      success: false,
+      success: false
     });
   }
 
   try {
     const decoded = await jwtUtils.verify(token);
     const hashedPassword: string = await bcryptUtils.hash(password);
-    await userRepository.updatePassword({ email: decoded.email, password: hashedPassword });
+    await userRepository.updatePassword({
+      email: decoded.email,
+      password: hashedPassword
+    });
 
     return res.json({
-      success: true,
+      success: true
     });
   } catch (e) {
     console.log(e.message);
@@ -311,20 +339,21 @@ export const updatePassword = async (req, res: Response) => {
 };
 
 export const verifyToken = async (req, res: Response) => {
-  return jwtUtils.verify(req.query.token)
-    .then((decoded) => {
+  return jwtUtils
+    .verify(req.query.token)
+    .then(decoded => {
       // TODO: need to define a custom type for express request
       return res.json({
         success: true,
-        decoded,
+        decoded
       });
     })
-    .catch((err) => {
+    .catch(err => {
       return res.status(403).json({
         success: false,
-        msg: err.message,
-      })
-    })
+        msg: err.message
+      });
+    });
 };
 
 export const updateProfilePicture = async (req, res: Response) => {
@@ -338,21 +367,23 @@ export const updateProfilePicture = async (req, res: Response) => {
     let bucketObject;
     let params = {
       Bucket,
-      Key: currentProfilePicture,
-    }
+      Key: currentProfilePicture
+    };
 
     await s3.deleteObject(params).promise();
     bucketObject = await getPresignedUrlFromS3(email, profilePicture);
     await sendPresignedUrlWithFile(bucketObject.url, profilePicture);
-    await userRepository.updateProfilePicture({ id: userId, profilePicture: bucketObject.key });
+    await userRepository.updateProfilePicture({
+      id: userId,
+      profilePicture: bucketObject.key
+    });
 
     return res.json({
       success: true,
-      profilePicture: bucketObject.key,
+      profilePicture: bucketObject.key
     });
   } catch (e) {
     console.log(e.message);
     return res.status(400).json(e.message);
   }
 };
-

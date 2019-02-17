@@ -3,7 +3,7 @@ import { Auth, User } from 'actions';
 const initialState = {
   registered: false,
   user: null,
-  error: null,
+  error: null
 };
 
 export default function (state = initialState, action) {
@@ -18,19 +18,19 @@ export default function (state = initialState, action) {
       return {
         ...state,
         registered: action.registered,
-        error: action.payload,
+        error: action.payload
       };
     case Auth.LOGIN:
       return {
         ...state,
         user: action.payload,
-        error: null,
+        error: null
       };
     case Auth.LOGIN_FAIL:
       return {
         ...state,
         user: null,
-        error: action.payload,
+        error: action.payload
       };
     case User.UPDATE_PROFILE_SUCCESS:
       return {
