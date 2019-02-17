@@ -16,49 +16,50 @@ export const LOG_OUT = 'LOG_OUT';
 
 /**
  * Action creator
-*/
+ */
 
 const cookies = new Cookies();
 
 export const signupSuccess = () => {
-  return ({
+  return {
     type: SIGNUP,
-    registered: true,
-  });
+    registered: true
+  };
 };
 
 export const signupFail = (error) => {
-  return ({
+  return {
     type: SIGNUP_FAIL,
     registered: false,
-    payload: error,
-  });
+    payload: error
+  };
 };
 
 export const loginSuccess = (user) => {
-  return ({
+  return {
     type: LOGIN,
-    payload: user,
-  });
+    payload: user
+  };
 };
 
 export const loginFail = (error) => {
-  return ({
+  return {
     type: LOGIN_FAIL,
-    payload: error,
-  });
+    payload: error
+  };
 };
 
 export const signup = (params) => {
   return (dispatch) => {
     dispatch(App.loadingStart('signup'));
 
-    return axios.post('/api/user/signup', {
-      displayName: params.displayName,
-      password: params.password,
-      email: params.email,
-      profilePicture: params.profilePicture,
-    })
+    return axios
+      .post('/api/user/signup', {
+        displayName: params.displayName,
+        password: params.password,
+        email: params.email,
+        profilePicture: params.profilePicture
+      })
       .then(() => {
         dispatch(App.loadingDone());
         toast.success('Signup Success!');
@@ -77,16 +78,16 @@ export const login = (params, reRoute) => {
   return (dispatch) => {
     dispatch(App.loadingStart('login'));
 
-    return axios.post('/api/user/login', {
-      email: params.email,
-      password: params.password,
-    })
+    return axios
+      .post('/api/user/login', {
+        email: params.email,
+        password: params.password
+      })
       .then(({ data }) => {
         dispatch(App.loadingDone());
         cookies.set('JMT_AUTH_TOKEN', data.token, { path: '/' });
         toast.success('Login Success!');
         history.push(reRoute);
-
         return dispatch(loginSuccess(data));
       })
       .catch(({ response }) => {
@@ -102,9 +103,10 @@ export const tokenDecode = (token) => {
   return (dispatch) => {
     dispatch(App.loadingStart('tokenDecode'));
 
-    return axios.get('/api/user/verifyToken', {
-      params: { token }
-    })
+    return axios
+      .get('/api/user/verifyToken', {
+        params: { token }
+      })
       .then(({ data }) => {
         dispatch(App.loadingDone());
 
@@ -127,9 +129,10 @@ export const checkLogin = (token) => {
   return (dispatch) => {
     dispatch(App.loadingStart('checkLogin'));
 
-    return axios.get('/api/user/checkUser', {
-      params: { token }
-    })
+    return axios
+      .get('/api/user/checkUser', {
+        params: { token }
+      })
       .then(({ data }) => {
         dispatch(loginSuccess(data.userData));
 

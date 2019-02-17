@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Group as GroupAction } from 'actions';
+import history from 'utils/history';
 import RestaurantDetail from '../../restaurant-detail';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
@@ -26,15 +27,24 @@ class Group extends Component {
     const { dispatch } = this.props;
     const { id } = this.state;
 
-    return dispatch(GroupAction.getGroup(id));
+    dispatch(GroupAction.checkUserGroup(id)).then((res) => {
+      if (!this.findUserInGroup(res.payload)) {
+        history.push('/404');
+      }
+    });
+    dispatch(GroupAction.getGroup(id));
   };
+
+  findUserInGroup = users =>
+    users.some(e => e.userId === this.props.user.userId);
 
   render() {
     const {
-      group: { activeGroup }
+      group: { activeGroup },
+      user
     } = this.props;
 
-    return !activeGroup.id ? null : (
+    return !activeGroup.id || !user.userId ? null : (
       <StyledGroup>
         <RestaurantDetail activeGroup={activeGroup} fromGroupPage />
         <CommentList />

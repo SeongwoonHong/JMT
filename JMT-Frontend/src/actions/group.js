@@ -54,8 +54,8 @@ export const checkUserGroup = (userId) => {
         }
       })
       .then((res) => {
-        dispatch({ type: CHECK_USER_GROUP, payload: res.data.result });
         dispatch(App.loadingDone());
+        return dispatch({ type: CHECK_USER_GROUP, payload: res.data.result });
       })
       .catch((e) => {
         // TODO - Toaster

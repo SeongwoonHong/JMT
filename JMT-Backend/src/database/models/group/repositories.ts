@@ -35,7 +35,7 @@ export const checkUserGroup = async id => {
 
     return {
       success: true,
-      result: rows[0]
+      result: rows
     };
   } catch (e) {
     throw new Error(e);
