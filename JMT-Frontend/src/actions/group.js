@@ -44,13 +44,13 @@ export const getGroup = (data) => {
   };
 };
 
-export const checkUserGroup = (userId) => {
+export const checkUserGroup = (groupId) => {
   return (dispatch) => {
     dispatch(App.loadingStart('checkUserGroup'));
     return axios
       .get('/api/group/checkUserGroup', {
         params: {
-          id: userId
+          id: groupId
         }
       })
       .then((res) => {
@@ -95,15 +95,16 @@ export const getGroupsByUser = () => {
   return (dispatch) => {
     dispatch({
       type: SUB_LOADING_START,
-      payload: 'getGroupsByUser',
+      payload: 'getGroupsByUser'
     });
 
-    return axios.get('/api/group/getGroupsByUser')
+    return axios
+      .get('/api/group/getGroupsByUser')
       .then((res) => {
         dispatch({ type: SUB_LOADING_DONE });
         dispatch({
           type: GET_GROUPS_BY_USER,
-          payload: res.data.result,
+          payload: res.data.result
         });
       })
       .catch(({ response }) => {

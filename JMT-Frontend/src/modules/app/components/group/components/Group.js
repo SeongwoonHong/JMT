@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Group as GroupAction } from 'actions';
-import history from 'utils/history';
+import { Redirect } from 'react-router-dom';
 import RestaurantDetail from '../../restaurant-detail';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
@@ -19,7 +19,8 @@ class Group extends Component {
     const params = new URLSearchParams(location.search);
 
     this.state = {
-      id: params.get('id')
+      id: params.get('id'),
+      notInGroup: false
     };
   }
 
@@ -29,10 +30,9 @@ class Group extends Component {
 
     dispatch(GroupAction.checkUserGroup(id)).then((res) => {
       if (!this.findUserInGroup(res.payload)) {
-        history.push('/404');
-      }
+        this.setState({ notInGroup: true });
+      } else dispatch(GroupAction.getGroup(id));
     });
-    dispatch(GroupAction.getGroup(id));
   };
 
   findUserInGroup = users =>
@@ -43,8 +43,12 @@ class Group extends Component {
       group: { activeGroup },
       user
     } = this.props;
+    const { notInGroup } = this.state;
 
-    return !activeGroup.id || !user.userId ? null : (
+    if (notInGroup) return <Redirect to={{ pathname: '/404' }} />;
+    if (!activeGroup.id || !user.userId) return null;
+
+    return (
       <StyledGroup>
         <RestaurantDetail activeGroup={activeGroup} fromGroupPage />
         <CommentList />
@@ -60,19 +64,4 @@ const StyledGroup = styled.div`
   width: 100vw;
   height: 100vh;
   position: relative;
-
-  .selectionIndicators {
-    position: absolute;
-    top: 75%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .btn-home {
-    position: absolute;
-    bottom: 20px;
-    width: 90%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
 `;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Restaurant, Group } from 'actions';
+import { Restaurant } from 'actions';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import phoneIcon from 'assets/phoneIcon.png';
