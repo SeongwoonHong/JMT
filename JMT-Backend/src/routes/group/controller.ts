@@ -38,8 +38,6 @@ export const checkUserGroup = async (req: Request, res: Response) => {
   try {
     const result = await groupRepository.checkUserGroup(id);
 
-    console.log(result);
-
     return res.json(result);
   } catch (e) {
     return res.status(404).json({

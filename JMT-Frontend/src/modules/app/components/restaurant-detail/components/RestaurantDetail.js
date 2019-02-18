@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Restaurant, Group } from 'actions';
+import { Restaurant } from 'actions';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import phoneIcon from 'assets/phoneIcon.png';
@@ -56,7 +56,6 @@ class RestaurantDetail extends Component {
     const { dispatch, activeGroup, fromGroupPage } = this.props;
     const { id } = this.state;
     if (fromGroupPage) {
-      dispatch(Group.getGroup(activeGroup.restaurantid));
       return dispatch(Restaurant.getRestaurantDetail(activeGroup.restaurantid));
     }
     return dispatch(Restaurant.getRestaurantDetail(id));
