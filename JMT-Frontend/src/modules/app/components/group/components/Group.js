@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Group as GroupAction } from 'actions';
 import { Redirect } from 'react-router-dom';
+import { Loader } from 'components';
 import RestaurantDetail from '../../restaurant-detail';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
@@ -46,7 +47,7 @@ class Group extends Component {
     const { notInGroup } = this.state;
 
     if (notInGroup) return <Redirect to={{ pathname: '/404' }} />;
-    if (!activeGroup.id || !user.userId) return null;
+    if (!activeGroup.id || !user.userId) return <Loader />;
 
     return (
       <StyledGroup>

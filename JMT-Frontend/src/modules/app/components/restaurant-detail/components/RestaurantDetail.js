@@ -55,12 +55,7 @@ class RestaurantDetail extends Component {
   componentWillMount = () => {
     const { dispatch, activeGroup, fromGroupPage } = this.props;
     const { id } = this.state;
-    if (fromGroupPage) {
-      dispatch(Group.getGroup(activeGroup.restaurantid));
-
-      return dispatch(Restaurant.getRestaurantDetail(activeGroup.restaurantid));
-    }
-
+    if (fromGroupPage) return dispatch(Restaurant.getRestaurantDetail(activeGroup.restaurantid));
     return dispatch(Restaurant.getRestaurantDetail(id));
   };
   /**
