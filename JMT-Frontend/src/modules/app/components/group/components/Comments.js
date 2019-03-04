@@ -11,20 +11,21 @@ class Comments extends Component {
     return (
       <StyledRestaurantList>
         <TransitionGroup>
-          {comments.length > 0
-            ? comments.map((comment, index) => {
-                return (
-                  <Comment
-                    data={comment}
-                    key={comment.id}
-                    delay={index / comments.length}
-                    shouldAnimate
-                    isSmallView
-                  />
-                );
-              })
-            : null // Loader goes here
-          }
+          {comments
+            .filter((comment) => comment.depth === 0)
+            .map((comment, index) => {
+              return (
+                <Comment
+                  comments={comments}
+                  replies={comment.children || []}
+                  data={comment}
+                  key={comment.id}
+                  delay={index / comments.length}
+                  shouldAnimate
+                  isSmallView
+                />
+              );
+            })}
         </TransitionGroup>
       </StyledRestaurantList>
     );

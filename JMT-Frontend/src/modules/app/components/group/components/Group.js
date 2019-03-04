@@ -8,6 +8,9 @@ import RestaurantDetail from '../../restaurant-detail';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 
+import axios from 'axios';
+import { parseComments } from 'utils/parse-comments';
+
 @connect(state => ({
   group: state.Group,
   user: state.Auth.user
@@ -21,11 +24,15 @@ class Group extends Component {
 
     this.state = {
       id: params.get('id'),
-      notInGroup: false
+      notInGroup: false,
+      comments: [],
     };
   }
 
   componentDidMount = () => {
+    axios.get('/api/comments').then(a => {
+      this.setState({ comments: a.data.comments });
+    });
     const { dispatch } = this.props;
     const { id } = this.state;
 
@@ -52,7 +59,9 @@ class Group extends Component {
     return (
       <StyledGroup>
         <RestaurantDetail activeGroup={activeGroup} fromGroupPage />
-        <CommentList />
+        <CommentList
+          comments={this.state.comments || []}
+        />
         <CommentForm />
       </StyledGroup>
     );
