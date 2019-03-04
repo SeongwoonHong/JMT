@@ -6,15 +6,9 @@ import { Loader } from 'components';
 import Comments from './Comments';
 
 @connect(state => ({
-  comments: state.Comments,
   app: state.App
 }))
 class CommentList extends React.Component {
-  renderView = () => {
-    const { comments } = this.props;
-
-    return <Comments comments={comments.list} />;
-  };
 
   render() {
     const { app } = this.props;
@@ -26,7 +20,7 @@ class CommentList extends React.Component {
     return (
       <StyledDiv>
         <StyledHeader>Group Chat</StyledHeader>
-        {this.renderView()}
+        <Comments comments={this.props.comments} />
       </StyledDiv>
     );
   }
