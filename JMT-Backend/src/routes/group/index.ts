@@ -3,7 +3,7 @@ import { Router } from 'express';
 import * as controllers from './controller';
 import { tokenVerifyMiddleware } from '@middlewares/token-verify';
 
-class User {
+class Group {
   public router: Router;
 
   constructor() {
@@ -14,7 +14,8 @@ class User {
   private routes = (): void => {
     this.router.get('/getGroup', controllers.getGroup);
     this.router.get('/getGroupsByUser', tokenVerifyMiddleware, controllers.getGroupsByUser);
+    this.router.get('/checkUserGroup', controllers.checkUserGroup);
   };
 }
 
-export default new User().router;
+export default new Group().router;

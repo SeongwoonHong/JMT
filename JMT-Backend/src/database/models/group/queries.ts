@@ -8,6 +8,10 @@ class Query {
   public static getGroupsByUser = (params): Promise<any> => {
     return db.executeSP('GET_GROUPS_BY_USER', params);
   };
+
+  public static checkUserGroup = (params): Promise<any> => {
+    return db.executeSP('GET_USERS_BY_GROUP', params);
+  };
 }
 
 export default Query;

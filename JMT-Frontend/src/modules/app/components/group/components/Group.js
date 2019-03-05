@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Group as GroupAction } from 'actions';
+import { Redirect } from 'react-router-dom';
+import { Loader } from 'components';
 import RestaurantDetail from '../../restaurant-detail';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 
 @connect(state => ({
-  group: state.Group
+  group: state.Group,
+  user: state.Auth.user
 }))
 class Group extends Component {
   constructor(props) {
@@ -17,7 +20,8 @@ class Group extends Component {
     const params = new URLSearchParams(location.search);
 
     this.state = {
-      id: params.get('id')
+      id: params.get('id'),
+      notInGroup: false
     };
   }
 
@@ -25,15 +29,27 @@ class Group extends Component {
     const { dispatch } = this.props;
     const { id } = this.state;
 
-    return dispatch(GroupAction.getGroup(id));
+    dispatch(GroupAction.checkUserGroup(id)).then((res) => {
+      if (!this.findUserInGroup(res.payload)) {
+        this.setState({ notInGroup: true });
+      } else dispatch(GroupAction.getGroup(id));
+    });
   };
+
+  findUserInGroup = users =>
+    users.some(e => e.userId === this.props.user.userId);
 
   render() {
     const {
-      group: { activeGroup }
+      group: { activeGroup },
+      user
     } = this.props;
+    const { notInGroup } = this.state;
 
-    return !activeGroup.id ? null : (
+    if (notInGroup) return <Redirect to={{ pathname: '/404' }} />;
+    if (!activeGroup.id || !user.userId) return <Loader />;
+
+    return (
       <StyledGroup>
         <RestaurantDetail activeGroup={activeGroup} fromGroupPage />
         <CommentList />
@@ -49,19 +65,4 @@ const StyledGroup = styled.div`
   width: 100vw;
   height: 100vh;
   position: relative;
-
-  .selectionIndicators {
-    position: absolute;
-    top: 75%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .btn-home {
-    position: absolute;
-    bottom: 20px;
-    width: 90%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
 `;

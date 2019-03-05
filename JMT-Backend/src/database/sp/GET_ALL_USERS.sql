@@ -4,7 +4,7 @@
 
 CREATE OR REPLACE FUNCTION public.get_all_users(
 	)
-    RETURNS TABLE("userId" integer, "displayName" character varying, password character varying, email character varying, "profilePicture" text, "signupDate" date) 
+    RETURNS TABLE("userId" integer, "displayName" character varying, "password" character varying, "email" character varying, "profilePicture" text, "signupDate" date) 
     LANGUAGE 'plpgsql'
 
     COST 100

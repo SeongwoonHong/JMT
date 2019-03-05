@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION public.get_users_by_group(
 	"_groupId" integer)
-    RETURNS TABLE("userId" integer, "displayName" character varying, password character varying, email character varying, avatar text, verified boolean, "signupDate" date) 
+    RETURNS TABLE("userId" integer, "displayName" character varying, "email" character varying, "profilePicture" text, "signupDate" date) 
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -15,15 +15,13 @@ BEGIN
 	SELECT 
 		u."userId",
 		u."displayName",
-		u.password,
-		u.email,
-		u.avatar,
-		u.verified,
+		u."email",
+		u."profilePicture",
 		u."signupDate"
 	FROM users as u
 	JOIN user_group as ug
 	ON ug."userId" = u."userId"
-	WHERE ug.groupId = "_groupId";
+	WHERE ug."groupId" = "_groupId";
 	
 END;
 
