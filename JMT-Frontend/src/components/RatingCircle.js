@@ -10,9 +10,8 @@ const Circle = ({ percentage }) => (
   </StyledOuter>
 );
 
-export default class RatingCircle extends React.Component {
-  renderCircles = () => {
-    const { rating } = this.props;
+const RatingCircle = ({ rating }) => {
+  const renderCircles = () => {
     const fullCircle = Math.floor(rating);
     const dynamicCircle = rating - fullCircle;
     const emptyCircle = 5 - Math.ceil(rating);
@@ -29,18 +28,16 @@ export default class RatingCircle extends React.Component {
     }
 
     return circles;
-  }
+  };
 
-  render() {
-    return (
-      <StyledRatingContainer {...this.props}>
-        {
-          this.renderCircles()
-        }
-      </StyledRatingContainer>
-    );
-  }
-}
+  return (
+    <StyledRatingContainer {...this.props}>
+      {
+        renderCircles()
+      }
+    </StyledRatingContainer>
+  );
+};
 
 const StyledRatingContainer = styled.div`
   position: relative;
@@ -74,3 +71,5 @@ const StyledMaskRating = styled.div`
   height: 100%;
   background-color: ${colors.lightTheme};
 `;
+
+export default RatingCircle;

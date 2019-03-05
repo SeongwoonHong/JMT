@@ -41,3 +41,17 @@ export const checkUserGroup = async id => {
     throw new Error(e);
   }
 };
+
+export const getGroupsByRestaurant = async (restaurantId) => {
+  try {
+    const groupData = await Query.getGroupsByRestaurant(restaurantId);
+    const { rows } = groupData;
+
+    return {
+      success: true,
+      result: rows,
+    };
+  } catch (e) {
+    throw new Error(e);
+  }
+};

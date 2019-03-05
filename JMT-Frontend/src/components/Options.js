@@ -1,31 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { colors } from 'constants';
 
-class Options extends Component {
-  render() {
-    const {
-      className,
-      style,
-      label,
-      text,
-      onClick,
-      innerRef,
-    } = this.props;
-
-    return (
-      <StyledBorder
-        className={className}
-        style={style}
-        onClick={onClick}
-        innerRef={innerRef}
-      >
-        <StyledLabel>{label}</StyledLabel>
-        <StyledSelectOptions>{text}</StyledSelectOptions>
-      </StyledBorder>
-    );
-  }
-}
+const Options = ({
+  className,
+  style,
+  label,
+  text,
+  onClick,
+  innerRef,
+}) => {
+  return (
+    <StyledBorder
+      className={className}
+      style={style}
+      onClick={onClick}
+      innerRef={innerRef}
+    >
+      <StyledLabel>{label}</StyledLabel>
+      <StyledSelectOptions>{text}</StyledSelectOptions>
+    </StyledBorder>
+  );
+};
 
 const StyledBorder = styled.div`
   margin: 0 24px;
