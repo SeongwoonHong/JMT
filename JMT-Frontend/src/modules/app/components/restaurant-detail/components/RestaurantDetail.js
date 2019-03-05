@@ -15,6 +15,7 @@ import Modal from 'react-modal';
 import Map from './Map';
 import ImageSlide from './ImageSlide';
 import Categories from './Categories';
+import Groups from './Groups';
 
 const modalStyles = {
   content: {
@@ -48,7 +49,8 @@ class RestaurantDetail extends Component {
       imageIndex: 0,
       id: params.get('id'),
       scheduleDate: null,
-      isModalOpen: false
+      isModalOpen: false,
+      modalGroups: [],
     };
   }
 
@@ -150,7 +152,7 @@ class RestaurantDetail extends Component {
   };
 
   renderModal = () => {
-    const { scheduleDate } = this.state;
+    const { scheduleDate, modalGroups } = this.state;
 
     return (
       <Modal
@@ -175,6 +177,9 @@ class RestaurantDetail extends Component {
         <Button style={{ marginTop: '20px' }} onClick={this.saveDate}>
           Save
         </Button>
+        <Groups
+          groups={modalGroups}
+        />
       </Modal>
     );
   };

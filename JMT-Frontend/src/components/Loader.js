@@ -1,23 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { colors } from 'constants';
 
-class Loader extends Component {
-  render() {
-    const { isSmall } = this.props;
-
-    return (
-      <StyledLoader
-        id="bouncing-loader"
-        isSmall={isSmall}
-      >
-        <div />
-        <div />
-        <div />
-      </StyledLoader>
-    );
-  }
-}
+const Loader = ({ isSmall }) => {
+  return (
+    <StyledLoader
+      id="bouncing-loader"
+      isSmall={isSmall}
+    >
+      <div />
+      <div />
+      <div />
+    </StyledLoader>
+  );
+};
 
 const StyledLoader = styled.div`
   display: flex;

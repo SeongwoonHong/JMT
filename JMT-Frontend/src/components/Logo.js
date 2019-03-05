@@ -1,25 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { colors } from 'constants';
 import logo from 'assets/logo.png';
 
-class Logo extends Component {
-  render() {
-    const {
-      width,
-      height
-    } = this.props;
-
-    return (
-      <StyledLogoContainer
-        width={width}
-        height={height}
-      >
-        <img src={logo} alt="" />
-      </StyledLogoContainer>
-    );
-  }
-}
+const Logo = ({
+  width,
+  height,
+}) => {
+  return (
+    <StyledLogoContainer
+      width={width}
+      height={height}
+    >
+      <img src={logo} alt="" />
+    </StyledLogoContainer>
+  );
+};
 
 export default Logo;
 

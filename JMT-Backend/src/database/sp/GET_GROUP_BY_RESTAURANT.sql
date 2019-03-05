@@ -3,7 +3,6 @@
 -- DROP FUNCTION public.get_group_by_restaurant(integer, timestamp without time zone, character varying, character varying);
 
 CREATE OR REPLACE FUNCTION public.get_group_by_restaurant(
-	"_userId" integer,
 	_date timestamp without time zone,
 	"_restaurantId" character varying,
 	"_restaurantName" character varying)

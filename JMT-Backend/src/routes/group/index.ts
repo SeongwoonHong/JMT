@@ -15,6 +15,7 @@ class Group {
     this.router.get('/getGroup', controllers.getGroup);
     this.router.get('/getGroupsByUser', tokenVerifyMiddleware, controllers.getGroupsByUser);
     this.router.get('/checkUserGroup', controllers.checkUserGroup);
+    this.router.get('/getGroupsByRestaurant', controllers.getGroupsByRestaurant);
   };
 }
 

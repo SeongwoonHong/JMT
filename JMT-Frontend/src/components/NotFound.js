@@ -1,20 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'components';
 import { colors } from 'constants';
 
-class NotFound extends Component {
-  render() {
-    return (
-      <StyledDiv>
-        <StyledTopText>404</StyledTopText>
-        <StyledMiddleText>PAGE NOT</StyledMiddleText>
-        <StyledBottomText>FOUND</StyledBottomText>
-        <Button to="/" className="button">GO HOME</Button>
-      </StyledDiv>
-    );
-  }
-}
+const NotFound = () => {
+  return (
+    <StyledDiv>
+      <StyledTopText>404</StyledTopText>
+      <StyledMiddleText>PAGE NOT</StyledMiddleText>
+      <StyledBottomText>FOUND</StyledBottomText>
+      <Button to="/" className="button">GO HOME</Button>
+    </StyledDiv>
+  );
+};
 
 export default NotFound;
 

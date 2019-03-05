@@ -1,43 +1,40 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { colors } from 'constants';
 
-class InputTextField extends Component {
-  render() {
-    const {
-      label,
-      value,
-      type = 'text',
-      onChange,
-      name,
-      onBlur,
-      hasError,
-      disabled,
-      className,
-      required,
-    } = this.props;
-
-    return (
-      <StyledInputTextField className={className}>
-        <StyledLabel>
-          { label }
-          { required && <StyledAsterisk>*</StyledAsterisk> }
-        </StyledLabel>
-        <StyledInputContainer hasError={hasError}>
-          <StyledInput
-            type={type}
-            name={name}
-            value={value}
-            onChange={onChange}
-            onBlur={onBlur}
-            disabled={disabled}
-            {...this.props}
-          />
-        </StyledInputContainer>
-      </StyledInputTextField>
-    );
-  }
-}
+const InputTextField = ({
+  label,
+  value,
+  type = 'text',
+  onChange,
+  name,
+  onBlur,
+  hasError,
+  disabled,
+  className,
+  required,
+  ...rest,
+}) => {
+  return (
+    <StyledInputTextField className={className}>
+      <StyledLabel>
+        { label }
+        { required && <StyledAsterisk>*</StyledAsterisk> }
+      </StyledLabel>
+      <StyledInputContainer hasError={hasError}>
+        <StyledInput
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          disabled={disabled}
+          {...rest}
+        />
+      </StyledInputContainer>
+    </StyledInputTextField>
+  );
+};
 
 export default InputTextField;
 

@@ -1,30 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { colors } from 'constants';
 import { Link } from 'react-router-dom';
 
-class Button extends Component {
-  render() {
-    const {
-      className,
-      onClick,
-      children,
-      style,
-      ...rest
-    } = this.props;
-
-    return (
-      <StyledButton
-        className={className}
-        onClick={onClick}
-        style={style}
-        {...rest}
-      >
-        <StyledButtonText>{children}</StyledButtonText>
-      </StyledButton>
-    );
-  }
-}
+const Button = ({
+  className,
+  onClick,
+  children,
+  style,
+  ...rest,
+}) => {
+  return (
+    <StyledButton
+      className={className}
+      onClick={onClick}
+      style={style}
+      {...rest}
+    >
+      <StyledButtonText>{children}</StyledButtonText>
+    </StyledButton>
+  );
+};
 
 const StyledButton = styled(({ className, children, ...rest }) => rest.to ?
   (
