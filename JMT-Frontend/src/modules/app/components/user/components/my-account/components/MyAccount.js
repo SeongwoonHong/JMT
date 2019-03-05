@@ -3,13 +3,12 @@ import styled from 'styled-components';
 import { MaterialIcon, Button, ModalTitle, InputTextField } from 'components';
 import Modal from 'react-modal';
 import cx from 'classnames';
-import { User } from 'actions';
+import { User, Auth } from 'actions';
 import { colors } from 'constants';
 import getProfileUrl from 'utils/profile-url';
 import { connect } from 'react-redux';
 
 import MyList from './MyList';
-import Message from './Message';
 import Profile from './Profile';
 
 const modalStyles = {
@@ -40,11 +39,6 @@ const menus = [
   },
   {
     index: 2,
-    name: 'Message',
-    icon: 'message'
-  },
-  {
-    index: 3,
     name: 'Log Out',
     icon: 'lock_open',
   },
@@ -56,8 +50,9 @@ const menus = [
 class MyAccount extends Component {
   state = {
     currentIndex: 0,
-    isModalOpen: false,
+    isProfilePictureModalOpened: false,
     profilePicture: getProfileUrl(this.props.user.profilePicture),
+    isLogoutModalOpened: false,
   }
 
   onFileChange = (e) => {
@@ -72,6 +67,9 @@ class MyAccount extends Component {
   }
 
   setIndex = (index) => {
+    if (index === menus.length - 1) {
+      return this.toggleModal('isLogoutModalOpened');
+    }
     return this.setState({ currentIndex: index });
   }
 
@@ -87,11 +85,17 @@ class MyAccount extends Component {
   }
 
   closeModal = () => {
-    return this.setState({ isModalOpen: false });
+    return this.setState({ isProfilePictureModalOpened: false });
   }
 
-  toggleModal = () => {
-    return this.setState({ isModalOpen: !this.state.isModalOpen });
+  logout = () => {
+    const { dispatch } = this.props;
+
+    return dispatch(Auth.logout());
+  }
+
+  toggleModal = (mode) => {
+    return this.setState({ [mode]: !this.state[mode] });
   }
 
   renderTabBody = (currentIndex) => {
@@ -100,23 +104,20 @@ class MyAccount extends Component {
         return <Profile />;
       case 1:
         return <MyList />;
-      case 2:
-        return <Message />;
       default:
         return null;
     }
   }
 
   renderModal = () => {
-    const { profilePicture } = this.state;
+    const { profilePicture, isProfilePictureModalOpened } = this.state;
 
     return (
       <Modal
-        isOpen={this.state.isModalOpen}
+        isOpen={isProfilePictureModalOpened}
         style={modalStyles}
-        contentLabel="Example Modal"
       >
-        <ModalTitle modalClose={this.toggleModal} title="Update a Picture" />
+        <ModalTitle modalClose={() => this.toggleModal('isProfilePictureModalOpened')} title="Update a Picture" />
         <div style={{ marginTop: '50px' }}>
           <StyledInputWrapper>
             <InputTextField
@@ -138,6 +139,33 @@ class MyAccount extends Component {
     );
   }
 
+
+  renderLogoutModal = () => {
+    const { isLogoutModalOpened } = this.state;
+
+    return (
+      <Modal
+        isOpen={isLogoutModalOpened}
+        style={modalStyles}
+      >
+        <ModalTitle modalClose={() => this.toggleModal('isLogoutModalOpened')} title="Logout" />
+        <div style={{ marginTop: '50px' }}>
+          <StyledInputWrapper>
+            Are you sure you want to log out?
+          </StyledInputWrapper>
+        </div>
+        <StyledButtonWrapper>
+          <Button onClick={this.logout}>
+            Yes
+          </Button>
+          <Button onClick={() => this.setState({ isLogoutModalOpened: false })}>
+            No
+          </Button>
+        </StyledButtonWrapper>
+      </Modal>
+    );
+  }
+
   render() {
     const { currentIndex, profilePicture } = this.state;
     const { displayName } = this.props.user;
@@ -148,7 +176,7 @@ class MyAccount extends Component {
           <StyledImageContainer>
             <MaterialIcon
               name="photo"
-              onClick={this.toggleModal}
+              onClick={() => this.toggleModal('isProfilePictureModalOpened')}
               className="photo"
             />
             <img src={profilePicture} alt="" />
@@ -176,6 +204,7 @@ class MyAccount extends Component {
           {this.renderTabBody(currentIndex)}
         </StyledTabBodyContainer>
         {this.renderModal()}
+        {this.renderLogoutModal()}
       </StyledMyAccount>
     );
   }
@@ -229,7 +258,7 @@ const StyledMenuContainer = styled.div`
 const StyledMenu = styled.div`
   display: flex;
   flex-direction: column;
-  width: 25%;
+  width: 33.3%;
   text-align: center;
   cursor: pointer;
 
@@ -259,4 +288,14 @@ const StyledTabBodyContainer = styled.div`
 const StyledInputWrapper = styled.div`
   position: relative;
   margin-top: 30px;
+`;
+
+const StyledButtonWrapper = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+
+  button {
+    margin: 10px;
+  }
 `;
