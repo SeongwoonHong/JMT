@@ -96,7 +96,9 @@ const StyledHome = styled.div`
   }
 
   .slick-slider {
-    height: 70vh;
+    .slick-next {
+      right: 0;
+    }
 
     .slick-dots li button:before {
       font-size: 9px;
