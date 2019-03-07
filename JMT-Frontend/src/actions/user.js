@@ -25,7 +25,6 @@ export const sendResetPasswordEmail = (email) => {
 
         return dispatch({
           type: SEND_RESET_PASSWORD_EMAIL_SUCCESS,
-          success: true,
         });
       })
       .catch(({ response }) => {
@@ -33,7 +32,6 @@ export const sendResetPasswordEmail = (email) => {
 
         return dispatch({
           type: SEND_RESET_PASSWORD_EMAIL_FAILURE,
-          success: false,
           msg: response.data.msg,
         });
       });

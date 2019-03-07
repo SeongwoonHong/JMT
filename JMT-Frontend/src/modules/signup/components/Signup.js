@@ -56,7 +56,9 @@ class Signup extends Component {
     };
   }
 
-  signup = () => {
+  signup = (e) => {
+    e.preventDefault();
+
     const { dispatch } = this.props;
     const {
       displayName,
@@ -121,7 +123,9 @@ class Signup extends Component {
     return errorMessages;
   }
 
-  sendEmail = () => {
+  sendEmail = (e) => {
+    e.preventDefault();
+
     const { email } = this.state;
     const errorMessages = {};
 
@@ -150,7 +154,7 @@ class Signup extends Component {
     } = this.state;
 
     return (
-      <StyledSignupContainer>
+      <StyledSignupContainer onSubmit={this.signup}>
         <StyledInputWrapper>
           <InputTextField
             label="Email"
@@ -219,7 +223,6 @@ class Signup extends Component {
           )
         }
         <Button
-          onClick={this.signup}
           className="btn-signup"
         >
           Signup
@@ -232,7 +235,7 @@ class Signup extends Component {
     const { email, errorMessages } = this.state;
 
     return (
-      <StyledSignupContainer>
+      <StyledSignupContainer onSubmit={this.sendEmail}>
         <StyledInputWrapper>
           <InputTextField
             label="Email"
@@ -246,16 +249,13 @@ class Signup extends Component {
         </StyledInputWrapper>
 
         <Button
-          onClick={this.sendEmail}
           className="btn-signup"
         >
           Send Email
         </Button>
-        <StyledFooter>
-          <StyledFooterText to="/login">
-            Login
-          </StyledFooterText>
-        </StyledFooter>
+        <StyledFooterText to="/login">
+          Login
+        </StyledFooterText>
       </StyledSignupContainer>
     );
   }
@@ -279,26 +279,27 @@ class Signup extends Component {
     if (isEmailSent) {
       return (
         <StyledSignupContainer>
-          Please check your email boi!
+          We've sent you an email.
+          Please check it out!
         </StyledSignupContainer>
       );
     }
 
     return (
-      <StyledSignupContainer>
+      <React.Fragment>
         <StyledHeader>SIGN UP</StyledHeader>
         {
           isTokenVerified ? this.renderSignup() : this.renderSendEmail()
         }
         {this.renderLoader()}
-      </StyledSignupContainer>
+      </React.Fragment>
     );
   }
 }
 
 export default Signup;
 
-const StyledSignupContainer = styled.div`
+const StyledSignupContainer = styled.form`
   padding: 15px;
 
   .signup-arrow {
@@ -340,19 +341,13 @@ const StyledErrorMessage = styled.div`
   font-size: 12px;
 `;
 
-const StyledFooter = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
 const StyledFooterText = styled(({ className, children, ...rest }) => (
   <Link className={className} {...rest}>
     {children}
   </Link>
 ))`
   color: ${colors.theme};
-  margin-top: 10px;
+  margin: 10px;
   float: right;
   display: block;
 `;

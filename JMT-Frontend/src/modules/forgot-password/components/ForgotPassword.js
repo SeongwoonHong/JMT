@@ -39,7 +39,9 @@ class ForgotPassword extends Component {
     return this.setState({ [e.target.name]: e.target.value });
   }
 
-  sendEmail = () => {
+  sendEmail = (e) => {
+    e.preventDefault();
+
     const { email } = this.state;
     const { dispatch } = this.props;
 
@@ -51,16 +53,14 @@ class ForgotPassword extends Component {
     }
 
     return dispatch(User.sendResetPasswordEmail(email))
-      .then((res) => {
-        if (res.success) {
-          return this.setState({ isEmailSent: true });
-        }
-
-        return toast.error('Account does not exist');
+      .then(() => {
+        return this.setState({ isEmailSent: true });
       });
   }
 
-  resetPassword = () => {
+  resetPassword = (e) => {
+    e.preventDefault();
+
     const { password, passwordConfirm } = this.state;
     const { dispatch } = this.props;
     const token = getURLSearchParams(this.props.location.search, 't');
@@ -116,7 +116,7 @@ class ForgotPassword extends Component {
     const { email, errorMessages } = this.state;
 
     return (
-      <StyledForgotPassword>
+      <StyledForgotPassword onSubmit={this.sendEmail}>
         <StyledTitle>Forgot your password?</StyledTitle>
         Enter your e-mail address and we'll send you a link to reset your password
         <StyledInputWrapper>
@@ -132,7 +132,6 @@ class ForgotPassword extends Component {
         </StyledInputWrapper>
         <Button
           className="btn-forgot-password"
-          onClick={this.sendEmail}
         >
           Reset
         </Button>
@@ -153,7 +152,7 @@ class ForgotPassword extends Component {
     const { password, passwordConfirm, errorMessages } = this.state;
 
     return (
-      <StyledForgotPassword>
+      <StyledForgotPassword onSubmit={this.resetPassword}>
         <StyledTitle>Please enter your new password</StyledTitle>
         <StyledInputWrapper>
           <InputTextField
@@ -179,7 +178,6 @@ class ForgotPassword extends Component {
         </StyledInputWrapper>
         <Button
           className="btn-forgot-password"
-          onClick={this.resetPassword}
         >
           Reset
         </Button>
@@ -209,7 +207,7 @@ class ForgotPassword extends Component {
 
 export default ForgotPassword;
 
-const StyledForgotPassword = styled.div`
+const StyledForgotPassword = styled.form`
   padding: 15px;
 
   .btn-forgot-password {
