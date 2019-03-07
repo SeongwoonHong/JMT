@@ -75,6 +75,7 @@ const StyledRestaurant = styled.div`
   justify-content: space-around;
   width: 90%;
   margin: 20px auto;
+  cursor: pointer;
 
   ${props =>
     props.isSmallView &&

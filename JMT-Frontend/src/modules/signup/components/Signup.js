@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Auth } from 'actions';
-import { Link } from 'react-router-dom';
 import { Loader, InputTextField, Button } from 'components';
 import inputValidator from 'utils/input-validator';
 import { colors, defaultProfilePicture } from 'constants';
 import getURLSearchParams from 'utils/get-url-params';
+
+import SendEmail from './SendEmail';
 
 @connect(state => ({
   app: state.App,
@@ -231,35 +232,6 @@ class Signup extends Component {
     );
   }
 
-  renderSendEmail = () => {
-    const { email, errorMessages } = this.state;
-
-    return (
-      <StyledSignupContainer onSubmit={this.sendEmail}>
-        <StyledInputWrapper>
-          <InputTextField
-            label="Email"
-            name="email"
-            value={email}
-            onChange={this.onChangeHandler}
-            hasError={errorMessages.email}
-            required
-          />
-          { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
-        </StyledInputWrapper>
-
-        <Button
-          className="btn-signup"
-        >
-          Send Email
-        </Button>
-        <StyledFooterText to="/login">
-          Login
-        </StyledFooterText>
-      </StyledSignupContainer>
-    );
-  }
-
   renderLoader = () => {
     const { app } = this.props;
 
@@ -274,6 +246,8 @@ class Signup extends Component {
     const {
       isTokenVerified,
       isEmailSent,
+      email,
+      errorMessages,
     } = this.state;
 
     if (isEmailSent) {
@@ -289,7 +263,13 @@ class Signup extends Component {
       <React.Fragment>
         <StyledHeader>SIGN UP</StyledHeader>
         {
-          isTokenVerified ? this.renderSignup() : this.renderSendEmail()
+          isTokenVerified ? this.renderSignup() :
+          <SendEmail
+            email={email}
+            errorMessages={errorMessages}
+            sendEmail={this.sendEmail}
+            onChange={this.onChangeHandler}
+          />
         }
         {this.renderLoader()}
       </React.Fragment>
@@ -339,17 +319,6 @@ const StyledErrorMessage = styled.div`
   left: 0;
   right: 0;
   font-size: 12px;
-`;
-
-const StyledFooterText = styled(({ className, children, ...rest }) => (
-  <Link className={className} {...rest}>
-    {children}
-  </Link>
-))`
-  color: ${colors.theme};
-  margin: 10px;
-  float: right;
-  display: block;
 `;
 
 const StyledImagePreview = styled.div`

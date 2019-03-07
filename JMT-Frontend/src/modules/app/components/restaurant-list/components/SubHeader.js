@@ -164,6 +164,7 @@ class SubHeader extends Component {
           <SVGContainer
             svg={filterSVG}
             onClick={this.modalToggler}
+            className="filter-icon"
           />
         </StyledSubHeaderBottomText>
       </StyledSubHeader>
@@ -193,6 +194,10 @@ const StyledSubHeaderBottomText = styled.div`
   justify-content: space-between;
   margin-top: 10px;
   margin-bottom: 5px;
+  
+  .filter-icon {
+    cursor: pointer;
+  }
 }
 `;
 
