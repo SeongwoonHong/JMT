@@ -42,7 +42,9 @@ class Login extends Component {
     return token;
   }
 
-  login = () => {
+  login = (e) => {
+    e.preventDefault();
+
     const { dispatch, location: { state } } = this.props;
     const { email, password } = this.state;
     const errorMessages = this.validateInputs(email, password);
@@ -101,7 +103,7 @@ class Login extends Component {
     const { email, password, errorMessages } = this.state;
 
     return (
-      <StyledLoginContainer>
+      <StyledLoginContainer onSubmit={this.login}>
         <StyledHeader>LOGIN</StyledHeader>
 
         <StyledInputWrapper>
@@ -129,7 +131,6 @@ class Login extends Component {
           { errorMessages.password && <StyledErrorMessage>{errorMessages.password}</StyledErrorMessage> }
         </StyledInputWrapper>
         <Button
-          onClick={this.login}
           className="btn-login"
         >
           Login
@@ -148,7 +149,7 @@ class Login extends Component {
 
 export default Login;
 
-const StyledLoginContainer = styled.div`
+const StyledLoginContainer = styled.form`
   padding: 15px;
 
   .login-arrow {
