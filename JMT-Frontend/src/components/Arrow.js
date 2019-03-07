@@ -31,6 +31,7 @@ const StyledArrow = styled.span`
   height: 25px;
   position: relative;
   display: ${props => props.isHide ? 'none' : 'inline-block'};
+  cursor: pointer;
 
   &.left {
     span:nth-child(4) {
