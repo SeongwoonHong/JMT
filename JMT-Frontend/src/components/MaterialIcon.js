@@ -1,17 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import cx from 'classnames';
 
-class MaterialIcon extends Component {
-  render() {
-    return (
-      <i
-        className={cx('material-icons', this.props.className)}
-        onClick={this.props.onClick}
-      >
-        {this.props.name}
-      </i>
-    );
-  }
-}
+const MaterialIcon = ({ className, onClick, name }) => {
+  return (
+    <i
+      className={cx('material-icons', className)}
+      onClick={onClick}
+    >
+      {name}
+    </i>
+  );
+};
 
 export default MaterialIcon;

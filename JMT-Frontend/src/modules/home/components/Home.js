@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { colors } from 'constants';
 import { Button, Header } from 'components';
@@ -21,57 +21,47 @@ const progressSections = [
   }
 ];
 
+const Home = () => {
+  const [currentIndex, setCurrentInex] = useState(0);
 
-class Home extends Component {
-  state = {
-    currentIndex: 0,
+  const sliderSettings = {
+    dots: true,
+    infinite: false,
+    afterChange: current => setCurrentInex(current)
   };
 
-  setCurrentIndex = (index) => {
-    return this.setState({ currentIndex: index });
-  }
-
-  render() {
-    const { currentIndex } = this.state;
-    const sliderSettings = {
-      dots: true,
-      infinite: false,
-      afterChange: current => this.setState({ currentIndex: current })
-    };
-
-    return (
-      <StyledHome>
-        <Header />
-        <Slider {...sliderSettings}>
-          {
-            progressSections.map((section, index) => {
-              return (
-                <StyledDiv
-                  index={index}
-                  currentIndex={currentIndex}
-                  key={section.id}
-                >
-                  {section.content}
-                </StyledDiv>
-              );
-            })
-          }
-        </Slider>
-        <Button
-          className="btn-home"
-          to="/main/categories"
-        >
-          {
-            currentIndex === progressSections.length - 1 ?
-            "Let's go!"
-            :
-            'Skip'
-          }
-        </Button>
-      </StyledHome>
-    );
-  }
-}
+  return (
+    <StyledHome>
+      <Header />
+      <Slider {...sliderSettings}>
+        {
+          progressSections.map((section, index) => {
+            return (
+              <StyledDiv
+                index={index}
+                currentIndex={currentIndex}
+                key={section.id}
+              >
+                {section.content}
+              </StyledDiv>
+            );
+          })
+        }
+      </Slider>
+      <Button
+        className="btn-home"
+        to="/main/categories"
+      >
+        {
+          currentIndex === progressSections.length - 1 ?
+          "Let's go!"
+          :
+          'Skip'
+        }
+      </Button>
+    </StyledHome>
+  );
+};
 
 export default Home;
 
@@ -96,7 +86,9 @@ const StyledHome = styled.div`
   }
 
   .slick-slider {
-    height: 70vh;
+    .slick-next {
+      right: 0;
+    }
 
     .slick-dots li button:before {
       font-size: 9px;

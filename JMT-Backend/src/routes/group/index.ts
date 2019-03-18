@@ -23,6 +23,10 @@ class Group {
       '/getGroupsByRestaurantAvailable',
       controllers.getGroupsByRestaurantAvailable
     );
+    this.router.get(
+      '/getGroupsByRestaurant',
+      controllers.getGroupsByRestaurant
+    );
   };
 }
 

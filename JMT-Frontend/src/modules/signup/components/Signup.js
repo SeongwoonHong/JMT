@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Auth } from 'actions';
-import { Link } from 'react-router-dom';
 import { Loader, InputTextField, Button } from 'components';
 import inputValidator from 'utils/input-validator';
 import { colors, defaultProfilePicture } from 'constants';
 import getURLSearchParams from 'utils/get-url-params';
+
+import SendEmail from './SendEmail';
 
 @connect(state => ({
   app: state.App,
@@ -56,7 +57,9 @@ class Signup extends Component {
     };
   }
 
-  signup = () => {
+  signup = (e) => {
+    e.preventDefault();
+
     const { dispatch } = this.props;
     const {
       displayName,
@@ -121,7 +124,9 @@ class Signup extends Component {
     return errorMessages;
   }
 
-  sendEmail = () => {
+  sendEmail = (e) => {
+    e.preventDefault();
+
     const { email } = this.state;
     const errorMessages = {};
 
@@ -150,7 +155,7 @@ class Signup extends Component {
     } = this.state;
 
     return (
-      <StyledSignupContainer>
+      <StyledSignupContainer onSubmit={this.signup}>
         <StyledInputWrapper>
           <InputTextField
             label="Email"
@@ -219,43 +224,10 @@ class Signup extends Component {
           )
         }
         <Button
-          onClick={this.signup}
           className="btn-signup"
         >
           Signup
         </Button>
-      </StyledSignupContainer>
-    );
-  }
-
-  renderSendEmail = () => {
-    const { email, errorMessages } = this.state;
-
-    return (
-      <StyledSignupContainer>
-        <StyledInputWrapper>
-          <InputTextField
-            label="Email"
-            name="email"
-            value={email}
-            onChange={this.onChangeHandler}
-            hasError={errorMessages.email}
-            required
-          />
-          { errorMessages.email && <StyledErrorMessage>{errorMessages.email}</StyledErrorMessage> }
-        </StyledInputWrapper>
-
-        <Button
-          onClick={this.sendEmail}
-          className="btn-signup"
-        >
-          Send Email
-        </Button>
-        <StyledFooter>
-          <StyledFooterText to="/login">
-            Login
-          </StyledFooterText>
-        </StyledFooter>
       </StyledSignupContainer>
     );
   }
@@ -274,31 +246,40 @@ class Signup extends Component {
     const {
       isTokenVerified,
       isEmailSent,
+      email,
+      errorMessages,
     } = this.state;
 
     if (isEmailSent) {
       return (
         <StyledSignupContainer>
-          Please check your email boi!
+          We've sent you an email.
+          Please check it out!
         </StyledSignupContainer>
       );
     }
 
     return (
-      <StyledSignupContainer>
+      <React.Fragment>
         <StyledHeader>SIGN UP</StyledHeader>
         {
-          isTokenVerified ? this.renderSignup() : this.renderSendEmail()
+          isTokenVerified ? this.renderSignup() :
+          <SendEmail
+            email={email}
+            errorMessages={errorMessages}
+            sendEmail={this.sendEmail}
+            onChange={this.onChangeHandler}
+          />
         }
         {this.renderLoader()}
-      </StyledSignupContainer>
+      </React.Fragment>
     );
   }
 }
 
 export default Signup;
 
-const StyledSignupContainer = styled.div`
+const StyledSignupContainer = styled.form`
   padding: 15px;
 
   .signup-arrow {
@@ -338,23 +319,6 @@ const StyledErrorMessage = styled.div`
   left: 0;
   right: 0;
   font-size: 12px;
-`;
-
-const StyledFooter = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const StyledFooterText = styled(({ className, children, ...rest }) => (
-  <Link className={className} {...rest}>
-    {children}
-  </Link>
-))`
-  color: ${colors.theme};
-  margin-top: 10px;
-  float: right;
-  display: block;
 `;
 
 const StyledImagePreview = styled.div`

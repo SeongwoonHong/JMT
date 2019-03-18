@@ -63,3 +63,18 @@ export const checkUserGroup = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getGroupsByRestaurant = async (req, res: Response) => {
+  const { restaurantId } = req.query;
+
+  try {
+    const result = await groupRepository.getGroupsByRestaurant(restaurantId);
+
+    return res.json(result);
+  } catch (e) {
+    return res.status(404).json({
+      success: false,
+      msg: e.message
+    })
+  }
+};

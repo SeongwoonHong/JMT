@@ -1,22 +1,27 @@
-CREATE OR REPLACE FUNCTION public.get_groups_by_restaurant(IN "_restaurantId" character varying)
-    RETURNS TABLE(id integer, date date, "categoryId" integer, "restaurantId" character varying, "restaurantName" character varying)
+-- FUNCTION: public.get_groups_by_restaurant(character varying)
+
+-- DROP FUNCTION public.get_groups_by_restaurant(character varying);
+
+CREATE OR REPLACE FUNCTION public.get_groups_by_restaurant(
+	"_restaurantId" character varying)
+    RETURNS TABLE(id integer, date timestamp without time zone, "restaurantId" character varying, "restaurantName" character varying, "groupCount" bigint) 
     LANGUAGE 'plpgsql'
-    VOLATILE
-    PARALLEL UNSAFE
-    COST 100    ROWS 1000 
-AS $BODY$  
-DECLARE
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
 
 BEGIN
 	RETURN QUERY
-	SELECT 
-		gr."id",
-		gr."date",
-		gr."categoryId",
-		gr."restaurantId",
-		gr."restaurantName"
+	
+	SELECT gr.id, gr.date, gr."restaurantId", gr."restaurantName", count(ug."userId")
 	FROM groups as gr
-	WHERE gr."restaurantId" = "_restaurantId";
+	JOIN user_group as ug
+	ON ug."groupId" = gr.id
+	WHERE gr."restaurantId" = "_restaurantId"
+	GROUP BY gr.id, gr.date, gr."restaurantId", gr."restaurantName"
+	ORDER BY date ASC;
 	
 END;
 

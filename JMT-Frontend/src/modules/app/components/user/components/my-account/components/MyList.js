@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Loader } from 'components';
+import { Loader, Button } from 'components';
 import { Group } from 'actions';
 import { convertDateObject } from 'utils/date-utils';
 import { colors } from 'constants';
@@ -34,12 +34,20 @@ class MyList extends Component {
   renderGroups = () => {
     const { groups } = this.props.group;
 
+    if (!groups.length) {
+      return (
+        <React.Fragment>
+          <StyledNoRestaurant>You have no restaurant on your list</StyledNoRestaurant>
+          <Button to="/main/restaurant-landing">Search Restaurant</Button>
+        </React.Fragment>
+      );
+    }
+
     return (
       <StyledGroups>
         {groups.map((group) => {
           return (
             <StyledGroup key={group.id}>
-              {/* <div>Category: {group.categoryId}</div> */}
               <StyledGroupName><strong>Restaurant</strong>: {group.restaurantName}</StyledGroupName>
               <StyledGroupDate><strong>date</strong>: {convertDateObject(new Date(group.date), false)}</StyledGroupDate>
             </StyledGroup>
@@ -88,5 +96,12 @@ const StyledGroupName = styled.div`
 
 const StyledGroupDate = styled.div`
   margin: 5px 0px;
+`;
+
+const StyledNoRestaurant = styled.div`
+  margin: 10px 10px 20px 10px;
+  color: ${colors.lightTheme};
+  font-size: 18px;
+  text-align: center;
 `;
 

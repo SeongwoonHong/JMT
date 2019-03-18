@@ -1,25 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { colors } from 'constants';
 
-class Arrow extends Component {
-  render() {
-    return (
-      <StyledArrow
-        className={this.props.className}
-        style={this.props.style}
-        onClick={this.props.onClick}
-        isHide={this.props.isHide}
-      >
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-      </StyledArrow>
-    );
-  }
-}
+const Arrow = ({
+  className,
+  style,
+  onClick,
+  isHide,
+}) => {
+  return (
+    <StyledArrow
+      className={className}
+      style={style}
+      onClick={onClick}
+      isHide={isHide}
+    >
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+    </StyledArrow>
+  );
+};
 
 export default Arrow;
 
@@ -28,6 +31,7 @@ const StyledArrow = styled.span`
   height: 25px;
   position: relative;
   display: ${props => props.isHide ? 'none' : 'inline-block'};
+  cursor: pointer;
 
   &.left {
     span:nth-child(4) {

@@ -4,7 +4,8 @@
   "plugins": [
     "import",
     "jsx-a11y",
-    "react"
+    "react",
+    "react-hooks"
   ],
   "rules": {
     "react/jsx-filename-extension": [
@@ -45,6 +46,7 @@
     "no-case-declarations": 0,
     "jsx-a11y/no-static-element-interactions": 0,
     "jsx-a11y/click-events-have-key-events": 0,
-    "react/no-unescaped-entities": 0
+    "react/no-unescaped-entities": 0,
+    "react-hooks/rules-of-hooks": "error"
   }
 }

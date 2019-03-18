@@ -1,37 +1,33 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import cx from 'classnames';
 import { colors } from 'constants';
 
-class SelectionIndicators extends Component {
-  render() {
-    const {
-      progressSections,
-      currentIndex,
-      className,
-      onClick
-    } = this.props;
-
-    return (
-      <StyledContainer className={className}>
-        {
-          progressSections.map((progress, i) => {
-            return (
-              <StyledButton
-                key={progress.id}
-                onClick={() => onClick(i)}
-                className={cx('indicator', {
-                  selected: i <= currentIndex,
-                  current: progress.id === currentIndex
-                })}
-              />
-            );
-          })
-        }
-      </StyledContainer>
-    );
-  }
-}
+const SelectionIndicators = ({
+  progressSections,
+  currentIndex,
+  className,
+  onClick
+}) => {
+  return (
+    <StyledContainer className={className}>
+      {
+        progressSections.map((progress, i) => {
+          return (
+            <StyledButton
+              key={progress.id}
+              onClick={() => onClick(i)}
+              className={cx('indicator', {
+                selected: i <= currentIndex,
+                current: progress.id === currentIndex
+              })}
+            />
+          );
+        })
+      }
+    </StyledContainer>
+  );
+};
 
 export default SelectionIndicators;
 

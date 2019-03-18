@@ -12,7 +12,6 @@ import Home from 'modules/home';
 import App from 'modules/app';
 import Signup from 'modules/signup';
 import Login from 'modules/login';
-import EmailVerified from 'modules/email-verified';
 import ForgotPassword from 'modules/forgot-password';
 import history from 'utils/history';
 import 'utils/axios.config';
@@ -49,7 +48,6 @@ ReactDOM.render(
             <Route path="/main" component={App} />
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
-            <Route path="/email-verified" component={EmailVerified} />
             <Route path="/forgot-password" component={ForgotPassword} />
             <Route component={NotFound} />
           </Switch>
