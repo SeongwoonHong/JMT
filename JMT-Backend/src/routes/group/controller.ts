@@ -17,6 +17,23 @@ export const getGroup = async (req: Request, res: Response) => {
   }
 };
 
+export const getGroupsByRestaurantAvailable = async (req, res: Response) => {
+  const { restaurantId } = req.query;
+
+  try {
+    const result = await groupRepository.getGroupsByRestaurantAvailable(
+      restaurantId
+    );
+
+    return res.json(result);
+  } catch (e) {
+    return res.status(404).json({
+      success: false,
+      msg: e.message
+    });
+  }
+};
+
 export const getGroupsByUser = async (req, res: Response) => {
   const { userId } = req.decoded;
 
