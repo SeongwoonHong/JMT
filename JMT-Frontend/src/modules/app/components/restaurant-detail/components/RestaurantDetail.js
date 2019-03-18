@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Restaurant } from 'actions';
+import { Restaurant, Group } from 'actions';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import phoneIcon from 'assets/phoneIcon.png';
@@ -35,7 +35,8 @@ const modalStyles = {
 @connect(state => ({
   restaurants: state.Restaurants,
   app: state.App,
-  user: state.Auth.user
+  user: state.Auth.user,
+  groups: state.Group.groups
 }))
 class RestaurantDetail extends Component {
   constructor(props) {
@@ -121,12 +122,15 @@ class RestaurantDetail extends Component {
   };
 
   openModal = () => {
-    const { user } = this.props;
+    const { user, restaurants, dispatch } = this.props;
 
     if (!user) {
       return toast.info('You need to login to join');
     }
 
+    dispatch(
+      Group.getGroupsByRestaurantAvailable(restaurants.activeRestaurant.id)
+    );
     return this.setState({ isModalOpen: true });
   };
 
@@ -149,9 +153,21 @@ class RestaurantDetail extends Component {
     return false;
   };
 
+  renderGroups = () => {
+    const { groups } = this.props;
+
+    return groups.map(group => (
+      <StyledGroup key={group.id}>
+        <StyledGroupName><strong>Restaurant</strong>: {group.restaurantName}</StyledGroupName>
+        <StyledGroupDate><strong>date</strong>: {convertDateObject(new Date(group.date), false)}</StyledGroupDate>
+      </StyledGroup>
+    ));
+  }
+
   renderModal = () => {
     const { scheduleDate } = this.state;
-
+    const { groups } = this.props;
+    console.log(groups);
     return (
       <Modal
         isOpen={this.state.isModalOpen}
@@ -172,6 +188,7 @@ class RestaurantDetail extends Component {
           />
         </div>
         <Link to="/main/group?id=1">test link</Link>
+        {groups.length > 0 && this.renderGroups()}
         <Button style={{ marginTop: '20px' }} onClick={this.saveDate}>
           Save
         </Button>
@@ -445,4 +462,26 @@ const StyledPhoneIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const StyledGroup = styled.div`
+  background-color: ${colors.white};
+  padding: 10px;
+  border-radius: 10px;
+  color: ${colors.black};
+  cursor: pointer;
+  margin-bottom: 10px;
+  text-align: center;
+  width: calc(100% - 20px);
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const StyledGroupName = styled.div`
+  margin: 5px 0px;
+`;
+
+const StyledGroupDate = styled.div`
+  margin: 5px 0px;
 `;

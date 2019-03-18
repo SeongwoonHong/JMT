@@ -28,6 +28,24 @@ export const getGroupsByUser = async userId => {
   }
 };
 
+export const getGroupsByRestaurantAvailable = async restaurantId => {
+  try {
+    console.log('restaurantId=', restaurantId);
+    const groupData = await Query.getGroupsByRestaurantAvailable({
+      _restaurantId: restaurantId
+    });
+    console.log(groupData);
+    const { rows } = groupData;
+
+    return {
+      success: true,
+      result: rows
+    };
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 export const checkUserGroup = async id => {
   try {
     const groupData = await Query.checkUserGroup({ id });
