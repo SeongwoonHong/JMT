@@ -1,9 +1,5 @@
 import { Response } from 'express';
 
-export const badRequest = (res, message = ''): Response => {
-  return error(res, message, 400);
-};
-
 export const error = (res: Response, message: object | string, code: number = 500): Response => {
   if (typeof message !== 'object') {
     message = {

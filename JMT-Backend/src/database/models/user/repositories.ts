@@ -12,12 +12,12 @@ export const updateEmailVerifiationByEmail = (token: { email: string }) => {
     Query.updateEmailVerifiationByEmailQuery(email);
 
     return {
-      success: true,
+      success: true
     };
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 export const getUserByEmailOrDisplayName = async ({ displayName, email }) => {
   try {
@@ -35,8 +35,8 @@ export const getUserByEmailOrDisplayName = async ({ displayName, email }) => {
       }
 
       return {
-        msg: `${duplicate} already exists`,
-        success: false,
+        msg: `${ duplicate } already exists`,
+        success: false
       };
     }
 
@@ -46,11 +46,11 @@ export const getUserByEmailOrDisplayName = async ({ displayName, email }) => {
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 export const signup = async ({ displayName, password, hashedPassword, email, profilePicture }) => {
   try {
-    const result = await Query.signUpQuery({ displayName, password: hashedPassword, email, profilePicture })
+    const result = await Query.signUpQuery({ displayName, password: hashedPassword, email, profilePicture });
 
     return {
       result,
@@ -59,7 +59,7 @@ export const signup = async ({ displayName, password, hashedPassword, email, pro
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 export const login = async ({ email, password }) => {
   try {
@@ -69,7 +69,7 @@ export const login = async ({ email, password }) => {
     if (!userData.success) {
       return {
         msg: 'account does not exist',
-        success: false,
+        success: false
       };
     }
 
@@ -80,30 +80,30 @@ export const login = async ({ email, password }) => {
     if (!passwordMatched) {
       return {
         success: false,
-        msg: 'password is not correct',
+        msg: 'password is not correct'
       };
     }
 
     return {
       result: rows[0],
-      success: true,
+      success: true
     };
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 export const updateUserProfile = async (params) => {
   try {
     await Query.updateUserProfileQuery(params);
 
     return {
-      success: true,
+      success: true
     };
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 export const checkLogin = async (email: string) => {
   try {
@@ -112,7 +112,7 @@ export const checkLogin = async (email: string) => {
 
     return {
       success: true,
-      result: rows[0],
+      result: rows[0]
     };
   } catch (e) {
     throw new Error(e);
@@ -124,7 +124,7 @@ export const updatePassword = async ({ email, password }) => {
     await Query.updatePasswordQuery({ email, password });
 
     return {
-      success: true,
+      success: true
     };
   } catch (e) {
     throw new Error(e);
@@ -138,13 +138,13 @@ export const getUserByEmail: any = async (email: string) => {
 
     if (!rows.length) {
       return {
-        success: false,
+        success: false
       };
     }
 
     return {
       success: true,
-      rows,
+      rows
     };
   } catch (e) {
     throw new Error(e);
@@ -153,10 +153,10 @@ export const getUserByEmail: any = async (email: string) => {
 
 export const updateProfilePicture = async ({ id, profilePicture }) => {
   try {
-    await Query.updateProfilePictureQuery({id, profilePicture });
+    await Query.updateProfilePictureQuery({ id, profilePicture });
 
     return {
-      success: true,
+      success: true
     };
   } catch (e) {
     throw new Error(e);
