@@ -30,31 +30,33 @@ class Group extends Component {
   }
 
   componentDidMount = () => {
-    axios.get('/api/comments').then(a => {
+    axios.get('/api/comments?id=119&groupId=2').then(a => {
       this.setState({ comments: a.data.comments });
     });
     const { dispatch } = this.props;
     const { id } = this.state;
 
     dispatch(GroupAction.checkUserGroup(id)).then((res) => {
+      console.log('res', res.payload, this.props);
       if (!this.findUserInGroup(res.payload)) {
         this.setState({ notInGroup: true });
       } else dispatch(GroupAction.getGroup(id));
     });
   };
 
-  findUserInGroup = users =>
-    users.some(e => e.userId === this.props.user.userId);
+  findUserInGroup(users) {
+    return users.some(e => e.userId === 119);
+  };
 
   render() {
     const {
       group: { activeGroup },
-      user
+      user,
     } = this.props;
     const { notInGroup } = this.state;
 
     if (notInGroup) return <Redirect to={{ pathname: '/404' }} />;
-    if (!activeGroup.id || !user.userId) return <Loader />;
+    if (!activeGroup.id || !119/*user.userId*/) return <Loader />;
 
     return (
       <StyledGroup>

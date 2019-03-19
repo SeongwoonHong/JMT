@@ -8,10 +8,18 @@ export const addNewComment = async (newComment) => {
   }
 };
 
+export const getComment = async (id) => {
+  try {
+    return await Query.getComment(id);
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 export const getComments = async (groupId) => {
   try {
-    const comments = await Query.getComments(groupId);
-    return comments;
+    return await Query.getComments(groupId);
   } catch (error) {
     console.log(error);
   }

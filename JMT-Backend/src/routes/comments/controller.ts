@@ -3,11 +3,14 @@ import { Request, Response } from 'express';
 
 import * as commentsRepository from '@db/models/comments/repositories';
 import * as responses from '@utils/response';
+import { sendCommentReplyMail } from '@utils/mail-utils';
+
+const { APP_URL } = process.env;
 
 export const getAllComments = async (req: Request, res: Response) => {
   const schema = Joi.object().keys({
     id: Joi.number().allow('', null),
-    groupId: Joi.number().allow('', null),
+    groupId: Joi.number().required(),
   });
   const validationResult = Joi.validate(req.query, schema);
 
@@ -18,28 +21,21 @@ export const getAllComments = async (req: Request, res: Response) => {
     });
   }
 
-  const { id, groupId } = req.query;
-
-  if (!id || !groupId) {
-    return responses.badRequest(res);
-  }
-
   try {
     const comments = await commentsRepository.getComments(req.query);
     return responses.success(res, comments.rows);
   } catch (error) {
-    console.log(error);
     return responses.error(res, error);
   }
 };
 
 export const addNewComment = async (req: Request, res: Response) => {
   const schema = Joi.object().keys({
-    depth: Joi.number(),
-    groupId: Joi.number(),
-    message: Joi.string(),
+    depth: Joi.number().required(),
+    groupId: Joi.number().required(),
+    message: Joi.string().required(),
     parentId: Joi.number().allow('', null),
-    userId: Joi.number(),
+    userId: Joi.number().required(),
   });
   const validationResult = Joi.validate(req.body, schema);
 
@@ -52,9 +48,19 @@ export const addNewComment = async (req: Request, res: Response) => {
 
   try {
     const comments = await commentsRepository.addNewComment(req.body);
+
+    if (req.body.depth > 0 && req.body.parentId) {
+      const { comment, user } = await commentsRepository.getComment(req.body.parentId);
+
+      sendCommentReplyMail({
+        email: user.email,
+        replyFrom: user.displayName,
+        commentUrl: `${APP_URL}/main/group?id=${req.body.groupId}#${comment.id}`,
+      });
+    }
+
     return responses.success(res, comments);
   } catch (error) {
-    console.log(error);
     return responses.error(res, error);
   }
 };
