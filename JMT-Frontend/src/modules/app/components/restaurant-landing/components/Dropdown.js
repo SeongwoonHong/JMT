@@ -45,13 +45,14 @@ class Dropdown extends Component {
     const { items } = this.props;
 
     return items.map((item) => {
+
       return (
         <StyledItem
-          key={item}
+          key={item.name}
           onClick={() => this.setState({ selectedItem: item })}
-          isSelected={selectedItem === item}
+          isSelected={selectedItem.name === item.name}
         >
-          <StyledText>{ item }</StyledText>
+          <StyledText>{ item.name }</StyledText>
         </StyledItem>
       );
     });
@@ -72,7 +73,7 @@ class Dropdown extends Component {
             onClick={() => onClickHandler(mode, selectedItem)}
             className="button"
           >
-            { selectedItem }
+            { selectedItem.name }
           </Button>
         </StyledContent>
       </StyledDropdown>
