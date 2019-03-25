@@ -23,7 +23,11 @@ export const getAllComments = async (req: Request, res: Response) => {
 
   try {
     const comments = await commentsRepository.getComments(req.query);
-    return responses.success(res, comments.rows);
+    return responses.success(res, comments.rows.map((row) => {
+      return {
+        ...row,
+      };
+    }));
   } catch (error) {
     return responses.error(res, error);
   }
@@ -55,7 +59,7 @@ export const addNewComment = async (req: Request, res: Response) => {
       sendCommentReplyMail({
         email: user.email,
         replyFrom: user.displayName,
-        commentUrl: `${APP_URL}/main/group?id=${req.body.groupId}#${comment.id}`,
+        commentUrl: `${APP_URL}/main/group?id=${req.body.groupId}#comments-${comment.id}`,
       });
     }
 

@@ -9,7 +9,6 @@ import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 
 import axios from 'axios';
-import { parseComments } from 'utils/parse-comments';
 
 @connect(state => ({
   group: state.Group,
@@ -26,27 +25,80 @@ class Group extends Component {
       id: params.get('id'),
       notInGroup: false,
       comments: [],
+      targetComment: {},
     };
   }
 
   componentDidMount = () => {
-    axios.get('/api/comments?id=119&groupId=2').then(a => {
-      this.setState({ comments: a.data.comments });
-    });
     const { dispatch } = this.props;
     const { id } = this.state;
 
-    dispatch(GroupAction.checkUserGroup(id)).then((res) => {
-      console.log('res', res.payload, this.props);
-      if (!this.findUserInGroup(res.payload)) {
-        this.setState({ notInGroup: true });
-      } else dispatch(GroupAction.getGroup(id));
-    });
+    dispatch(GroupAction.checkUserGroup(id))
+      .then((res) => {
+        if (!this.findUserInGroup(res.payload)) {
+          this.setState({ notInGroup: true });
+        } else {
+          dispatch(GroupAction.getGroup(id));
+        }
+        return axios.get(`/api/comments?&groupId=${id}`);
+      })
+      .then((response) => {
+        this.setState({ comments: response.data || [] });
+      });
   };
 
   findUserInGroup(users) {
     return users.some(e => e.userId === 119);
   };
+
+  onCommentReply(targetComment) {
+    this.setState({ targetComment }, () => {
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  }
+
+  onCommentSubmit(comment = '') {
+    axios
+      .post(`/api/comments`, {
+        depth: this.state.targetComment.hasOwnProperty('depth')
+          ? this.state.targetComment.depth + 1
+          : 0,
+        groupId: this.state.id,
+        message: comment.trim(),
+        parentId: this.state.targetComment.id || null,
+        userId: /*this.props.user.userId*/119
+      })
+      .then((response) => {
+        this.setState({
+          comments: [
+            ...this.state.comments.map((comment) => {
+              return {
+                ...comment,
+                children: this.state.targetComment.id === comment.id
+                  ? comment.children.concat(response.data.id)
+                  : comment.children,
+              }
+            }),
+            {
+              children: [],
+              displayName: this.props.user.displayname,
+              depth: this.state.targetComment.hasOwnProperty('depth')
+                ? this.state.targetComment.depth + 1
+                : 0,
+              id: response.data.id,
+              message: response.data.message,
+              userId: this.props.user.userId,
+            }
+          ],
+          targetComments: {}
+        }, () => {
+          window.scrollTo(
+            0,
+            document.getElementById(`comments-${response.data.id}`).offsetTop
+          );
+        });
+      })
+  }
 
   render() {
     const {
@@ -60,11 +112,18 @@ class Group extends Component {
 
     return (
       <StyledGroup>
-        <RestaurantDetail activeGroup={activeGroup} fromGroupPage />
-        <CommentList
-          comments={this.state.comments || []}
+        <RestaurantDetail
+          activeGroup={activeGroup}
+          fromGroupPage
         />
-        <CommentForm />
+        <CommentList
+          comments={this.state.comments}
+          onCommentReply={this.onCommentReply.bind(this)}
+        />
+        <CommentForm
+          targetCommentUser={this.state.targetComment.displayName}
+          onSubmit={this.onCommentSubmit.bind(this)}
+        />
       </StyledGroup>
     );
   }

@@ -1,38 +1,12 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { colors } from 'constants';
-import animate from 'gsap-promise';
 
 class Comment extends Component {
-  // componentDidMount = () => {
-  //   const { shouldAnimate } = this.props;
-  //
-  //   shouldAnimate && animate.set(this.component, { autoAlpha: 0, x: '-80px' });
-  // };
-  //
-  // componentWillUnmount = () => {
-  //   TweenMax.killTweensOf(this.component);
-  // };
-  //
-  // componentWillEnter = (done) => {
-  //   this.animateIn().then(done);
-  // };
-  //
-  // componentWillAppear = (done) => {
-  //   this.animateIn().then(done);
-  // };
-  //
-  // animateIn = () => {
-  //   return animate.to(this.component, 0.5, {
-  //     autoAlpha: 1,
-  //     x: '0px',
-  //     delay: this.props.delay
-  //   });
-  // };
 
   render() {
     const {
-      user, message, avatar = 'https://www.w3schools.com/howto/img_avatar.png', date
+      id, user, message, avatar = 'https://www.w3schools.com/howto/img_avatar.png', date, displayName
     } = this.props.data;
 
     const { isSmallView } = this.props;
@@ -40,20 +14,26 @@ class Comment extends Component {
     return (
       <React.Fragment>
         <StyledComment
+          id={`comments-${id}`}
           depth={this.props.data.depth}
           innerRef={el => (this.component = el)}
           isSmallView={isSmallView}
         >
           <StyledLeft>
-            <StyledImage img={avatar} isSmallView={isSmallView} />
+            <StyledAvatar onClick={() => {
+              this.props.onCommentReply(this.props.data)
+            }}>
+              <StyledImage img={avatar} isSmallView={isSmallView} />
+              <span>{displayName}</span>
+            </StyledAvatar>
           </StyledLeft>
           <StyledRight isSmallView={isSmallView}>
             <StyledTopText>
               <StyledRating isSmallView={isSmallView}>{user}</StyledRating>
-              {/* <StyledDesc isSmallView={isSmallView}>{price || 'N/A'}</StyledDesc> */}
             </StyledTopText>
             <StyledMiddleText isSmallView={isSmallView}>
-              {message}
+              {displayName.length > 0 ? <strong>@{displayName}</strong> : null}
+              <p>{message}</p>
             </StyledMiddleText>
             <StyledBottomText isSmallView={isSmallView}>{date}</StyledBottomText>
           </StyledRight>
@@ -64,6 +44,8 @@ class Comment extends Component {
             <Comment
               comments={this.props.comments}
               replies={replyData.children || []}
+              isSmallView={isSmallView}
+              onCommentReply={this.props.onCommentReply}
               key={replyData.id}
               data={replyData}
             />
@@ -82,7 +64,7 @@ const StyledComment = styled.div`
   justify-content: space-around;
   width: 90%;
   margin: 20px auto;
-  margin-left: ${props => props.depth ? (props.depth + 1) * 20 : 20}px !important;
+  margin-left: ${props => props.depth ? 40 : 0}px !important;
   opacity: 1 !important;
 
   ${props =>
@@ -99,23 +81,25 @@ const StyledLeft = styled.div`
 const StyledRight = styled.div`
   width: 75%;
   display: inline-block;
-  padding: 10px;
+  padding-left: 10px;
+`;
 
-  ${props =>
-    props.isSmallView &&
-    css`
-      padding: 0;
-    `};
+const StyledAvatar = styled.div`
+  > span {
+    display: block;
+    font-size: 12px;
+    margin: 0 5px 5px;
+  }
 `;
 
 const StyledImage = styled.div`
   background-image: url('${props => props.img}');
   background-size: cover;
   background-repeat: no-repeat;
-  width: 90px;
-  height: 90px;
+  width: 50px;
+  height: 50px;
   border-radius: 15px;
-  margin: 10px;
+  margin: 10px 10px 5px;
 
   ${props =>
     props.isSmallView &&
@@ -136,6 +120,9 @@ const StyledMiddleText = styled.div`
   font-size: 16px;
   margin-top: 10px;
   word-break: break-all;
+  > p {
+    margin-top: 5px;
+  }
 
   ${props =>
     props.isSmallView &&

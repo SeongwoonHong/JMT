@@ -6,7 +6,6 @@ import { Group } from 'actions';
 import { Loader, InputTextField, Button } from 'components';
 import { withCookies, Cookies } from 'react-cookie';
 import inputValidator from 'utils/input-validator';
-// import history from 'utils/history';
 import { colors } from 'constants';
 
 @withRouter
@@ -15,49 +14,38 @@ import { colors } from 'constants';
   app: state.App
 }))
 class CommentForm extends Component {
-  state = {
-    comment: '',
-    errorMessages: {}
-  };
 
-  // componentWillMount = () => {
-  //   if (this.getTokenFromCookie()) {
-  //     return history.push('/');
-  //   }
+  constructor(props) {
+    super(props);
 
-  //   return false;
-  // };
+    this.state = {
+      targetCommentUser: '',
+      comment: '',
+      errorMessages: {}
+    };
+  }
 
-  onChangeHandler = (e) => {
-    const { name, value } = e.target;
+  static getDerivedStateFromProps(props, state) {
+    return {
+      ...state,
+      targetCommentUser: props.targetCommentUser || ''
+    };
+  }
 
-    return this.setState({ [name]: value });
-  };
-
-  getTokenFromCookie = () => {
-    const cookies = new Cookies();
-    const token = cookies.get('JMT_AUTH_TOKEN');
-
-    return token;
+  onChangeHandler = ({ target: { value: comment }}) => {
+    this.setState({ comment });
   };
 
   saveComment = () => {
-    // const { dispatch, location: { state } } = this.props;
     const { comment } = this.state;
     const errorMessages = this.validateInputs(comment);
-    // let reRoute = '/';
 
     this.initializeErrorMessages();
     if (!this.isInputValidationPassed(errorMessages)) {
       return this.setState({ errorMessages });
     }
 
-    // if (state) {
-    //   reRoute = state.prevRoute;
-    // }
-
     return dispatch(Group.insertComment({ email, password }));
-    // return true;
   };
 
   isInputValidationPassed = (errorObject) => {
@@ -78,9 +66,18 @@ class CommentForm extends Component {
     return errorMessages;
   };
 
+  onKeyDown(e) {
+    if (e.which === 13 && this.state.comment.length > 0) {
+      this.props.onSubmit(this.state.comment);
+    }
+  }
+
   render() {
     const { app } = this.props;
-    const { comment, errorMessages } = this.state;
+    const { comment, errorMessages, targetCommentUser } = this.state;
+    const label = targetCommentUser.length > 0
+      ? `Enter your comment for @${targetCommentUser}`
+      : `Enter your comment`;
 
     if (app.isLoading) {
       return <Loader />;
@@ -90,9 +87,10 @@ class CommentForm extends Component {
       <StyledCommentContainer>
         <StyledInputWrapper>
           <InputTextField
-            label="Enter your comment"
+            label={label}
             name="comment"
             value={comment}
+            onKeyDown={this.onKeyDown.bind(this)}
             onChange={this.onChangeHandler}
             hasError={errorMessages.comment}
           />
@@ -100,7 +98,11 @@ class CommentForm extends Component {
             <StyledErrorMessage>{errorMessages.comment}</StyledErrorMessage>
           )}
         </StyledInputWrapper>
-        <Button onClick={this.saveComment} className="btn-save">
+        <Button onClick={() => {
+          if (this.state.comment.length > 0) {
+            this.props.onSubmit(comment);
+          }
+        }} className="btn-save">
           Save
         </Button>
       </StyledCommentContainer>
