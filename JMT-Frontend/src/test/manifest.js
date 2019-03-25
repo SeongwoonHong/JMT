@@ -3,17 +3,15 @@
 export default {
   NotFound: {
     components: require('components/NotFound'),
-    props: {
-    },
+    props: {}
   },
   SubHeader: {
     components: require('modules/app/components/restaurant-list/components/SubHeader'),
-    props: {
-    },
+    props: {}
   },
   Loader: {
     components: require('components/Loader'),
-    props: {},
+    props: {}
   },
   Signup: {
     components: require('modules/signup/components/Signup'),
@@ -22,18 +20,23 @@ export default {
   Button: {
     components: require('components/Button'),
     props: {
-      text: 'Search',
-    },
-  },
-  'email-verified': {
-    components: require('modules/email-verified'),
-    props: {
-    },
+      text: 'Search'
+    }
   },
   Dropdown: {
     components: require('modules/app/components/restaurant-landing/components/Dropdown'),
     props: {
-      items: ['All', 'Africa Restaurant', 'Afghan Restaurant', 'American Restaurant', 'Asian Restaurant', 'Something Restaurant', 'Something2 Restaurant', 'Something3 Restaurant', 'Something4 Restaurant'],
+      items: [
+        'All',
+        'Africa Restaurant',
+        'Afghan Restaurant',
+        'American Restaurant',
+        'Asian Restaurant',
+        'Something Restaurant',
+        'Something2 Restaurant',
+        'Something3 Restaurant',
+        'Something4 Restaurant'
+      ],
       isOpened: true
     }
   },
@@ -41,8 +44,8 @@ export default {
     components: require('components/Options'),
     props: {
       label: 'Cuisines',
-      text: 'All',
-    },
+      text: 'All'
+    }
   },
   ImageSlide: {
     components: require('modules/app/components/restaurant-detail/components/ImageSlide'),
@@ -50,28 +53,37 @@ export default {
       images: [
         'https://s3-media3.fl.yelpcdn.com/bphoto/Jt-heyagIeWlSGNcD6DSUw/o.jpg',
         'https://s3-media2.fl.yelpcdn.com/bphoto/zgESCUABKFAvTATWHpWT3w/o.jpg',
-        'https://s3-media2.fl.yelpcdn.com/bphoto/qxl3bpWRv_Vm9t8kQNxgGQ/o.jpg',
+        'https://s3-media2.fl.yelpcdn.com/bphoto/qxl3bpWRv_Vm9t8kQNxgGQ/o.jpg'
       ],
       width: '100%',
-      height: '250px',
-    },
+      height: '250px'
+    }
   },
   RatingCircle: {
     components: require('components/RatingCircle'),
     props: {
-      rating: 2,
-    },
+      rating: 2
+    }
   },
   Arrow: {
     components: require('components/Arrow'),
     props: {
-      className: 'right',
-    },
+      className: 'right'
+    }
   },
   Header: {
     components: require('components/Header'),
-    props: {
-    },
+    props: {}
   },
+  GroupList: {
+    components: require('components/GroupList'),
+    props: {
+      group: {
+        id: 'asdfadf',
+        date: '2019/03/19',
+        restaurantName: 'Ssam',
+        count: 4
+      }
+    }
+  }
 };
-
