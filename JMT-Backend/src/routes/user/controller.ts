@@ -191,7 +191,7 @@ export const login = async (req, res: Response) => {
       userId
     });
 
-    return res.json({
+    return res.set('cookie', 'asdf').json({
       success: true,
       token,
       userId: userId,

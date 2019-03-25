@@ -13,4 +13,3 @@ export class Group {
     this.restaurantName = group.restaurantName;
   }
 }
-

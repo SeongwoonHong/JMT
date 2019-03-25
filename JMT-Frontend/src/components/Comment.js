@@ -1,61 +1,82 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { colors } from 'constants';
-import animate from 'gsap-promise';
 
 class Comment extends Component {
-  componentDidMount = () => {
-    const { shouldAnimate } = this.props;
-
-    shouldAnimate && animate.set(this.component, { autoAlpha: 0, x: '-80px' });
-  };
-
-  componentWillUnmount = () => {
-    TweenMax.killTweensOf(this.component);
-  };
-
-  componentWillEnter = (done) => {
-    this.animateIn().then(done);
-  };
-
-  componentWillAppear = (done) => {
-    this.animateIn().then(done);
-  };
-
-  animateIn = () => {
-    return animate.to(this.component, 0.5, {
-      autoAlpha: 1,
-      x: '0px',
-      delay: this.props.delay
-    });
-  };
+  // componentDidMount = () => {
+  //   const { shouldAnimate } = this.props;
+  //
+  //   shouldAnimate && animate.set(this.component, { autoAlpha: 0, x: '-80px' });
+  // };
+  //
+  // componentWillUnmount = () => {
+  //   TweenMax.killTweensOf(this.component);
+  // };
+  //
+  // componentWillEnter = (done) => {
+  //   this.animateIn().then(done);
+  // };
+  //
+  // componentWillAppear = (done) => {
+  //   this.animateIn().then(done);
+  // };
+  //
+  // animateIn = () => {
+  //   return animate.to(this.component, 0.5, {
+  //     autoAlpha: 1,
+  //     x: '0px',
+  //     delay: this.props.delay
+  //   });
+  // };
 
   render() {
     const {
-      user, comment, avatar, date
+      user,
+      message,
+      avatar = 'https://www.w3schools.com/howto/img_avatar.png',
+      date
     } = this.props.data;
 
     const { isSmallView } = this.props;
 
     return (
-      <StyledComment
-        innerRef={el => (this.component = el)}
-        isSmallView={isSmallView}
-      >
-        <StyledLeft>
-          <StyledImage img={avatar} isSmallView={isSmallView} />
-        </StyledLeft>
-        <StyledRight isSmallView={isSmallView}>
-          <StyledTopText>
-            <StyledRating isSmallView={isSmallView}>{user}</StyledRating>
-            {/* <StyledDesc isSmallView={isSmallView}>{price || 'N/A'}</StyledDesc> */}
-          </StyledTopText>
-          <StyledMiddleText isSmallView={isSmallView}>
-            {comment}
-          </StyledMiddleText>
-          <StyledBottomText isSmallView={isSmallView}>{date}</StyledBottomText>
-        </StyledRight>
-      </StyledComment>
+      <React.Fragment>
+        <StyledComment
+          depth={this.props.data.depth}
+          innerRef={el => (this.component = el)}
+          isSmallView={isSmallView}
+        >
+          <StyledLeft>
+            <StyledImage img={avatar} isSmallView={isSmallView} />
+          </StyledLeft>
+          <StyledRight isSmallView={isSmallView}>
+            <StyledTopText>
+              <StyledRating isSmallView={isSmallView}>{user}</StyledRating>
+              {/* <StyledDesc isSmallView={isSmallView}>{price || 'N/A'}</StyledDesc> */}
+            </StyledTopText>
+            <StyledMiddleText isSmallView={isSmallView}>
+              {message}
+            </StyledMiddleText>
+            <StyledBottomText isSmallView={isSmallView}>
+              {date}
+            </StyledBottomText>
+          </StyledRight>
+        </StyledComment>
+        {this.props.replies &&
+          this.props.replies.map((reply) => {
+            const replyData = this.props.comments.find(
+              comment => comment.id === reply
+            );
+            return (
+              <Comment
+                comments={this.props.comments}
+                replies={replyData.children || []}
+                key={replyData.id}
+                data={replyData}
+              />
+            );
+          })}
+      </React.Fragment>
     );
   }
 }
@@ -68,6 +89,9 @@ const StyledComment = styled.div`
   justify-content: space-around;
   width: 90%;
   margin: 20px auto;
+  margin-left: ${props =>
+    props.depth ? (props.depth + 1) * 20 : 20}px !important;
+  opacity: 1 !important;
 
   ${props =>
     props.isSmallView &&
