@@ -6,12 +6,12 @@ import { Comment } from 'components';
 
 class Comments extends Component {
   render() {
-    const { comments } = this.props;
+    const { comments, onCommentReply } = this.props;
 
     return (
       <StyledRestaurantList>
         <TransitionGroup>
-          {comments
+          { comments
             .filter((comment) => comment.depth === 0)
             .map((comment, index) => {
               return (
@@ -21,11 +21,12 @@ class Comments extends Component {
                   data={comment}
                   key={comment.id}
                   delay={index / comments.length}
+                  onCommentReply={onCommentReply}
                   shouldAnimate
                   isSmallView
                 />
               );
-            })}
+            }) }
         </TransitionGroup>
       </StyledRestaurantList>
     );

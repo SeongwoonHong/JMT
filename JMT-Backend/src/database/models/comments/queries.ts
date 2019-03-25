@@ -56,7 +56,7 @@ class Query {
       .join(' AND ');
 
     return db.pg.query(
-      `SELECT (SELECT coalesce((select array(SELECT child FROM comments_comments WHERE parent = comments.id)), null)) as children, depth, id, message FROM comments WHERE ${ _options };`
+      `SELECT (SELECT coalesce((select array(SELECT child FROM comments_comments WHERE parent = comments.id)), null)) as children, depth, id, message, users."userId", users."displayName" FROM comments LEFT JOIN users ON comments."userId" = users."userId" WHERE ${ _options };`
     );
   };
 }
