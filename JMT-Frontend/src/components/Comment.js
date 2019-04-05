@@ -21,7 +21,7 @@ class Comment extends Component {
         >
           <StyledLeft>
             <StyledAvatar onClick={() => {
-              this.props.onCommentReply(this.props.data)
+              this.props.onCommentReply(this.props.data);
             }}>
               <StyledImage img={avatar} isSmallView={isSmallView} />
               <span>{displayName}</span>
@@ -39,7 +39,7 @@ class Comment extends Component {
           </StyledRight>
         </StyledComment>
         {this.props.replies && this.props.replies.map((reply) => {
-          const replyData = this.props.comments.find((comment) => comment.id === reply);
+          const replyData = this.props.comments.find(comment => comment.id === reply);
           return (
             <Comment
               comments={this.props.comments}
