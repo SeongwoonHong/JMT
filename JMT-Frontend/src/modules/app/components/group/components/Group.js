@@ -26,6 +26,9 @@ class Group extends Component {
       comments: [],
       targetComment: {},
     };
+
+    this.onCommentReply = this.onCommentReply.bind(this);
+    this.onCommentSubmit = this.onCommentSubmit.bind(this);
   }
 
   componentDidMount = () => {
@@ -46,10 +49,6 @@ class Group extends Component {
       });
   };
 
-  findUserInGroup(users) {
-    return users.some(e => e.userId === this.props.user.userId);
-  };
-
   onCommentReply(targetComment) {
     this.setState({ targetComment }, () => {
       window.scrollTo(0, document.body.scrollHeight);
@@ -59,7 +58,7 @@ class Group extends Component {
   onCommentSubmit(comment = '') {
     axios
       .post('/api/comments', {
-        depth: this.state.targetComment.hasOwnProperty('depth')
+        depth: this.state.targetComment.depth !== undefined
           ? this.state.targetComment.depth + 1
           : 0,
         groupId: this.state.id,
@@ -70,18 +69,18 @@ class Group extends Component {
       .then((response) => {
         this.setState({
           comments: [
-            ...this.state.comments.map((comment) => {
+            ...this.state.comments.map((existingComment) => {
               return {
-                ...comment,
-                children: this.state.targetComment.id === comment.id
-                  ? comment.children.concat(response.data.id)
-                  : comment.children,
+                ...existingComment,
+                children: this.state.targetComment.id === existingComment.id
+                  ? existingComment.children.concat(response.data.id)
+                  : existingComment.children,
               };
             }),
             {
               children: [],
               displayName: this.props.user.displayName,
-              depth: this.state.targetComment.hasOwnProperty('depth')
+              depth: this.state.targetComment.depth !== undefined
                 ? this.state.targetComment.depth + 1
                 : 0,
               id: response.data.id,
@@ -97,6 +96,10 @@ class Group extends Component {
           );
         });
       });
+  }
+
+  findUserInGroup(users) {
+    return users.some(e => e.userId === this.props.user.userId);
   }
 
   render() {
@@ -117,11 +120,11 @@ class Group extends Component {
         />
         <CommentList
           comments={this.state.comments}
-          onCommentReply={this.onCommentReply.bind(this)}
+          onCommentReply={this.onCommentReply}
         />
         <CommentForm
           targetCommentUser={this.state.targetComment.displayName}
-          onSubmit={this.onCommentSubmit.bind(this)}
+          onSubmit={this.onCommentSubmit}
         />
       </StyledGroup>
     );

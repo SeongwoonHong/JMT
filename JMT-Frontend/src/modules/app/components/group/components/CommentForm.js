@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Group } from 'actions';
 import { Loader, InputTextField, Button } from 'components';
-import { withCookies, Cookies } from 'react-cookie';
+import { withCookies } from 'react-cookie';
 import inputValidator from 'utils/input-validator';
 import { colors } from 'constants';
 
@@ -30,11 +30,38 @@ class CommentForm extends Component {
       comment: '',
       errorMessages: {}
     };
+
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onChangeHandler = this.onChangeHandler.bind(this);
   }
 
-  onChangeHandler = ({ target: { value: comment }}) => {
+  onChangeHandler = ({ target: { value: comment } }) => {
     this.setState({ comment });
   };
+
+  onKeyDown(e) {
+    if (e.which === 13 && this.state.comment.length > 0) {
+      this.props.onSubmit(this.state.comment);
+    }
+  }
+
+  validateInputs = (comment) => {
+    const errorMessages = {};
+
+    if (inputValidator.isEmpty(comment)) {
+      errorMessages.comment = 'Comment is required';
+    }
+
+    return errorMessages;
+  };
+
+  initializeErrorMessages = () => {
+    return this.setState({ errorMessages: {} });
+  };
+
+  isInputValidationPassed(errorObject) {
+    return Object.keys(errorObject).length === 0;
+  }
 
   saveComment() {
     const { comment } = this.state;
@@ -48,36 +75,12 @@ class CommentForm extends Component {
     return dispatch(Group.insertComment({ email, password }));
   }
 
-  isInputValidationPassed = (errorObject) => {
-    return Object.keys(errorObject).length === 0;
-  };
-
-  initializeErrorMessages = () => {
-    return this.setState({ errorMessages: {} });
-  };
-
-  validateInputs = (comment) => {
-    const errorMessages = {};
-
-    if (inputValidator.isEmpty(comment)) {
-      errorMessages.comment = 'Comment is required';
-    }
-
-    return errorMessages;
-  };
-
-  onKeyDown(e) {
-    if (e.which === 13 && this.state.comment.length > 0) {
-      this.props.onSubmit(this.state.comment);
-    }
-  }
-
   render() {
     const { app } = this.props;
     const { comment, errorMessages, targetCommentUser } = this.state;
     const label = targetCommentUser.length > 0
       ? `Enter your comment for @${targetCommentUser}`
-      : `Enter your comment`;
+      : 'Enter your comment';
 
     if (app.isLoading) {
       return <Loader />;
@@ -90,7 +93,7 @@ class CommentForm extends Component {
             label={label}
             name="comment"
             value={comment}
-            onKeyDown={this.onKeyDown.bind(this)}
+            onKeyDown={this.onKeyDown}
             onChange={this.onChangeHandler}
             hasError={errorMessages.comment}
           />
@@ -98,11 +101,13 @@ class CommentForm extends Component {
             <StyledErrorMessage>{errorMessages.comment}</StyledErrorMessage>
           )}
         </StyledInputWrapper>
-        <Button onClick={() => {
-          if (this.state.comment.length > 0) {
-            this.props.onSubmit(comment);
-          }
-        }} className="btn-save">
+        <Button
+          onClick={() => {
+            if (this.state.comment.length > 0) {
+              this.props.onSubmit(comment);
+            }
+          }}
+          className="btn-save">
           Save
         </Button>
       </StyledCommentContainer>

@@ -12,7 +12,7 @@ class Comments extends Component {
       <StyledRestaurantList>
         <TransitionGroup>
           { comments
-            .filter((comment) => comment.depth === 0)
+            .filter(comment => comment.depth === 0)
             .map((comment, index) => {
               return (
                 <Comment
