@@ -15,6 +15,13 @@ import { colors } from 'constants';
 }))
 class CommentForm extends Component {
 
+  static getDerivedStateFromProps(props, state) {
+    return {
+      ...state,
+      targetCommentUser: props.targetCommentUser || ''
+    };
+  }
+
   constructor(props) {
     super(props);
 
@@ -25,18 +32,11 @@ class CommentForm extends Component {
     };
   }
 
-  static getDerivedStateFromProps(props, state) {
-    return {
-      ...state,
-      targetCommentUser: props.targetCommentUser || ''
-    };
-  }
-
   onChangeHandler = ({ target: { value: comment }}) => {
     this.setState({ comment });
   };
 
-  saveComment = () => {
+  saveComment() {
     const { comment } = this.state;
     const errorMessages = this.validateInputs(comment);
 
@@ -46,7 +46,7 @@ class CommentForm extends Component {
     }
 
     return dispatch(Group.insertComment({ email, password }));
-  };
+  }
 
   isInputValidationPassed = (errorObject) => {
     return Object.keys(errorObject).length === 0;
