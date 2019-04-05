@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -7,8 +8,6 @@ import { Loader } from 'components';
 import RestaurantDetail from '../../restaurant-detail';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
-
-import axios from 'axios';
 
 @connect(state => ({
   group: state.Group,
@@ -48,7 +47,7 @@ class Group extends Component {
   };
 
   findUserInGroup(users) {
-    return users.some(e => e.userId === 119);
+    return users.some(e => e.userId === this.props.user.userId);
   };
 
   onCommentReply(targetComment) {
@@ -59,14 +58,14 @@ class Group extends Component {
 
   onCommentSubmit(comment = '') {
     axios
-      .post(`/api/comments`, {
+      .post('/api/comments', {
         depth: this.state.targetComment.hasOwnProperty('depth')
           ? this.state.targetComment.depth + 1
           : 0,
         groupId: this.state.id,
         message: comment.trim(),
         parentId: this.state.targetComment.id || null,
-        userId: /*this.props.user.userId*/119
+        userId: this.props.user.userId
       })
       .then((response) => {
         this.setState({
@@ -77,11 +76,11 @@ class Group extends Component {
                 children: this.state.targetComment.id === comment.id
                   ? comment.children.concat(response.data.id)
                   : comment.children,
-              }
+              };
             }),
             {
               children: [],
-              displayName: this.props.user.displayname,
+              displayName: this.props.user.displayName,
               depth: this.state.targetComment.hasOwnProperty('depth')
                 ? this.state.targetComment.depth + 1
                 : 0,
@@ -90,14 +89,14 @@ class Group extends Component {
               userId: this.props.user.userId,
             }
           ],
-          targetComments: {}
+          targetComment: {}
         }, () => {
           window.scrollTo(
             0,
             document.getElementById(`comments-${response.data.id}`).offsetTop
           );
         });
-      })
+      });
   }
 
   render() {
@@ -108,7 +107,7 @@ class Group extends Component {
     const { notInGroup } = this.state;
 
     if (notInGroup) return <Redirect to={{ pathname: '/404' }} />;
-    if (!activeGroup.id || !119/*user.userId*/) return <Loader />;
+    if (!activeGroup.id || !user.userId) return <Loader />;
 
     return (
       <StyledGroup>
