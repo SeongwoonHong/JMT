@@ -9,6 +9,12 @@ export const ALERT_HIDE = 'ALERT_HIDE';
  */
 let alertID = null;
 
+export function hide() {
+  return {
+    type: ALERT_HIDE,
+  };
+}
+
 export function show(alert) {
   return (dispatch) => {
     clearTimeout(alertID);
@@ -18,11 +24,5 @@ export function show(alert) {
     });
 
     return alertID = setTimeout(() => dispatch(hide()), 3000);
-  };
-}
-
-export function hide() {
-  return {
-    type: ALERT_HIDE,
   };
 }
