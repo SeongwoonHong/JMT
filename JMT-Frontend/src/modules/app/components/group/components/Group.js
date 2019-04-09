@@ -26,6 +26,9 @@ class Group extends Component {
       comments: [],
       targetComment: {}
     };
+
+    this.onCommentReply = this.onCommentReply.bind(this);
+    this.onCommentSubmit = this.onCommentSubmit.bind(this);
   }
 
   componentDidMount = () => {
@@ -102,8 +105,7 @@ class Group extends Component {
   }
 
   findUserInGroup(users) {
-    const { userId } = this.props.user;
-    return users.some(e => e.userId === userId);
+    return users.some(e => e.userId === this.props.user.userId);
   }
 
   render() {
