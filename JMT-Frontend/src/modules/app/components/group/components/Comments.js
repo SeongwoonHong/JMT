@@ -6,7 +6,7 @@ import { Comment } from 'components';
 
 class Comments extends Component {
   render() {
-    const { comments } = this.props;
+    const { comments, onCommentReply } = this.props;
 
     return (
       <StyledRestaurantList>
@@ -21,6 +21,7 @@ class Comments extends Component {
                   data={comment}
                   key={comment.id}
                   delay={index / comments.length}
+                  onCommentReply={onCommentReply}
                   shouldAnimate
                   isSmallView
                 />

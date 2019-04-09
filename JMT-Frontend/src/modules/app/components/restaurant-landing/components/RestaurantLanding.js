@@ -17,8 +17,14 @@ import EnterLocation from './EnterLocation';
 class Landing extends Component {
   state = {
     isDropdownOpened: false,
-    cuisinesText: 'All',
-    locationText: 'Select Location',
+    selectedCuisine: {
+      name: 'All',
+      value: 'All',
+    },
+    selectedLocation: {
+      name: 'Select Location',
+      value: 'Selected Location',
+    },
     currentLocation: {},
     dropdownItems: [],
     dropdownMode: null,
@@ -80,21 +86,21 @@ class Landing extends Component {
   search = () => {
     const { dispatch } = this.props;
     const {
-      cuisinesText,
-      locationText,
+      selectedCuisine,
+      selectedLocation,
       currentLocation: {
         lat,
         lng,
       },
     } = this.state;
 
-    if (locationText === 'Select Location') {
+    if (selectedLocation.name === 'Select Location') {
       return toast.info('You need to select location to search');
     }
 
     return dispatch(Restaurant.searchRestaurant({
-      cuisines: cuisinesText === 'All' ? 'restaurants' : cuisinesText,
-      location: locationText === 'Current Location' ? '' : locationText,
+      cuisines: selectedCuisine.value === 'All' ? 'restaurants' : selectedCuisine.value,
+      location: selectedLocation.value === 'Current Location' ? '' : selectedLocation.value,
       latitude: lat,
       longitude: lng,
     }));
@@ -115,7 +121,10 @@ class Landing extends Component {
   closeEnterLocation = (location) => {
     this.setState({
       isEnterLocationVisible: false,
-      locationText: location,
+      selectedLocation: {
+        name: location,
+        value: location,
+      },
     });
   }
 
@@ -123,16 +132,16 @@ class Landing extends Component {
     this.closeDropdown();
 
     if (mode === 'cuisines') {
-      this.setState({ cuisinesText: selectedItem });
+      this.setState({ selectedCuisine: selectedItem });
     } else {
-      this.setState({ locationText: selectedItem });
+      this.setState({ selectedLocation: selectedItem });
     }
 
-    if (selectedItem === 'Current Location') {
+    if (selectedItem.value === 'Current Location') {
       return this.getCurrentLocation();
     }
 
-    if (selectedItem === 'Enter Location') {
+    if (selectedItem.value === 'Enter Location') {
       return this.openEnterLocation();
     }
 
@@ -167,8 +176,8 @@ class Landing extends Component {
 
   render() {
     const {
-      cuisinesText,
-      locationText,
+      selectedCuisine,
+      selectedLocation,
       isDropdownOpened,
       dropdownItems,
       dropdownMode,
@@ -179,14 +188,14 @@ class Landing extends Component {
       <StyledLanding>
         <Options
           onClick={() => this.optionClickHandler('cuisines')}
-          text={cuisinesText}
+          text={selectedCuisine.name}
           label="Cuisines"
           innerRef={el => this.cuisines = el}
           className="cuisines-text"
         />
         <Options
           onClick={() => this.optionClickHandler('location')}
-          text={locationText}
+          text={selectedLocation.name}
           label="Location"
           innerRef={el => this.location = el}
         />

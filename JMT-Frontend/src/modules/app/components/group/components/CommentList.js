@@ -20,7 +20,10 @@ class CommentList extends React.Component {
     return (
       <StyledDiv>
         <StyledHeader>Group Chat</StyledHeader>
-        <Comments comments={this.props.comments} />
+        <Comments
+          comments={this.props.comments}
+          onCommentReply={this.props.onCommentReply}
+        />
       </StyledDiv>
     );
   }

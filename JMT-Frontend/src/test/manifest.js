@@ -23,11 +23,6 @@ export default {
       text: 'Search',
     },
   },
-  // 'email-verified': {
-  //   components: require('modules/email-verified'),
-  //   props: {
-  //   },
-  // },
   Dropdown: {
     components: require('modules/app/components/restaurant-landing/components/Dropdown'),
     props: {

@@ -4,10 +4,27 @@ const chalk = require('chalk');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devPort = 3000;
-const plugins = [
+const plugins = isProduction ? [
+  new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+  }),
+  new webpack.NoEmitOnErrorsPlugin(),
+  new UglifyJsPlugin(),
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'vendor',
+    filename: 'vendor.[hash].js',
+  }),
+  new HtmlWebpackPlugin({
+    title: 'JMT',
+    favicon: 'public/sample_favicon.png',
+    template: path.resolve(process.cwd(), 'public/index.html'),
+    inject: 'body',
+  }),
+] : [
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
   }),
@@ -18,7 +35,7 @@ const plugins = [
     template: path.resolve(process.cwd(), 'public/index.html'),
     inject: 'body',
   }),
-  new OpenBrowserPlugin({ url: `http://localhost:${devPort}` })
+  new OpenBrowserPlugin({ url: `http://localhost:${devPort}` }),
 ];
 
 console.log(`
@@ -29,10 +46,24 @@ console.log(`
 
 module.exports = {
   entry: {
-    main: path.resolve(process.cwd(), 'src/index.js'),
+    app: path.resolve(process.cwd(), 'src/index.js'),
+    vendor: [
+      'react',
+      'react-dom',
+      'react-redux',
+      'react-router',
+      'react-router-dom',
+      'redux',
+      'redux-thunk',
+      'react-datepicker',
+      'react-modal',
+      'react-google-maps',
+      'prop-types',
+      'styled-components',
+    ]
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].[hash:6].js',
     path: path.resolve(process.cwd(), 'dist'),
     publicPath: '/',
   },

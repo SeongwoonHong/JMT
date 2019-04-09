@@ -18,6 +18,7 @@ import Logo from './Logo';
 import Header from './Header';
 import Comment from './Comment';
 import MaterialIcon from './MaterialIcon';
+import GroupList from './GroupList';
 
 export {
   Button,
@@ -40,4 +41,5 @@ export {
   Header,
   Comment,
   MaterialIcon,
+  GroupList
 };

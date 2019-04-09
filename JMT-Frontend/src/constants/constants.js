@@ -1,5 +1,59 @@
-export const cuisineOptions = ['All', 'African Restaurant', 'Afghan Restaurant', 'American Restaurant', 'Asian Restaurant', 'Something Restaurant', 'Something2 Restaurant', 'Something3 Restaurant', 'Something4 Restaurant'];
-export const locationOptions = ['Current Location', 'Enter Location'];
+export const cuisineOptions = [
+  {
+    name: 'All',
+    value: 'All'
+  },
+  {
+    name: 'African Restaurant',
+    value: 'african'
+  },
+  {
+    name: 'Afghan Restaurant',
+    value: 'afghani'
+  },
+  {
+    name: 'American Restaurant',
+    value: 'tradamerican,newamerican'
+  },
+  {
+    name: 'Korean Restaurant',
+    value: 'korean'
+  },
+  {
+    name: 'Japanese Restaurant',
+    value: 'japanese'
+  },
+  {
+    name: 'Asian Restaurant',
+    value: 'asian'
+  },
+  {
+    name: 'Chinese Restaurant',
+    value: 'chinese'
+  },
+  {
+    name: 'French Restaurant',
+    value: 'french'
+  },
+  {
+    name: 'Italian Restaurant',
+    value: 'italian'
+  },
+  {
+    name: 'Fast Food',
+    value: 'hotdogs'
+  }
+];
+export const locationOptions = [
+  {
+    name: 'Current Location',
+    value: 'Current Location',
+  },
+  {
+    name: 'Enter Location',
+    value: 'Enter Location',
+  }
+];
 export const categories = [ /** Menu Category and Sub menus */
   {
     name: 'Sort',

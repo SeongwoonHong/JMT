@@ -12,7 +12,7 @@
   "dependencies": {
     "aws-sdk": "^2.375.0",
     "axios": "^0.18.0",
-    "bcrypt": "^2.0.1",
+    "bcrypt": "^3.0.5",
     "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",

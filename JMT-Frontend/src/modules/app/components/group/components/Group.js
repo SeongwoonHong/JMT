@@ -23,44 +23,110 @@ class Group extends Component {
     this.state = {
       id: params.get('id'),
       notInGroup: false,
-      comments: []
+      comments: [],
+      targetComment: {}
     };
   }
 
   componentDidMount = () => {
-    axios.get('/api/comments?id=119&groupId=2').then((a) => {
-      this.setState({ comments: a.data.comments });
-    });
     const { dispatch } = this.props;
     const { id } = this.state;
 
-    dispatch(GroupAction.checkUserGroup(id)).then((res) => {
-      console.log('res', res.payload, this.props);
-      if (!this.findUserInGroup(res.payload)) {
-        this.setState({ notInGroup: true });
-      } else dispatch(GroupAction.getGroup(id));
-    });
+    dispatch(GroupAction.checkUserGroup(id))
+      .then((res) => {
+        if (!this.findUserInGroup(res.payload)) {
+          this.setState({ notInGroup: true });
+        } else {
+          dispatch(GroupAction.getGroup(id));
+        }
+        return axios.get(`/api/comments?&groupId=${id}`);
+      })
+      .then((response) => {
+        this.setState({ comments: response.data || [] });
+      });
   };
 
+  onCommentReply(targetComment) {
+    this.setState({ targetComment }, () => {
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  }
+
+  onCommentSubmit(comment = '') {
+    axios
+      .post('/api/comments', {
+        depth:
+          this.state.targetComment.depth !== undefined
+            ? this.state.targetComment.depth + 1
+            : 0,
+        groupId: this.state.id,
+        message: comment.trim(),
+        parentId: this.state.targetComment.id || null,
+        userId: this.props.user.userId
+      })
+      .then((response) => {
+        this.setState(
+          {
+            comments: [
+              ...this.state.comments.map((existingComment) => {
+                return {
+                  ...existingComment,
+                  children:
+                    this.state.targetComment.id === existingComment.id
+                      ? existingComment.children.concat(response.data.id)
+                      : existingComment.children
+                };
+              }),
+              {
+                children: [],
+                displayName: this.props.user.displayName,
+                depth:
+                  this.state.targetComment.depth !== undefined
+                    ? this.state.targetComment.depth + 1
+                    : 0,
+                id: response.data.id,
+                message: response.data.message,
+                userId: this.props.user.userId
+              }
+            ],
+            targetComment: {}
+          },
+          () => {
+            window.scrollTo(
+              0,
+              document.getElementById(`comments-${response.data.id}`).offsetTop
+            );
+          }
+        );
+      });
+  }
+
   findUserInGroup(users) {
-    return users.some(e => e.userId === 119);
+    const { userId } = this.props.user;
+    return users.some(e => e.userId === userId);
   }
 
   render() {
     const {
-      group: { activeGroup }
-      // user,
+      group: { activeGroup },
+      user
     } = this.props;
     const { notInGroup } = this.state;
 
     if (notInGroup) return <Redirect to={{ pathname: '/404' }} />;
-    if (!activeGroup.id || !119 /* user.userId */) return <Loader />;
+    if (!activeGroup.id || !user.userId) return <Loader />;
 
     return (
       <StyledGroup>
         <RestaurantDetail activeGroup={activeGroup} fromGroupPage />
-        <CommentList comments={this.state.comments || []} />
-        <CommentForm />
+        <CommentList
+          comments={this.state.comments}
+          onCommentReply={this.onCommentReply}
+        />
+        <CommentForm
+          targetCommentUser={this.state.targetComment.displayName}
+          onSubmit={this.onCommentSubmit}
+        />
       </StyledGroup>
     );
   }
