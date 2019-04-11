@@ -11,7 +11,7 @@ class Comments extends Component {
     return (
       <StyledRestaurantList>
         <TransitionGroup>
-          { comments
+          {comments
             .filter(comment => comment.depth === 0)
             .map((comment, index) => {
               return (
@@ -26,7 +26,7 @@ class Comments extends Component {
                   isSmallView
                 />
               );
-            }) }
+            })}
         </TransitionGroup>
       </StyledRestaurantList>
     );

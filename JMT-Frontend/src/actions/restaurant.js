@@ -24,7 +24,7 @@ export const JOIN_RESTAURANT_FAIL = 'JOIN_RESTAURANT_FAIL';
 export const getRestaurant = (data) => {
   return {
     type: GET_RESTAURANT,
-    payload: data,
+    payload: data
   };
 };
 
@@ -32,11 +32,12 @@ export const getRestaurantDetail = (id) => {
   return (dispatch) => {
     dispatch(App.loadingStart('getRestaurantDetail'));
 
-    return axios.get('/api/restaurant/getRestaurantDetail', {
-      params: {
-        id
-      }
-    })
+    return axios
+      .get('/api/restaurant/getRestaurantDetail', {
+        params: {
+          id
+        }
+      })
       .then((res) => {
         dispatch({ type: GET_RESTAURANT_DETAIL, payload: res.data, id });
         dispatch(App.loadingDone());
@@ -45,7 +46,7 @@ export const getRestaurantDetail = (id) => {
         // TODO - Toaster
         dispatch({
           type: GET_RESTAURANT_DETAIL_FAIL,
-          payload: e,
+          payload: e
         });
       });
   };
@@ -56,22 +57,23 @@ export const searchRestaurant = ({
   location,
   latitude,
   longitude,
-  ...rest,
+  ...rest
 }) => {
   return (dispatch) => {
     const { sort_by: sortBy, price } = rest;
 
     dispatch(App.loadingStart('searchRestaurant'));
-    return axios.get('/api/restaurant/searchRestaurant', {
-      params: {
-        location,
-        latitude,
-        longitude,
-        sort_by: sortBy,
-        categories: cuisines, // on the backend, 'cuisines' is now categories. so we need to pass it as categories
-        price,
-      }
-    })
+    return axios
+      .get('/api/restaurant/searchRestaurant', {
+        params: {
+          location,
+          latitude,
+          longitude,
+          sort_by: sortBy,
+          categories: cuisines, // on the backend, 'cuisines' is now categories. so we need to pass it as categories
+          price
+        }
+      })
       .then((res) => {
         dispatch(App.loadingDone());
         dispatch(getRestaurant(res.data));
@@ -115,13 +117,14 @@ export const getRestaurantAutocomplete = ({
   longitude = -79.4136106
 }) => {
   return () => {
-    return axios.get('/api/restaurant/getRestaurantAutoComplete', {
-      params: {
-        keyword,
-        latitude,
-        longitude,
-      }
-    })
+    return axios
+      .get('/api/restaurant/getRestaurantAutoComplete', {
+        params: {
+          keyword,
+          latitude,
+          longitude
+        }
+      })
       .then((e) => {
         return e.data;
       })
@@ -137,25 +140,28 @@ export const getRestaurantAutocomplete = ({
  * @param {string} restaurantId
  * @param {string} restaurantName
  */
-export const joinRestaurant = (date, restaurantId, restaurantName) => {
-  return (dispatch) => {
-    dispatch(App.loadingStart('joinRestaurant'));
-
-    return axios.post('/api/restaurant/joinRestaurant', {
+export const joinRestaurant = (
+  date,
+  restaurantId,
+  restaurantName
+) => (dispatch) => {
+  dispatch(App.loadingStart('joinRestaurant'));
+  return axios
+    .post('/api/restaurant/joinRestaurant', {
       date,
       restaurantId,
-      restaurantName,
+      restaurantName
     })
-      .then(() => {
-        dispatch({ type: JOIN_RESTAURANT });
-        dispatch(App.loadingDone());
-        toast.success('Saved');
-      })
-      .catch(({ response }) => {
-        console.log(response.data);
-        toast.error(response.data.msg);
-        dispatch({ type: JOIN_RESTAURANT_FAIL });
-        dispatch(App.loadingDone());
-      });
-  };
+    .then((res) => {
+      dispatch({ type: JOIN_RESTAURANT });
+      dispatch(App.loadingDone());
+      toast.success('Saved');
+      return history.push(`/main/group?id=${res.data.groupId}`);
+    })
+    .catch(({ response }) => {
+      console.log(response.data);
+      toast.error(response.data.msg);
+      dispatch({ type: JOIN_RESTAURANT_FAIL });
+      dispatch(App.loadingDone());
+    });
 };

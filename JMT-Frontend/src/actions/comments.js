@@ -4,15 +4,15 @@ const REMOVE_COMMENT = 'app/comments/REMOVE_COMMENT';
 
 export const addGroupComments = payload => ({
   type: ADD_GROUP_COMMENTS,
-  payload,
+  payload
 });
 
 export const addComment = payload => ({
   type: ADD_COMMENT,
-  payload,
+  payload
 });
 
 export const removeComment = payload => ({
   type: REMOVE_COMMENT,
-  payload,
+  payload
 });

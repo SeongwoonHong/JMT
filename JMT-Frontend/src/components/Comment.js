@@ -3,10 +3,14 @@ import styled, { css } from 'styled-components';
 import { colors } from 'constants';
 
 class Comment extends Component {
-
   render() {
     const {
-      id, user, message, avatar = 'https://www.w3schools.com/howto/img_avatar.png', date, displayName
+      id,
+      user,
+      message,
+      avatar = 'https://www.w3schools.com/howto/img_avatar.png',
+      date,
+      displayName
     } = this.props.data;
 
     const { isSmallView } = this.props;
@@ -20,9 +24,11 @@ class Comment extends Component {
           isSmallView={isSmallView}
         >
           <StyledLeft>
-            <StyledAvatar onClick={() => {
-              this.props.onCommentReply(this.props.data);
-            }}>
+            <StyledAvatar
+              onClick={() => {
+                this.props.onCommentReply(this.props.data);
+              }}
+            >
               <StyledImage img={avatar} isSmallView={isSmallView} />
               <span>{displayName}</span>
             </StyledAvatar>
@@ -35,22 +41,27 @@ class Comment extends Component {
               {displayName.length > 0 ? <strong>@{displayName}</strong> : null}
               <p>{message}</p>
             </StyledMiddleText>
-            <StyledBottomText isSmallView={isSmallView}>{date}</StyledBottomText>
+            <StyledBottomText isSmallView={isSmallView}>
+              {date}
+            </StyledBottomText>
           </StyledRight>
         </StyledComment>
-        {this.props.replies && this.props.replies.map((reply) => {
-          const replyData = this.props.comments.find(comment => comment.id === reply);
-          return (
-            <Comment
-              comments={this.props.comments}
-              replies={replyData.children || []}
-              isSmallView={isSmallView}
-              onCommentReply={this.props.onCommentReply}
-              key={replyData.id}
-              data={replyData}
-            />
-          );
-        })}
+        {this.props.replies &&
+          this.props.replies.map((reply) => {
+            const replyData = this.props.comments.find(
+              comment => comment.id === reply
+            );
+            return (
+              <Comment
+                comments={this.props.comments}
+                replies={replyData.children || []}
+                isSmallView={isSmallView}
+                onCommentReply={this.props.onCommentReply}
+                key={replyData.id}
+                data={replyData}
+              />
+            );
+          })}
       </React.Fragment>
     );
   }
@@ -64,7 +75,7 @@ const StyledComment = styled.div`
   justify-content: space-around;
   width: 90%;
   margin: 20px auto;
-  margin-left: ${props => props.depth ? 40 : 0}px !important;
+  margin-left: ${props => (props.depth ? 40 : 0)}px !important;
   opacity: 1 !important;
 
   ${props =>

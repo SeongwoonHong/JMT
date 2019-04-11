@@ -1,7 +1,7 @@
-import axios from 'axios';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import { Group as GroupAction } from 'actions';
 import { Redirect } from 'react-router-dom';
 import { Loader } from 'components';
@@ -24,7 +24,7 @@ class Group extends Component {
       id: params.get('id'),
       notInGroup: false,
       comments: [],
-      targetComment: {},
+      targetComment: {}
     };
 
     this.onCommentReply = this.onCommentReply.bind(this);
@@ -58,43 +58,49 @@ class Group extends Component {
   onCommentSubmit(comment = '') {
     axios
       .post('/api/comments', {
-        depth: this.state.targetComment.depth !== undefined
-          ? this.state.targetComment.depth + 1
-          : 0,
+        depth:
+          this.state.targetComment.depth !== undefined
+            ? this.state.targetComment.depth + 1
+            : 0,
         groupId: this.state.id,
         message: comment.trim(),
         parentId: this.state.targetComment.id || null,
         userId: this.props.user.userId
       })
       .then((response) => {
-        this.setState({
-          comments: [
-            ...this.state.comments.map((existingComment) => {
-              return {
-                ...existingComment,
-                children: this.state.targetComment.id === existingComment.id
-                  ? existingComment.children.concat(response.data.id)
-                  : existingComment.children,
-              };
-            }),
-            {
-              children: [],
-              displayName: this.props.user.displayName,
-              depth: this.state.targetComment.depth !== undefined
-                ? this.state.targetComment.depth + 1
-                : 0,
-              id: response.data.id,
-              message: response.data.message,
-              userId: this.props.user.userId,
-            }
-          ],
-          targetComment: {}
-        }, () => {
-          window.scrollTo(
-            0,
-            document.getElementById(`comments-${response.data.id}`).offsetTop
-          );
-        });
+        this.setState(
+          {
+            comments: [
+              ...this.state.comments.map((existingComment) => {
+                return {
+                  ...existingComment,
+                  children:
+                    this.state.targetComment.id === existingComment.id
+                      ? existingComment.children.concat(response.data.id)
+                      : existingComment.children
+                };
+              }),
+              {
+                children: [],
+                displayName: this.props.user.displayName,
+                depth:
+                  this.state.targetComment.depth !== undefined
+                    ? this.state.targetComment.depth + 1
+                    : 0,
+                id: response.data.id,
+                message: response.data.message,
+                userId: this.props.user.userId
+              }
+            ],
+            targetComment: {}
+          },
+          () => {
+            window.scrollTo(
+              0,
+              document.getElementById(`comments-${response.data.id}`).offsetTop
+            );
+          }
+        );
       });
   }
 
@@ -105,7 +111,7 @@ class Group extends Component {
   render() {
     const {
       group: { activeGroup },
-      user,
+      user
     } = this.props;
     const { notInGroup } = this.state;
 
@@ -114,10 +120,7 @@ class Group extends Component {
 
     return (
       <StyledGroup>
-        <RestaurantDetail
-          activeGroup={activeGroup}
-          fromGroupPage
-        />
+        <RestaurantDetail activeGroup={activeGroup} fromGroupPage />
         <CommentList
           comments={this.state.comments}
           onCommentReply={this.onCommentReply}

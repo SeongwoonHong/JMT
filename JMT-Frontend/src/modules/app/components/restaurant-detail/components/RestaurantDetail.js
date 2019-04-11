@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Restaurant } from 'actions';
+import { Restaurant, Group } from 'actions';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import phoneIcon from 'assets/phoneIcon.png';
 import { colors } from 'constants';
-import { RatingCircle, Loader, Arrow, Button, ModalTitle } from 'components';
+import {
+  RatingCircle,
+  Loader,
+  Arrow,
+  Button,
+  ModalTitle,
+  GroupList
+} from 'components';
 import { getTimeWithPeriod, convertDateObject } from 'utils/date-utils';
 import history from 'utils/history';
 import DatePicker from 'react-datepicker';
@@ -36,7 +43,8 @@ const modalStyles = {
 @connect(state => ({
   restaurants: state.Restaurants,
   app: state.App,
-  user: state.Auth.user
+  user: state.Auth.user,
+  groups: state.Group.groups
 }))
 class RestaurantDetail extends Component {
   constructor(props) {
@@ -50,14 +58,17 @@ class RestaurantDetail extends Component {
       id: params.get('id'),
       scheduleDate: null,
       isModalOpen: false,
-      modalGroups: [],
+      modalGroups: []
     };
   }
 
   componentWillMount = () => {
     const { dispatch, activeGroup, fromGroupPage } = this.props;
     const { id } = this.state;
-    if (fromGroupPage) return dispatch(Restaurant.getRestaurantDetail(activeGroup.restaurantid));
+    if (fromGroupPage) {
+      return dispatch(Restaurant.getRestaurantDetail(activeGroup.restaurantid));
+    }
+    dispatch(Group.getGroupsByRestaurantAvailable(id));
     return dispatch(Restaurant.getRestaurantDetail(id));
   };
   /**
@@ -123,36 +134,61 @@ class RestaurantDetail extends Component {
   };
 
   openModal = () => {
-    const { user } = this.props;
+    const { user, restaurants, dispatch } = this.props;
 
     if (!user) {
       return toast.info('You need to login to join');
     }
 
+    dispatch(
+      Group.getGroupsByRestaurantAvailable(restaurants.activeRestaurant.id)
+    );
     return this.setState({ isModalOpen: true });
   };
 
-  saveDate = () => {
+  saveDate = async () => {
     const { scheduleDate } = this.state;
     const { dispatch, restaurants } = this.props;
 
     if (!scheduleDate) return false;
 
     const convertedScheduleDate = convertDateObject(scheduleDate);
-
-    dispatch(
+    await dispatch(
       Restaurant.joinRestaurant(
         convertedScheduleDate,
         restaurants.activeRestaurant.id,
-        restaurants.activeRestaurant.name,
+        restaurants.activeRestaurant.name
       )
     );
 
     return false;
   };
 
+  handleJoinGroup = async (date, restaurantid, restaurantName) => {
+    const { dispatch } = this.props;
+
+    await dispatch(
+      Restaurant.joinRestaurant(date, restaurantid, restaurantName)
+    );
+  };
+
+  renderGroupList = () => {
+    const { groups } = this.props;
+
+    return groups.map((group) => {
+      return (
+        <GroupList
+          key={group.id}
+          group={group}
+          onJoinGroup={this.handleJoinGroup}
+        />
+      );
+    });
+  };
+
   renderModal = () => {
     const { scheduleDate, modalGroups } = this.state;
+    const { groups } = this.props;
 
     return (
       <Modal
@@ -161,7 +197,7 @@ class RestaurantDetail extends Component {
         contentLabel="Example Modal"
       >
         <ModalTitle modalClose={this.closeModal} title="Select a Date" />
-        <div style={{ marginTop: '50px' }}>
+        <div style={{ marginTop: '50px', marginBottom: '50px' }}>
           <DatePicker
             selected={scheduleDate}
             onChange={this.handleDateChange}
@@ -173,13 +209,11 @@ class RestaurantDetail extends Component {
             timeCaption="time"
           />
         </div>
-        <Link to="/main/group?id=1">test link</Link>
+        {groups.length > 0 && this.renderGroupList()}
         <Button style={{ marginTop: '20px' }} onClick={this.saveDate}>
           Save
         </Button>
-        <Groups
-          groups={modalGroups}
-        />
+        <Groups groups={modalGroups} />
       </Modal>
     );
   };

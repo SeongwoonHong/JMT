@@ -13,13 +13,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isLoading: true,
-        requestInProcess: action.payload,
+        requestInProcess: action.payload
       };
     case Group.SUB_LOADING_DONE:
       return {
         ...state,
         isLoading: false,
-        requestInProcess: null,
+        requestInProcess: null
       };
     case Group.GET_GROUP:
       return {
@@ -29,6 +29,11 @@ export default function (state = initialState, action) {
         }
       };
     case Group.GET_GROUPS_BY_USER:
+      return {
+        ...state,
+        groups: action.payload
+      };
+    case Group.GET_GROUPS_BY_RESTAURANT_AVAILABLE:
       return {
         ...state,
         groups: action.payload
