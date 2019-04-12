@@ -16,6 +16,8 @@ class App {
   }
 
   private configure(): void {
+    fs.writeFileSync(path.resolve('./src/logs/errors.log'), '');
+
     const accessLogStream: fs.WriteStream = fs.createWriteStream(
       path.resolve('./src/logs/errors.log'),
       {
