@@ -4,5 +4,10 @@
     "Name": "lyndonoc/jmt-backend",
     "Update": "true"
   },
+  "Ports": [
+    {
+      "ContainerPort": 8000
+    }
+  ],
   "Volumes": []
 }
