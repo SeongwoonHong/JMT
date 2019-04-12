@@ -3,6 +3,8 @@ import { toast } from 'react-toastify';
 
 import { App } from './';
 
+const { API_URL = '' } = process.env;
+
 /**
  * Action types
  */
@@ -26,7 +28,7 @@ export const getGroup = (data) => {
   return (dispatch) => {
     dispatch(App.loadingStart('getGroup'));
     return axios
-      .get('/api/group/getGroup', {
+      .get(`${API_URL}/api/group/getGroup`, {
         params: {
           id: data
         }
@@ -49,7 +51,7 @@ export const checkUserGroup = (groupId) => {
   return (dispatch) => {
     dispatch(App.loadingStart('checkUserGroup'));
     return axios
-      .get('/api/group/checkUserGroup', {
+      .get(`${API_URL}/api/group/checkUserGroup`, {
         params: {
           id: groupId
         }
@@ -73,7 +75,7 @@ export const insertComment = (data) => {
     dispatch(App.loadingStart('insertComment'));
 
     return axios
-      .post('/api/group/insertComment', {
+      .post(`${API_URL}/api/group/insertComment`, {
         params: {
           data
         }
@@ -100,7 +102,7 @@ export const getGroupsByUser = () => {
     });
 
     return axios
-      .get('/api/group/getGroupsByUser')
+      .get(`${API_URL}/api/group/getGroupsByUser`)
       .then((res) => {
         dispatch({ type: SUB_LOADING_DONE });
         dispatch({
@@ -125,7 +127,7 @@ export const getGroupsByRestaurantAvailable = (restaurantId) => {
     });
 
     return axios
-      .get('/api/group/getGroupsByRestaurantAvailable', {
+      .get(`${API_URL}/api/group/getGroupsByRestaurantAvailable`, {
         params: {
           restaurantId
         }
