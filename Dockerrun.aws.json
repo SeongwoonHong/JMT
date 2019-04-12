@@ -4,11 +4,5 @@
     "Name": "lyndonoc/jmt-backend",
     "Update": "true"
   },
-  "Ports": [
-    {
-      "ContainerPort": 8080,
-      "HostPort": 8000
-    }
-  ],
   "Volumes": []
 }
