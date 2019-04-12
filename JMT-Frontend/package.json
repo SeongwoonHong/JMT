@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server",
-    "build": "webpack --progress",
+    "build": "NODE_ENV=production webpack --progress",
     "lint": "./node_modules/.bin/eslint src/"
   },
   "author": "",
