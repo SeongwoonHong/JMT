@@ -8,6 +8,11 @@ before_install:
 script:
   - docker run lyndonoc/jmt-backend npm run test
 
+after_success:
+  - docker build -t lyndonoc/jmt-backend -f ./JMT-Backend/Dockerfile ./JMT-Backend
+  - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+  - docker push lyndonoc/jmt-backend
+
 before_deploy:
   - cd ./JMT-Frontend && npm install && npm run build && cd ../
 
@@ -22,6 +27,7 @@ deploy:
     env: "JmtElastic-env"
     bucket_name: "elasticbeanstalk-us-east-2-762560686208"
     bucket_path: "JMT-elastic"
+    all_branches: true
   - provider: s3
     access_key_id:
       secure: "$AWS_ACCESS_KEY"
@@ -32,3 +38,4 @@ deploy:
     skip_cleanup: true
     local_dir: "./JMT-Frontend/dist"
     region: us-east-1
+    all_branches: true
