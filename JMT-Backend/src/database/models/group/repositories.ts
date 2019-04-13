@@ -30,11 +30,9 @@ export const getGroupsByUser = async userId => {
 
 export const getGroupsByRestaurantAvailable = async restaurantId => {
   try {
-    console.log('restaurantId=', restaurantId);
     const groupData = await Query.getGroupsByRestaurantAvailable({
       _restaurantId: restaurantId
     });
-    console.log(groupData);
     const { rows } = groupData;
 
     return {

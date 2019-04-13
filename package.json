@@ -6,6 +6,7 @@
   "scripts": {
     "clean": "concurrently 'cd JMT-Frontend && rm -rf node_modules && npm i' 'cd JMT-Backend && rm -rf node_modules && npm i'",
     "start": "concurrently 'cd JMT-Frontend && npm start' 'cd JMT-Backend && npm start'",
+    "dev": "concurrently 'cd JMT-Frontend && npm start' 'cd JMT-Backend && npm run start:dev'",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "author": "seongwoon hong",

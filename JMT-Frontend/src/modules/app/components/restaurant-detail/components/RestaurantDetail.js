@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Restaurant, Group } from 'actions';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import phoneIcon from 'assets/phoneIcon.png';
 import { colors } from 'constants';
 import { RatingCircle, Loader, Arrow, Button, ModalTitle } from 'components';
@@ -169,7 +169,7 @@ class RestaurantDetail extends Component {
   renderModal = () => {
     const { scheduleDate, modalGroups } = this.state;
     const { groups } = this.props;
-    console.log(groups);
+
     return (
       <Modal
         isOpen={this.state.isModalOpen}
@@ -189,7 +189,6 @@ class RestaurantDetail extends Component {
             timeCaption="time"
           />
         </div>
-        <Link to="/main/group?id=1">test link</Link>
         {groups.length > 0 && this.renderGroups()}
         <Button style={{ marginTop: '20px' }} onClick={this.saveDate}>
           Save

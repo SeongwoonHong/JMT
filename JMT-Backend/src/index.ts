@@ -4,6 +4,7 @@ import * as express from 'express';
 import * as compression from 'compression';
 import * as morgan from 'morgan';
 
+import * as cors from 'cors';
 import * as routes from './routes';
 
 class App {
@@ -17,6 +18,19 @@ class App {
 
   private configure(): void {
     fs.writeFileSync(path.resolve('./src/logs/errors.log'), '');
+
+    const whitelist = ['http://jmtelastic-env.2aassp2jzm.us-east-2.elasticbeanstalk.com', 'http://jmt-client.s3-website-us-east-1.amazonaws.com', 'http://localhost:3000'];
+    const corsOptions = {
+      origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+          callback(null, true)
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
+      },
+      allowedHeaders: ['Content-Type', 'Authorization']
+    };
+    this.express.use(cors(corsOptions));
 
     const accessLogStream: fs.WriteStream = fs.createWriteStream(
       path.resolve('./src/logs/errors.log'),

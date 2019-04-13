@@ -9,7 +9,6 @@ export const joinRestaurant = async (params) => {
      * When there's an existing group already
      */
     if (groupRes.rows.length) {
-      console.log('groupRes = ', groupRes);
       const groupId = groupRes.rows[0].id;
       await Query.joinExistingGroupRestaurant({ _groupId: groupId, ...params });
 
