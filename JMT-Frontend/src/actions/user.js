@@ -2,6 +2,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { App } from './';
 
+const { API_URL = '' } = process.env;
+
 /**
  *  Action Types
  */
@@ -19,7 +21,7 @@ export const sendResetPasswordEmail = (email) => {
   return (dispatch) => {
     dispatch(App.loadingStart('sendResetPasswordEmail'));
 
-    return axios.post('/api/user/sendResetPasswordEmail', { email })
+    return axios.post(`${API_URL}/api/user/sendResetPasswordEmail`, { email })
       .then(() => {
         dispatch(App.loadingDone());
 
@@ -42,7 +44,7 @@ export const updatePassword = (params) => {
   return (dispatch) => {
     dispatch(App.loadingStart('updatePassword'));
 
-    return axios.post('/api/user/updatePassword', {
+    return axios.post(`${API_URL}/api/user/updatePassword`, {
       password: params.password,
       token: params.token
     })
@@ -60,7 +62,7 @@ export const updateProfile = (params) => {
   return (dispatch) => {
     dispatch(App.loadingStart('updateProfile'));
 
-    return axios.post('/api/user/updateProfile', {
+    return axios.post(`${API_URL}/api/user/updateProfile`, {
       displayName: params.displayName,
       password: params.password,
     })
@@ -90,7 +92,7 @@ export const updateProfilePicture = (profilePicture) => {
   return (dispatch) => {
     dispatch(App.loadingStart('updateProfilePicture'));
 
-    return axios.post('/api/user/updateProfilePicture', {
+    return axios.post(`${API_URL}/api/user/updateProfilePicture`, {
       profilePicture,
     })
       .then((res) => {

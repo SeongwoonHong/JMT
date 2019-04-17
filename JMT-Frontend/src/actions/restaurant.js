@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 
 import { App } from './';
 
+const { API_URL = '' } = process.env;
+
 /**
  * Action types
  */
@@ -32,7 +34,7 @@ export const getRestaurantDetail = (id) => {
   return (dispatch) => {
     dispatch(App.loadingStart('getRestaurantDetail'));
 
-    return axios.get('/api/restaurant/getRestaurantDetail', {
+    return axios.get(`${API_URL}/api/restaurant/getRestaurantDetail`, {
       params: {
         id
       }
@@ -62,7 +64,7 @@ export const searchRestaurant = ({
     const { sort_by: sortBy, price } = rest;
 
     dispatch(App.loadingStart('searchRestaurant'));
-    return axios.get('/api/restaurant/searchRestaurant', {
+    return axios.get(`${API_URL}/api/restaurant/searchRestaurant`, {
       params: {
         location,
         latitude,
@@ -115,7 +117,7 @@ export const getRestaurantAutocomplete = ({
   longitude = -79.4136106
 }) => {
   return () => {
-    return axios.get('/api/restaurant/getRestaurantAutoComplete', {
+    return axios.get(`${API_URL}/api/restaurant/getRestaurantAutoComplete`, {
       params: {
         keyword,
         latitude,
@@ -141,7 +143,7 @@ export const joinRestaurant = (date, restaurantId, restaurantName) => {
   return (dispatch) => {
     dispatch(App.loadingStart('joinRestaurant'));
 
-    return axios.post('/api/restaurant/joinRestaurant', {
+    return axios.post(`${API_URL}/api/restaurant/joinRestaurant`, {
       date,
       restaurantId,
       restaurantName,

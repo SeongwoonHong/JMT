@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import history from 'utils/history';
 import { App } from './';
 
+const { API_URL = '' } = process.env;
+
 /**
  *  Action Types
  */
@@ -54,7 +56,7 @@ export const signup = (params) => {
     dispatch(App.loadingStart('signup'));
 
     return axios
-      .post('/api/user/signup', {
+      .post(`${API_URL}/api/user/signup`, {
         displayName: params.displayName,
         password: params.password,
         email: params.email,
@@ -79,7 +81,7 @@ export const login = (params, reRoute) => {
     dispatch(App.loadingStart('login'));
 
     return axios
-      .post('/api/user/login', {
+      .post(`${API_URL}/api/user/login`, {
         email: params.email,
         password: params.password
       })
@@ -104,7 +106,7 @@ export const tokenDecode = (token) => {
     dispatch(App.loadingStart('tokenDecode'));
 
     return axios
-      .get('/api/user/verifyToken', {
+      .get(`${API_URL}/api/user/verifyToken`, {
         params: { token }
       })
       .then(({ data }) => {
@@ -130,7 +132,7 @@ export const checkLogin = (token) => {
     dispatch(App.loadingStart('checkLogin'));
 
     return axios
-      .get('/api/user/checkUser', {
+      .get(`${API_URL}/api/user/checkUser`, {
         params: { token }
       })
       .then(({ data }) => {
@@ -154,5 +156,5 @@ export const logout = () => {
 };
 
 export const sendSignupEmail = (email) => {
-  return axios.post('/api/user/sendSignupEmail', { email });
+  return axios.post(`${API_URL}/api/user/sendSignupEmail`, { email });
 };
