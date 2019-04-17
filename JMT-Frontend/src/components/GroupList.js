@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { convertDateObject } from 'utils/date-utils';
 import { Button } from 'components';
 
-const GroupList = ({ group }) => (
+const GroupList = ({ group, onJoinGroup }) => (
   <StyledGroup key={group.id}>
     <StyledVertical>
       <StyledGroupName>
@@ -13,11 +13,23 @@ const GroupList = ({ group }) => (
       <StyledGroupDate>
         <strong>date</strong>: {convertDateObject(new Date(group.date), false)}
       </StyledGroupDate>
-      <div>Count: {group.count}</div>
+      <div>
+        <i className="material-icons">person</i> {group.userCount}
+      </div>
     </StyledVertical>
     <StyledButton className="right top">
       {' '}
-      <Button className="btn" style={{ width: '70px', height: '70px' }}>
+      <Button
+        className="btn"
+        style={{ width: '70px', height: '70px' }}
+        onClick={() =>
+          onJoinGroup(
+            convertDateObject(new Date(group.date), false),
+            group.restaurantId,
+            group.restaurantName
+          )
+        }
+      >
         Join
       </Button>
     </StyledButton>

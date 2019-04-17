@@ -5,7 +5,14 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import phoneIcon from 'assets/phoneIcon.png';
 import { colors } from 'constants';
-import { RatingCircle, Loader, Arrow, Button, ModalTitle } from 'components';
+import {
+  RatingCircle,
+  Loader,
+  Arrow,
+  Button,
+  ModalTitle,
+  GroupList
+} from 'components';
 import { getTimeWithPeriod, convertDateObject } from 'utils/date-utils';
 import history from 'utils/history';
 import DatePicker from 'react-datepicker';
@@ -51,14 +58,17 @@ class RestaurantDetail extends Component {
       id: params.get('id'),
       scheduleDate: null,
       isModalOpen: false,
-      modalGroups: [],
+      modalGroups: []
     };
   }
 
   componentWillMount = () => {
     const { dispatch, activeGroup, fromGroupPage } = this.props;
     const { id } = this.state;
-    if (fromGroupPage) return dispatch(Restaurant.getRestaurantDetail(activeGroup.restaurantid));
+    if (fromGroupPage) {
+      return dispatch(Restaurant.getRestaurantDetail(activeGroup.restaurantid));
+    }
+    dispatch(Group.getGroupsByRestaurantAvailable(id));
     return dispatch(Restaurant.getRestaurantDetail(id));
   };
   /**
@@ -136,40 +146,49 @@ class RestaurantDetail extends Component {
     return this.setState({ isModalOpen: true });
   };
 
-  saveDate = () => {
+  saveDate = async () => {
     const { scheduleDate } = this.state;
     const { dispatch, restaurants } = this.props;
 
     if (!scheduleDate) return false;
 
     const convertedScheduleDate = convertDateObject(scheduleDate);
-
-    dispatch(
+    await dispatch(
       Restaurant.joinRestaurant(
         convertedScheduleDate,
         restaurants.activeRestaurant.id,
-        restaurants.activeRestaurant.name,
+        restaurants.activeRestaurant.name
       )
     );
 
     return false;
   };
 
-  renderGroups = () => {
+  handleJoinGroup = async (date, restaurantid, restaurantName) => {
+    const { dispatch } = this.props;
+
+    await dispatch(
+      Restaurant.joinRestaurant(date, restaurantid, restaurantName)
+    );
+  };
+
+  renderGroupList = () => {
     const { groups } = this.props;
 
-    return groups.map(group => (
-      <StyledGroup key={group.id}>
-        <StyledGroupName><strong>Restaurant</strong>: {group.restaurantName}</StyledGroupName>
-        <StyledGroupDate><strong>date</strong>: {convertDateObject(new Date(group.date), false)}</StyledGroupDate>
-      </StyledGroup>
-    ));
-  }
+    return groups.map((group) => {
+      return (
+        <GroupList
+          key={group.id}
+          group={group}
+          onJoinGroup={this.handleJoinGroup}
+        />
+      );
+    });
+  };
 
   renderModal = () => {
     const { scheduleDate, modalGroups } = this.state;
     const { groups } = this.props;
-
     return (
       <Modal
         isOpen={this.state.isModalOpen}
@@ -177,7 +196,7 @@ class RestaurantDetail extends Component {
         contentLabel="Example Modal"
       >
         <ModalTitle modalClose={this.closeModal} title="Select a Date" />
-        <div style={{ marginTop: '50px' }}>
+        <div style={{ marginTop: '50px', marginBottom: '50px' }}>
           <DatePicker
             selected={scheduleDate}
             onChange={this.handleDateChange}
@@ -189,13 +208,11 @@ class RestaurantDetail extends Component {
             timeCaption="time"
           />
         </div>
-        {groups.length > 0 && this.renderGroups()}
+        {groups.length > 0 && this.renderGroupList()}
         <Button style={{ marginTop: '20px' }} onClick={this.saveDate}>
           Save
         </Button>
-        <Groups
-          groups={modalGroups}
-        />
+        <Groups groups={modalGroups} />
       </Modal>
     );
   };
@@ -466,26 +483,4 @@ const StyledPhoneIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const StyledGroup = styled.div`
-  background-color: ${colors.white};
-  padding: 10px;
-  border-radius: 10px;
-  color: ${colors.black};
-  cursor: pointer;
-  margin-bottom: 10px;
-  text-align: center;
-  width: calc(100% - 20px);
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const StyledGroupName = styled.div`
-  margin: 5px 0px;
-`;
-
-const StyledGroupDate = styled.div`
-  margin: 5px 0px;
 `;

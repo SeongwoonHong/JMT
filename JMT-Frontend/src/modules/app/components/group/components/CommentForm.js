@@ -14,7 +14,6 @@ import { colors } from 'constants';
   app: state.App
 }))
 class CommentForm extends Component {
-
   static getDerivedStateFromProps(props, state) {
     return {
       ...state,
@@ -78,9 +77,10 @@ class CommentForm extends Component {
   render() {
     const { app } = this.props;
     const { comment, errorMessages, targetCommentUser } = this.state;
-    const label = targetCommentUser.length > 0
-      ? `Enter your comment for @${targetCommentUser}`
-      : 'Enter your comment';
+    const label =
+      targetCommentUser.length > 0
+        ? `Enter your comment for @${targetCommentUser}`
+        : 'Enter your comment';
 
     if (app.isLoading) {
       return <Loader />;
@@ -107,7 +107,8 @@ class CommentForm extends Component {
               this.props.onSubmit(comment);
             }
           }}
-          className="btn-save">
+          className="btn-save"
+        >
           Save
         </Button>
       </StyledCommentContainer>

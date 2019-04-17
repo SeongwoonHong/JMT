@@ -19,10 +19,13 @@ class Group {
       controllers.getGroupsByUser
     );
     this.router.get('/checkUserGroup', controllers.checkUserGroup);
-    this.router.get('/getGroupsByRestaurant', controllers.getGroupsByRestaurant);
     this.router.get(
       '/getGroupsByRestaurantAvailable',
       controllers.getGroupsByRestaurantAvailable
+    );
+    this.router.get(
+      '/getGroupsByRestaurant',
+      controllers.getGroupsByRestaurant
     );
   };
 }
