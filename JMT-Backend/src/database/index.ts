@@ -51,7 +51,6 @@ class DataBase {
       }
       params += ')';
       statement += params;
-      console.log(statement);
 
       return this.pg.query(statement).then(result => resolve(result));
     });

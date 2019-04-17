@@ -10,7 +10,10 @@ const isProduction = process.env.NODE_ENV === 'production';
 const devPort = 3000;
 const plugins = isProduction ? [
   new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    'process.env': {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      API_URL: JSON.stringify(process.env.API_URL)
+    }
   }),
   new webpack.NoEmitOnErrorsPlugin(),
   new UglifyJsPlugin(),
@@ -112,4 +115,4 @@ module.exports = {
       '/api': 'http://localhost:5000'
     }
   },
-}
+};

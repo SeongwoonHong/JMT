@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 
 import { App } from './';
 
+const { API_URL = '' } = process.env;
+
 /**
  * Action types
  */
@@ -64,7 +66,7 @@ export const searchRestaurant = ({
 
     dispatch(App.loadingStart('searchRestaurant'));
     return axios
-      .get('/api/restaurant/searchRestaurant', {
+      .get(`${API_URL}/api/restaurant/searchRestaurant`, {
         params: {
           location,
           latitude,
@@ -118,7 +120,7 @@ export const getRestaurantAutocomplete = ({
 }) => {
   return () => {
     return axios
-      .get('/api/restaurant/getRestaurantAutoComplete', {
+      .get(`${API_URL}/api/restaurant/getRestaurantAutoComplete`, {
         params: {
           keyword,
           latitude,
@@ -140,28 +142,27 @@ export const getRestaurantAutocomplete = ({
  * @param {string} restaurantId
  * @param {string} restaurantName
  */
-export const joinRestaurant = (
-  date,
-  restaurantId,
-  restaurantName
-) => (dispatch) => {
-  dispatch(App.loadingStart('joinRestaurant'));
-  return axios
-    .post('/api/restaurant/joinRestaurant', {
-      date,
-      restaurantId,
-      restaurantName
-    })
-    .then((res) => {
-      dispatch({ type: JOIN_RESTAURANT });
-      dispatch(App.loadingDone());
-      toast.success('Saved');
-      return history.push(`/main/group?id=${res.data.groupId}`);
-    })
-    .catch(({ response }) => {
-      console.log(response.data);
-      toast.error(response.data.msg);
-      dispatch({ type: JOIN_RESTAURANT_FAIL });
-      dispatch(App.loadingDone());
-    });
+export const joinRestaurant = (date, restaurantId, restaurantName) => {
+  return (dispatch) => {
+    dispatch(App.loadingStart('joinRestaurant'));
+
+    return axios
+      .post(`${API_URL}/api/restaurant/joinRestaurant`, {
+        date,
+        restaurantId,
+        restaurantName
+      })
+      .then((res) => {
+        dispatch({ type: JOIN_RESTAURANT });
+        dispatch(App.loadingDone());
+        toast.success('Saved');
+        return history.push(`/main/group?id=${res.data.groupId}`);
+      })
+      .catch(({ response }) => {
+        console.log(response.data);
+        toast.error(response.data.msg);
+        dispatch({ type: JOIN_RESTAURANT_FAIL });
+        dispatch(App.loadingDone());
+      });
+  };
 };

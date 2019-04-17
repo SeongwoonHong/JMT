@@ -9,6 +9,8 @@ import RestaurantDetail from '../../restaurant-detail';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 
+const { API_URL = '' } = process.env;
+
 @connect(state => ({
   group: state.Group,
   user: state.Auth.user
@@ -42,7 +44,7 @@ class Group extends Component {
         } else {
           dispatch(GroupAction.getGroup(id));
         }
-        return axios.get(`/api/comments?&groupId=${id}`);
+        return axios.get(`${API_URL}/api/comments?&groupId=${id}`);
       })
       .then((response) => {
         this.setState({ comments: response.data || [] });

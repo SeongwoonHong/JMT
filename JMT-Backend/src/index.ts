@@ -4,6 +4,7 @@ import * as express from 'express';
 import * as compression from 'compression';
 import * as morgan from 'morgan';
 
+import * as cors from 'cors';
 import * as routes from './routes';
 
 class App {
@@ -17,6 +18,8 @@ class App {
 
   private configure(): void {
     fs.writeFileSync(path.resolve('./src/logs/errors.log'), '');
+
+    this.express.use(cors());
 
     const accessLogStream: fs.WriteStream = fs.createWriteStream(
       path.resolve('./src/logs/errors.log'),
