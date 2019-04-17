@@ -18,7 +18,11 @@ class Query {
   };
   public static getGroupsByRestaurant = (params): Promise<any> => {
     return db.executeSP('GET_GROUPS_BY_RESTAURANT', params);
-  }
+  };
+
+  public static getGroupsByRestaurantAvailable = (params): Promise<any> => {
+    return db.executeSP('GET_GROUPS_BY_RESTAURANT_AVAILABLE', params);
+  };
 }
 
 export default Query;

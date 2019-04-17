@@ -4,12 +4,14 @@
   "description": "jmt server",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development nodemon --config './nodemon.ts.json' index.ts",
-    "test": "mocha --reporter spec --compilers ts:ts-node/register './src/test/**/*.test.ts'"
+    "start": "node dist",
+    "start:dev": "NODE_ENV=development nodemon --config './nodemon.ts.json' index.ts",
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ef-carbon/tspm": "^2.2.5",
     "aws-sdk": "^2.375.0",
     "axios": "^0.18.0",
     "bcrypt": "^3.0.5",

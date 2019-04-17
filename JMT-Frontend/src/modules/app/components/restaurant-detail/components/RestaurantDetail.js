@@ -189,7 +189,6 @@ class RestaurantDetail extends Component {
   renderModal = () => {
     const { scheduleDate, modalGroups } = this.state;
     const { groups } = this.props;
-
     return (
       <Modal
         isOpen={this.state.isModalOpen}
